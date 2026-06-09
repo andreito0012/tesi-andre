@@ -11,12 +11,12 @@
 \title{Fancy Title}
 \author{Andrea Giovanardi }
 \date{\today}
-\subject{Supervisor's course name}
+\subject{Business Intelligence}
 \supervisor{Matteo Golfarelli}
 \cosupervisor{Dott. CoSupervisor 1}
 \morecosupervisor{Dott. CoSupervisor 2}
-\session{I}
-\academicyear{2022-2023}
+\session{II}
+\academicyear{2026-2027}
 
 % Definition of acronyms
 \acrodef{IoT}{Internet of Thing}
@@ -29,7 +29,7 @@
 
 \frontmatter\frontispiece
 
-\begin{abstract}	
+\begin{abstract}    
 Max 2000 characters, strict.
 \end{abstract}
 
@@ -46,7 +46,7 @@ Optional. Max a few lines.
 \mainmatter
 
 %----------------------------------------------------------------------------------------
-\chapter{Introduction}
+\chapter{Introduction to the Problem}
 \label{chap:introduction}
 %----------------------------------------------------------------------------------------
 
@@ -70,26 +70,125 @@ you may need both \ac{vm} and \acp{vm}.
 
 \note{At the end, describe the structure of the paper}
 
-\chapter{State of the art}
+\section{Context}
+The general challenge of integrating Large Language Models (LLMs) into operational Business Intelligence (BI) dashboards.
+
+\section{Criticalities}
+The strict necessity for numerical fidelity and domain constraints, which are essential for reliable, on-the-field decision-making.
+
+\section{Framework}
+The primary research question and the supporting sub-questions that guide the entire thesis.
+
+
+%----------------------------------------------------------------------------------------
+\chapter{State of the Art and Related Works}
+\label{chap:state_of_the_art}
+%----------------------------------------------------------------------------------------
+
+\section{Data Integration}
+Main approaches for connecting LLMs to data, including Retrieval-Augmented Generation (RAG), prompt-based methods, tool use, and domain knowledge injection via semantic layers.
+
+\section{Evaluation}
+Existing metrics used to measure and evaluate AI hallucinations.
+
+\section{Literature}
+Current research and advancements in GenBI and LLM OLAP.
+
+\section{Research Gap}
+Identification of the specific gap in the current literature that this thesis aims to bridge by proposing a unified framework.
 
 I suggest referencing stuff as follows: \cref{fig:random-image} or \Cref{fig:random-image}
 
-\begin{figure}
+\begin{figure}[h]
     \centering
     \includegraphics[width=.8\linewidth]{figures/random-image.pdf}
     \caption{Some random image}
     \label{fig:random-image}
 \end{figure}
 
-\section{Some cool topic}
 
-\chapter{Contribution}
+
+
+%----------------------------------------------------------------------------------------
+\chapter{Case Study: Context and Problem}
+\label{chap:case_study}
+%----------------------------------------------------------------------------------------
+
+\section{Setting}
+The last-mile delivery station environment, the continuous improvement cycle (plan, execute, measure, adjust), and the time pressure that makes delayed data visibility a missed intervention window.
+
+\section{Core Metric}
+Definition of the reference indicator as a productivity ratio (output units divided by input resource), the gap between planned and actual values, and its additive decomposition into a fixed set of mutually-exclusive categories with a two-level hierarchy, heterogeneous aggregation weights, and a residual term that guarantees completeness.
+
+\section{Pre-AI Baseline}
+The manual workflow for monitoring (weekly cadence, tile-by-tile extraction) and for producing the bridge document (subjective cause selection, unconstrained ranking, experience-dependent actions).
+
+\section{Three Weaknesses}
+Limited reactivity, subjective root-cause selection, and analyst dependence, mapped explicitly to the three contracts proposed in Chapter 4.
+
+\section{Methodology}
+Single-case longitudinal design where the researcher is embedded in the operational team for six months. Development followed an iterative pattern: observe a failure in the AI output, isolate it, fix it, validate against real data, check for regressions. Failure instances were collected and classified into families for the analysis in Chapter 5. A synthetic dataset preserving the structural properties of the real data built for the controlled evaluation.
+
+
+%----------------------------------------------------------------------------------------
+\chapter{Proposed Solution: Three-Contract Framework}
+\label{chap:proposed_solution}
+%----------------------------------------------------------------------------------------
+
+\section{Core Concept}
+Introduction of the three contracts (tile-as-source, curated knowledge tree, and post-generation sanitizer) as a unified solution to the grounding problem, each acting at a different point of the generation chain.
+
+\section{Prompt Engineering}
+The design of the system prompt as an explicit encoding of fidelity rules, with one directive per observed failure mode rather than generic accuracy instructions.
+
+\section{Architecture}
+The overall system architecture of the AI-BI pipeline, from data aggregation to final narrative output.
+
+\section{Application}
+How the framework was derived from the iterative development of the case study, showing the concrete implementation of each contract and how the architecture instantiates the general model.
 
 You may also put some code snippet (which is NOT float by default), eg: \cref{lst:random-code}.
 
 \lstinputlisting[float,language=Java,label={lst:random-code}]{listings/HelloWorld.java}
 
-\section{Fancy formulas here}
+\section{Fancy formulas here} % Mantenuto dal template originale
+
+
+%----------------------------------------------------------------------------------------
+\chapter{Results and Evaluation}
+\label{chap:results}
+%----------------------------------------------------------------------------------------
+
+\section{Failure Analysis}
+A catalog of the main grounding failure modes observed and an explanation of how the proposed framework mitigates them.
+
+\section{Quantitative Assessment}
+A controlled evaluation using mock data to compare different system configurations.
+
+\section{Qualitative Assessment}
+Two to three real-world qualitative episodes drawn from the case study to provide practical, operational evidence of success.
+
+
+%----------------------------------------------------------------------------------------
+\chapter{Discussion and Future Directions}
+\label{chap:discussion}
+%----------------------------------------------------------------------------------------
+
+\section{Synthesis}
+How the observed results successfully answer the initial research question.
+
+\section{Contributions}
+The specific value added to the existing literature regarding LLMs and BI.
+
+\section{Generalizability}
+An assessment of how well the three-contract framework can be adapted and applied to other contexts or industries.
+
+\section{Limitations}
+A transparent look at the limits of the current thesis work.
+
+\section{Future Developments}
+Potential next steps, such as extending the framework to support interactive Q\&A functionalities based on the same underlying schema.
+
 
 %----------------------------------------------------------------------------------------
 % BIBLIOGRAPHY
