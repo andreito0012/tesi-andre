@@ -53,23 +53,38 @@ Optional. Max a few lines.
 \mainmatter
 
 %----------------------------------------------------------------------------------------
-\chapter{Introduction to the Problem}
+\chapter{Introduction}
 \label{chap:introduction}
 %----------------------------------------------------------------------------------------
 
 \section{Context}
 During one of the audited weeks of my internship, the operational dashboard flagged a clear productivity gap at the station. 
 The AI summary built on top of it explained the gap with full confidence, but the explanation produced was factually incorrect. 
-It pointed to a structural metric that had little to do with the real cause of the difference, and proposed corrective actions and "why" analyses that no manager could realistically carry out.
+It pointed to a structural metric that had little to do with the real cause of the difference, proposed corrective actions and root analyses that no manager could realistically carry out.
 I noticed the error , that morning, because i was familiar with the station and the metric, but a manager that reads the same paragraph on a busy day or even if less experienced could have easily take that for true and acted on it. 
 
 That episode marked my thesis begin and frames the general problem it adresses: what happen when a \ac{LLM} is placed on top of a \ac{BI} dashboard and asked to turn numbers into decisons? 
-That's a key question expecially considering the setting of a \ac{DS}. 
+That's a key question considering the setting of a \ac{DS}. 
 It's the final node of the logistick network, the place where package are sorted in the early morning and loaded onto routes to be delivered to final customers.
 The station where i worked, DFV2 in Udine, runs on a standard daily rhythm: plan the day, run it, measure what happened, adjust for tomorrow. 
 Manager controls the rhythm trought a large set of indicators that read every day to determine if any correction is needed. Normally the window to act is narrow so is important that a Manager doesn't get the picture late or even wrong otherwise the chances to fix it would be lost.
 
-Among all the indicators that we used at the station
+Among all the indicators that we used at the station, one productivity ratio act as the headline figure, it's a number that represent the capability of the station to turn paid work into delivered packages.
+Most of the days this ratio is close to the planned one, but not exactly on it and that gap is exacly what a manager has to explore, understand and explain. 
+Explaining it is anything but trivial.
+This difference is the combined effect of many separated factors, some of them are internal to the station while the rest of them is completely extrarnal, and working out which factor and its weight is a task that, before this project, was done completely by hand.
+
+When a station miss its target, the designed manager has to produce a written justination , internally refferred as the "bridge", based on a weekly Excel report that states how the previous one had closed. A manual and slow activity that neither said anything about how the current week was going while there was still time to act on it.
+
+This is the exact scenario where a \ac{LLM} could be the right fit. A that model is capable of reading the numbers and turn it into praragraphs within seconds, replacing hours of manual assembly.
+The downside is that the same flexibility that makes it so powerfull and usefull is also the source of risks.
+A language model hallucinates on numbers, quietly recomputing a value or inventing one that looks plausible, and it explains causes with the same fluency whether the cause is real or not.
+For a tool that is used to feed decisions on the floor those errors are not acceptable and they must be reduced as much as possible, while keeping in mind that hallucinations cannot be avoided at 100\%.
+
+
+A manager must be able to safely rely on the output of the model while, at the same time have a clear view on the related data. 
+That's why I have built a dynamic dashboard that provides on-demand, intra-week visibility for all the factors influencig the gap. 
+It automatically retrieves the required data to avoid manual checks, while establishing the strict architectural constraints necessary to keep the model anchored to the verified numbers.
 
 \section{Criticalities}
 This highlighted a strict necessity for numerical fidelity and domain constraints, which are essential for reliable, on-the-field decision-making in a fast-paced logistics environment.
