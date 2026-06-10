@@ -6,22 +6,29 @@
 \usepackage{shortcuts}
 \usepackage{acronym}
 
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+
 \school{\unibo}
 \programme{Corso di Laurea Magistrale in Digital Transformation Management}
 \title{Fancy Title}
-\author{Andrea Giovanardi }
+\author{Andrea Giovanardi}
 \date{\today}
 \subject{Business Intelligence}
 \supervisor{Matteo Golfarelli}
 \cosupervisor{Dott. CoSupervisor 1}
 \morecosupervisor{Dott. CoSupervisor 2}
 \session{II}
-\academicyear{2026-2027}
+\academicyear{2025-2026}
 
 % Definition of acronyms
-\acrodef{IoT}{Internet of Thing}
-\acrodef{vm}[VM]{Virtual Machine}
-
+\acrodef{AI}{Artificial Intelligence}
+\acrodef{BI}{Business Intelligence}
+\acrodef{LLM}{Large Language Model}
+\acrodef{RAG}{Retrieval-Augmented Generation}
+\acrodef{OLAP}{Online Analytical Processing}
+\acrodef{KPI}{Key Performance Indicator}
+\acrodef{DS}{Delivery Station}
 
 \mainlinespacing{1.241} % line spacing in mainmatter, comment to default (1)
 
@@ -50,36 +57,40 @@ Optional. Max a few lines.
 \label{chap:introduction}
 %----------------------------------------------------------------------------------------
 
-Write your intro here.
-\sidenote{Add sidenotes in this way. They are named after the author of the thesis}
-
-You can use acronyms that your defined previously,
-such as \ac{IoT}.
-%
-If you use acronyms twice,
-they will be written in full only once
-(indeed, you can mention the \ac{IoT} now without it being fully explained).
-%
-In some cases, you may need a plural form of the acronym.
-%
-For instance,
-that you are discussing \acp{vm},
-you may need both \ac{vm} and \acp{vm}.
-
-\paragraph{Structure of the Thesis}
-
-\note{At the end, describe the structure of the paper}
-
 \section{Context}
-The general challenge of integrating Large Language Models (LLMs) into operational Business Intelligence (BI) dashboards.
+During one of the audited weeks of my internship, the operational dashboard flagged a clear productivity gap at the station. 
+The AI summary built on top of it explained the gap with full confidence, but the explanation produced was factually incorrect. 
+It pointed to a structural metric that had little to do with the real cause of the difference, and proposed corrective actions and "why" analyses that no manager could realistically carry out.
+I noticed the error , that morning, because i was familiar with the station and the metric, but a manager that reads the same paragraph on a busy day or even if less experienced could have easily take that for true and acted on it. 
+
+That episode marked my thesis begin and frames the general problem it adresses: what happen when a \ac{LLM} is placed on top of a \ac{BI} dashboard and asked to turn numbers into decisons? 
+That's a key question expecially considering the setting of a \ac{DS}. 
+It's the final node of the logistick network, the place where package are sorted in the early morning and loaded onto routes to be delivered to final customers.
+The station where i worked, DFV2 in Udine, runs on a standard daily rhythm: plan the day, run it, measure what happened, adjust for tomorrow. 
+Manager controls the rhythm trought a large set of indicators that read every day to determine if any correction is needed. Normally the window to act is narrow so is important that a Manager doesn't get the picture late or even wrong otherwise the chances to fix it would be lost.
+
+Among all the indicators that we used at the station
 
 \section{Criticalities}
-The strict necessity for numerical fidelity and domain constraints, which are essential for reliable, on-the-field decision-making.
+This highlighted a strict necessity for numerical fidelity and domain constraints, which are essential for reliable, on-the-field decision-making in a fast-paced logistics environment.
 
 \section{Framework}
-The primary research question and the supporting sub-questions that guide the entire thesis.
+The primary research question and the supporting sub-questions that guide the entire thesis aim to address how an AI-BI data binding framework can be designed to guarantee such fidelity.
 
+\paragraph{Structure of the Thesis}
+The remainder of this document is organized as follows:
 
+\begin{itemize}
+    \item \textbf{Chapter 2} reviews the state of the art and related works, exploring current paradigms for data integration, evaluating hallucination metrics, and identifying the specific research gap in operational BI.
+    
+    \item \textbf{Chapter 3} introduces the case study, detailing the operational setting, the core metric, the pre-AI baseline, and the single-case methodology adopted during the internship.
+    
+    \item \textbf{Chapter 4} presents the proposed solution, detailing the conceptual innovation of the three-contract framework (tile-as-source, curated knowledge tree, and sanitizer) and the system architecture.
+    
+    \item \textbf{Chapter 5} focuses on the results and evaluation, analyzing the catalog of grounding failures and providing both quantitative controlled assessments and real-world qualitative evidence.
+    
+    \item \textbf{Chapter 6} discusses the findings, highlighting the thesis contributions and generalizability, acknowledging limitations, and outlining future research directions.
+\end{itemize}
 %----------------------------------------------------------------------------------------
 \chapter{State of the Art and Related Works}
 \label{chap:state_of_the_art}
@@ -106,9 +117,6 @@ I suggest referencing stuff as follows: \cref{fig:random-image} or \Cref{fig:ran
     \label{fig:random-image}
 \end{figure}
 
-
-
-
 %----------------------------------------------------------------------------------------
 \chapter{Case Study: Context and Problem}
 \label{chap:case_study}
@@ -129,7 +137,6 @@ Limited reactivity, subjective root-cause selection, and analyst dependence, map
 \section{Methodology}
 Single-case longitudinal design where the researcher is embedded in the operational team for six months. Development followed an iterative pattern: observe a failure in the AI output, isolate it, fix it, validate against real data, check for regressions. Failure instances were collected and classified into families for the analysis in Chapter 5. A synthetic dataset preserving the structural properties of the real data built for the controlled evaluation.
 
-
 %----------------------------------------------------------------------------------------
 \chapter{Proposed Solution: Three-Contract Framework}
 \label{chap:proposed_solution}
@@ -145,14 +152,13 @@ The design of the system prompt as an explicit encoding of fidelity rules, with 
 The overall system architecture of the AI-BI pipeline, from data aggregation to final narrative output.
 
 \section{Application}
-How the framework was derived from the iterative development of the case study, showing the concrete implementation of each contract and how the architecture instantiates the general model.
+How the framework was derived from the iterative development of the case study, showing the concrete implementation of each contract.
 
 You may also put some code snippet (which is NOT float by default), eg: \cref{lst:random-code}.
 
 \lstinputlisting[float,language=Java,label={lst:random-code}]{listings/HelloWorld.java}
 
 \section{Fancy formulas here} % Mantenuto dal template originale
-
 
 %----------------------------------------------------------------------------------------
 \chapter{Results and Evaluation}
@@ -167,7 +173,6 @@ A controlled evaluation using mock data to compare different system configuratio
 
 \section{Qualitative Assessment}
 Two to three real-world qualitative episodes drawn from the case study to provide practical, operational evidence of success.
-
 
 %----------------------------------------------------------------------------------------
 \chapter{Discussion and Future Directions}
@@ -188,7 +193,6 @@ A transparent look at the limits of the current thesis work.
 
 \section{Future Developments}
 Potential next steps, such as extending the framework to support interactive Q\&A functionalities based on the same underlying schema.
-
 
 %----------------------------------------------------------------------------------------
 % BIBLIOGRAPHY
