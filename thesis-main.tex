@@ -70,13 +70,13 @@ The station where i worked, DFV2 in Udine, runs on a standard daily rhythm: plan
 Manager controls the rhythm trought a large set of indicators that read every day to determine if any correction is needed. Normally the window to act is narrow so is important that a Manager doesn't get the picture late or even wrong otherwise the chances to fix it would be lost.
 
 Among all the indicators that we used at the station, one productivity ratio act as the headline figure, it's a number that represent the capability of the station to turn paid work into delivered packages.
-Most of the days this ratio is close to the planned one, but not exactly on it and that gap is exacly what a manager has to explore, understand and explain. 
-Explaining it is anything but trivial.
+Most of the days this ratio is close to the planned one, but not exactly on it and that gap is what a manager has to explore, understand and explain. 
+A process that is anything but trivial.
 This difference is the combined effect of many separated factors, some of them are internal to the station while the rest of them is completely extrarnal, and working out which factor and its weight is a task that, before this project, was done completely by hand.
 
 When a station miss its target, the designed manager has to produce a written justination , internally refferred as the "bridge", based on a weekly Excel report that states how the previous one had closed. A manual and slow activity that neither said anything about how the current week was going while there was still time to act on it.
 
-This is the exact scenario where a \ac{LLM} could be the right fit. A that model is capable of reading the numbers and turn it into praragraphs within seconds, replacing hours of manual assembly.
+This is the exact scenario where a \ac{LLM} could be the right fit. A that model is capable of reading the numbers and turn them into praragraphs within seconds, replacing hours of manual assembly.
 The downside is that the same flexibility that makes it so powerfull and usefull is also the source of risks.
 A language model hallucinates on numbers, quietly recomputing a value or inventing one that looks plausible, and it explains causes with the same fluency whether the cause is real or not.
 For a tool that is used to feed decisions on the floor those errors are not acceptable and they must be reduced as much as possible, while keeping in mind that hallucinations cannot be avoided at 100\%.
@@ -87,7 +87,23 @@ That's why I have built a dynamic dashboard that provides on-demand, intra-week 
 It automatically retrieves the required data to avoid manual checks, while establishing the strict architectural constraints necessary to keep the model anchored to the verified numbers.
 
 \section{Criticalities}
-This highlighted a strict necessity for numerical fidelity and domain constraints, which are essential for reliable, on-the-field decision-making in a fast-paced logistics environment.
+The main difficulty of this project is the grounding problem, intended in a stricter sense than the one commonly used in the literature.
+It can be decomposed into two main requirments that needs to hold together. 
+A numerical: every quantitative token in the generated text must be traceable, character by character, to the pre-computed value. 
+The second one is casual: every explanation and every raccomendation  must come from a well defined set of causes that the domain admits, not from everything that seems reasonable.
+
+Consider the numerical side first. If the value that the dashboard shows is 49.0, the sentence produced by the \ac{LLM} must say 49.0, not 49 or "around 50".  
+This is more demanding than the usal faithfulness a retrival system offers, where a claim counts as grounded if it is broadly supported by some documentation. For Operational \ac{BI} a broad support is not enough.
+The number that is shown to the final user and the one that is retrived by the code should be the same because otherwise any decision that is taken solely based on the \ac{AI} generated text when a figure is close but not exact can potentially, in this context, be wrong.
+
+
+The causal side is even harder. Reporting a number without changing it's value is a matter of fidelity to the base data. 
+Explayining why we have that precise value, instead, is connected to the domain knowledge. 
+The set of plausible-sounding causes for any gap is enormous, while the possible set of causes admitted by the domain in small and specific. 
+A narrative defined as "usefull" has to stay inside this small set. 
+It should behave like an expert analyst that among everything that could explain the gap, choose only the feasable reasons and conseguently actions that a Manager should take to improve the situation.
+Domain constraint without numerical fidelty buys very little, a right explanation based on a wrong input it's meaningless.
+
 
 \section{Framework}
 The primary research question and the supporting sub-questions that guide the entire thesis aim to address how an AI-BI data binding framework can be designed to guarantee such fidelity.
