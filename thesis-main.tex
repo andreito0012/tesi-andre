@@ -16,8 +16,7 @@
 \date{\today}
 \subject{Business Intelligence}
 \supervisor{Matteo Golfarelli}
-\cosupervisor{Dott. CoSupervisor 1}
-\morecosupervisor{Dott. CoSupervisor 2}
+
 \session{II}
 \academicyear{2025-2026}
 
@@ -29,6 +28,9 @@
 \acrodef{OLAP}{Online Analytical Processing}
 \acrodef{KPI}{Key Performance Indicator}
 \acrodef{DS}{Delivery Station}
+\acrodef{SQL}{Structured Query Language}
+\acrodef{JSON}{JavaScript Object Notation}
+\acrodef{API}{Application Programming Interface}
 
 \mainlinespacing{1.241} % line spacing in mainmatter, comment to default (1)
 
@@ -59,65 +61,82 @@ Optional. Max a few lines.
 
 \section{Context}
 During one of the audited weeks of my internship, the operational dashboard flagged a clear productivity gap at the station. 
-The AI summary built on top of it explained the gap with full confidence, but the explanation produced was factually incorrect. 
+The AI summary built on top of it explained that difference with full confidence, but the explanation produced was factually incorrect. 
 It pointed to a structural metric that had little to do with the real cause of the difference, proposed corrective actions and root analyses that no manager could realistically carry out.
-I noticed the error , that morning, because i was familiar with the station and the metric, but a manager that reads the same paragraph on a busy day or even if less experienced could have easily take that for true and acted on it. 
+I noticed the error, that morning, because I was familiar with the station and the metric, but a manager reading the same paragraph on a busy day, or less experienced, could have easily taken that for true and acted on it. 
 
-That episode marked my thesis begin and frames the general problem it adresses: what happen when a \ac{LLM} is placed on top of a \ac{BI} dashboard and asked to turn numbers into decisons? 
+That episode marked my thesis beginning and frames the general problem it addresses: what happens when a \ac{LLM} is placed on top of a \ac{BI} dashboard and asked to turn numbers into decisions? 
 That's a key question considering the setting of a \ac{DS}. 
-It's the final node of the logistick network, the place where package are sorted in the early morning and loaded onto routes to be delivered to final customers.
-The station where i worked, DFV2 in Udine, runs on a standard daily rhythm: plan the day, run it, measure what happened, adjust for tomorrow. 
-Manager controls the rhythm trought a large set of indicators that read every day to determine if any correction is needed. Normally the window to act is narrow so is important that a Manager doesn't get the picture late or even wrong otherwise the chances to fix it would be lost.
+It is the final node of the logistic network, the place where packages are sorted in the early morning and loaded onto routes to be delivered to final customers.
+The station where I worked, DFV2 in Udine, runs on a standard daily rhythm: plan the day, run it, measure what happen, adjust for tomorrow. 
+The manager controls the rhythm through a large set of indicators that are read every day to determine if any correction is needed. Normally the window to act is narrow so it is important that a manager doesn't get the picture late or even wrong otherwise the chances to fix it would be lost.
 
-Among all the indicators that we used at the station, one productivity ratio act as the headline figure, it's a number that represent the capability of the station to turn paid work into delivered packages.
+Among all the indicators that we used at the station, one productivity ratio acts as the headline figure, it's a number that represents the capability of the station to turn paid work into delivered packages.
 Most of the days this ratio is close to the planned one, but not exactly on it and that gap is what a manager has to explore, understand and explain. 
 A process that is anything but trivial.
-This difference is the combined effect of many separated factors, some of them are internal to the station while the rest of them is completely extrarnal, and working out which factor and its weight is a task that, before this project, was done completely by hand.
+This difference is the combined effect of many separate factors, some of them are internal to the station while the rest of them are completely external, and working out which factor and its weight is a task that, before this project, was done completely by hand.
 
-When a station miss its target, the designed manager has to produce a written justination , internally refferred as the "bridge", based on a weekly Excel report that states how the previous one had closed. A manual and slow activity that neither said anything about how the current week was going while there was still time to act on it.
+When a station misses its target, the designated manager has to produce a written justification, internally referred to as the "bridge", based on a weekly Excel report that states how the previous one had closed. A manual and slow activity that said nothing about how the current week was going while there was still time to act on it.
 
-This is the exact scenario where a \ac{LLM} could be the right fit. A that model is capable of reading the numbers and turn them into praragraphs within seconds, replacing hours of manual assembly.
-The downside is that the same flexibility that makes it so powerfull and usefull is also the source of risks.
+This is the exact scenario where a \ac{LLM} could be the right fit. 
+A model capable of reading the numbers and turning them into paragraphs within seconds, replacing hours of manual assembly.
+The downside is that the same flexibility that makes it so powerful and useful is also the source of risks.
 A language model hallucinates on numbers, quietly recomputing a value or inventing one that looks plausible, and it explains causes with the same fluency whether the cause is real or not.
-For a tool that is used to feed decisions on the floor those errors are not acceptable and they must be reduced as much as possible, while keeping in mind that hallucinations cannot be avoided at 100\%.
-
-
-A manager must be able to safely rely on the output of the model while, at the same time have a clear view on the related data. 
+For a tool that is used to feed decisions on the floor those errors are not acceptable, and they must be reduced as much as possible, while keeping in mind that hallucinations cannot be avoided at 100\%. 
+A manager must be able to safely rely on the output of the model while, at the same time having a clear view of the related data. 
 
 
 \section{Criticalities}
 The main difficulty of this project is the grounding problem, intended in a stricter sense than the one commonly used in the literature.
-It can be decomposed into two main requirments that needs to hold together. 
-A numerical: every quantitative token in the generated text must be traceable, character by character, to the pre-computed value. 
-The second one is casual: every explanation and every raccomendation  must come from a well defined set of causes that the domain admits, not from everything that seems reasonable.
+It can be decomposed into two main requirements that need to hold together. 
+The first is numerical: every quantitative token in the generated text must be traceable, character by character, to the pre-computed value. 
+The second one is causal: every explanation and every recommendation  must come from a well-defined set of causes that the domain admits, not from everything that seems reasonable.
 
 Consider the numerical side first. If the value that the dashboard shows is 49.0, the sentence produced by the \ac{LLM} must say 49.0, not 49 or "around 50".  
-This is more demanding than the usal faithfulness a retrival system offers, where a claim counts as grounded if it is broadly supported by some documentation. For Operational \ac{BI} a broad support is not enough.
-The number that is shown to the final user and the one that is retrived by the code should be the same because otherwise any decision that is taken solely based on the \ac{AI} generated text when a figure is close but not exact can potentially, in this context, be wrong.
+This is more demanding than the usual faithfulness a retrieval system offers, where a claim counts as grounded if it is broadly supported by some documentation. For Operational \ac{BI} a broad support is not enough.
+The number that is shown to the final user and the one that is retrieved by the code must be the same, otherwise any decision that is taken solely based on the \ac{AI} generated text, when a figure is close but not exact, can potentially be wrong.
 
 
-The causal side is even harder. Reporting a number without changing it's value is a matter of fidelity to the base data. 
-Explayining why we have that precise value, instead, is connected to the domain knowledge. 
-The set of plausible-sounding causes for any gap is enormous, while the possible set of causes admitted by the domain in small and specific. 
-A narrative defined as "usefull" has to stay inside this small set. 
-It should behave like an expert analyst that among everything that could explain the gap, choose only the feasable reasons and conseguently actions that a Manager should take to improve the situation.
-Domain constraint without numerical fidelty buys very little, a right explanation based on a wrong input it's meaningless.
+The causal side is even harder. Reporting a number without changing its value is a matter of fidelity to the base data. 
+Explaining why we have that precise value, instead, is connected to the domain knowledge. 
+The set of plausible-sounding causes for any gap is enormous, while the possible set of causes admitted by the domain is small and specific. 
+A narrative defined as "useful" has to stay inside this small set. 
+It should behave like an expert analyst that among the possible explanations of the gap, chooses only the feasible ones and consequently actions that a manager can adopt in order to improve the situation.
+Domain constraint without numerical fidelity buys very little, a right explanation based on a wrong input is meaningless.
+
+Those two requirements matter even more because a wrong output does not stay only on the screen. 
+A manager uses it as the base for decisions that influence the whole productivity.
+The standard here is therefore demanding, above all on the numbers: a number must be right every time, because one confident mistake, acted upon, can undo a week of planning.
+The casual side is a different story: the most I can require is that the explanation stays inside what the domain admits.
+In particular, this last part is where most of the failure I observed were located. 
+% It is also the section that existing approaches leave largely uncovered.
 
 
 \section{Framework}
-The primary research question and the supporting sub-questions that guide the entire thesis aim to address how an AI-BI data binding framework can be designed to guarantee such fidelity.
+The two criticalities highlighted in the previous section shape the questions that guide the thesis.
+I framed the work around one main question and two subsequent ones, each at a different level.
+
+The first question is empirical and comes before thinking about any solution: what are the common patterns of grounding failure that occur when a language model generates a narrative over a high-density \ac{BI} dashboard?
+I wanted a clear picture of how the model fails in practice derived from the field directly, rather than borrowed from the literature. 
+This decision was motivated by the intention to build a tailored and fix design around the real failures.
+
+From the answer to this primary question two design questions follow. 
+The second asks what architecture can be implemented to constrain the faithfulness of the model towards both the numerical and causal sides at once, rather than patching each slip in isolation?
+The last question is narrower: what role can a curated knowledge tree, a structured map of causes and feasible actions, play as the base structure that bounds what the model is allowed to say?
+
+Those three questions mark the trace that next chapters will follow. The primary is answered by a catalogue of failure modes derived from the internship itself, the second and third by the framework that has been built to mitigate those errors and tested against the same catalogue.
 
 \paragraph{Structure of the Thesis}
 The remainder of this document is organized as follows:
 
 \begin{itemize}
-    \item \textbf{Chapter 2} reviews the state of the art and related works, exploring current paradigms for data integration, evaluating hallucination metrics, and identifying the specific research gap in operational BI.
+    \item \textbf{Chapter 2} reviews the state of the art and related works, exploring current paradigms for \ac{LLM} integration, evaluating hallucination metrics, and positioning the work with respect to current methodologies.
     
     \item \textbf{Chapter 3} introduces the case study, detailing the operational setting, the core metric, the pre-AI baseline, and the single-case methodology adopted during the internship.
     
     \item \textbf{Chapter 4} presents the proposed solution, detailing the conceptual innovation of the three-contract framework (tile-as-source, curated knowledge tree, and sanitizer) and the system architecture.
     
-    \item \textbf{Chapter 5} focuses on the results and evaluation, analyzing the catalog of grounding failures and providing both quantitative controlled assessments and real-world qualitative evidence.
+    \item \textbf{Chapter 5} focuses on the results and evaluation, analyzing the catalog of grounding failures and providing both a quantitative evaluation on real operational data and real-world qualitative evidence.
     
     \item \textbf{Chapter 6} discusses the findings, highlighting the thesis contributions and generalizability, acknowledging limitations, and outlining future research directions.
 \end{itemize}
