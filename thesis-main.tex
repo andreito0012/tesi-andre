@@ -107,7 +107,7 @@ Domain constraint without numerical fidelity buys very little, a right explanati
 Those two requirements matter even more because a wrong output does not stay only on the screen. 
 A manager uses it as the base for decisions that influence the whole productivity.
 The standard here is therefore demanding, above all on the numbers: a number must be right every time, because one confident mistake, acted upon, can undo a week of planning.
-The casual side is a different story: the most I can require is that the explanation stays inside what the domain admits.
+The causal side is a different story: the most I can require is that the explanation stays inside what the domain admits.
 In particular, this last part is where most of the failure I observed were located. 
 % It is also the section that existing approaches leave largely uncovered.
 
@@ -117,7 +117,7 @@ The two criticalities highlighted in the previous section shape the questions th
 I framed the work around one main question and two subsequent ones, each at a different level.
 
 The first question is empirical and comes before thinking about any solution: what are the common patterns of grounding failure that occur when a language model generates a narrative over a high-density \ac{BI} dashboard?
-I wanted a clear picture of how the model fails in practice derived from the field directly, rather than borrowed from the literature. 
+I wanted a clear picture of how the model fails derived from the field directly, rather than borrowed from the literature. 
 This decision was motivated by the intention to build a tailored and fix design around the real failures.
 
 From the answer to this primary question two design questions follow. 
@@ -140,14 +140,34 @@ The remainder of this document is organized as follows:
     
     \item \textbf{Chapter 6} discusses the findings, highlighting the thesis contributions and generalizability, acknowledging limitations, and outlining future research directions.
 \end{itemize}
+
 %----------------------------------------------------------------------------------------
 \chapter{State of the Art and Related Works}
 \label{chap:state_of_the_art}
 %----------------------------------------------------------------------------------------
+\section {Background}
+Chapter~\ref{chap:introduction} framed the problem as two requirements that have to hold together. 
+Every number that appears in the generated text must correspond to the actual value of it and every explanation must come from the well-defined domain.
+This chapter focus on the existing literature thought that double lens.
+For each family of methods, I run the same two checks: does it guarantee the truthiness of the number, and does it bound the cause?
+The map this build is what the last section uses to present the work.
 
-\section{Data Integration}
-Main approaches for connecting LLMs to data, including Retrieval-Augmented Generation (RAG), prompt-based methods, tool use, and domain knowledge injection via semantic layers.
+\section{The grounding problem}
+When we talk about grounding, in terms of natural language processing, usually means that the output is supported by the source.
+\ac{RAG} made this idea popular: a claim counts as grounded when retrieved evidence backs it \cite{lewis2020rag}.
+There are two main failure modes as stated by the survey on hallucination in text generation \cite{ji2023survey,huang2023hallucination}.
+Intrinsic hallucination is text that contradicts the source, and extrinsic hallucinations is text that adds something the source cannot confirm.
+The same literature go further by separating faithfulness as being coherent with the input given, from factuality intended as the truth in the world.
+A text can be faithful but not factual if the input is wrong, but the narrative report it coherently.
+At the same time, a text can be factual but not faithful if it states something right in the world, but not coherent with the input.
+The requirement that matter for \ac{BI} is only the first one.
 
+Operational \ac{BI} requires a higher standard. 
+The generic support is not enough.
+A productivity figure of 49.0 is either reproduced as 49.0 or it is wrong, any representation that deviates from the defined one is non-correct. 
+So the definition that I adopt here is stricter than the common one: a narrative is grounded when every quantitative token is traceable, character by character, to a structured field, and every comparative statement agrees in sign with it.
+This aligns more with faithfulness rather than factuality, and it is tighter than both because it asks for fidelity to an exact value and not for consistency to with a passage. 
+Controlled table-to-text work, the ToTTo dataset for instance \cite{parikh2020totto}, push the generation in that direction, by asking the model to describe only the given cells without any deviation.
 \section{Evaluation}
 Existing metrics used to measure and evaluate AI hallucinations.
 
@@ -249,7 +269,7 @@ Potential next steps, such as extending the framework to support interactive Q\&
 
 \backmatter
 
-\nocite{*} % Remove this as soon as you have the first citation
+
 
 \bibliographystyle{alpha}
 \bibliography{bibliography}
