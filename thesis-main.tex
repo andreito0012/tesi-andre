@@ -231,8 +231,18 @@ Retrieval works by similarity, not by schema identity. \ac{RAG} has no concept o
 \ac{RAG} is necessary, but not sufficient, since it has no guarantee on the value.
 
 \section{Prompt engineering and reasoning}
+Lots of research focus on the prompt to improve the output, shifting the focus on how something is asked rather than the model itself.
+Chain-of-thought prompting asks the model to reason by decomposing the work in steps\cite{wei2022cot}.
+Self-consistency creates many reasoning paths and keeps the most voted one \cite{wang2023selfconsistency}.
+Instruction tuning with human feedback (RLHF) aligns the model to what the user really want by moving the work towards what is really useful \cite{ouyang2022instructgpt}. 
+All those methods lift the average quality of what comes out, not the single case.
 
-
+None of them enforce something. 
+They simply make the correct answer more likely, but they do not make the wrong one impossible.
+As reported later, even capable model with a cured but generic prompt tend to invent numbers. Good instructions alone cannot close this gap, but why does it lie to us?
+When sending a message to any \ac{LLM} we are making a request not a command, and being the model itself a probabilistic generator, it is free to follow our directions or not.
+On the casual side, prompt engineering helps, it makes the model reason tidier, and falling on fewer off-topic causes.
+On the operational side it cannot supply the hard guarantee that the operation use needs, since a well done prompt engineering only push the odd side, no amount of it can make the value certain.
 \section{Literature}
 Current research and advancements in GenBI and LLM OLAP.
 
