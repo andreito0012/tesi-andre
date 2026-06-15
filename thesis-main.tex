@@ -5,6 +5,8 @@
 \usepackage{notes}
 \usepackage{shortcuts}
 \usepackage{acronym}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning}
 
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{6pt}
@@ -71,8 +73,8 @@ It is the final node of the logistic network, the place where packages are sorte
 The station where I worked, DFV2 in Udine, runs on a standard daily rhythm: plan the day, run it, measure what happen, adjust for tomorrow. 
 The manager controls the rhythm through a large set of indicators that are read every day to determine if any correction is needed. Normally the window to act is narrow so it is important that a manager doesn't get the picture late or even wrong otherwise the chances to fix it would be lost.
 
-Among all the indicators that we used at the station, one productivity ratio acts as the headline figure, it's a number that represents the capability of the station to turn paid work into delivered packages.
-Most of the days this ratio is close to the planned one, but not exactly on it and that gap is what a manager has to explore, understand and explain. 
+Among all the indicators that we used at the station, one metric acts as the headline figure, a single number that capture how efficiently the station operates.
+Most of the days this number is close to the planned one, but not exactly on it and that gap is what a manager has to explore, understand and explain. 
 A process that is anything but trivial.
 This difference is the combined effect of many separate factors, some of them are internal to the station while the rest of them are completely external, and working out which factor and its weight is a task that, before this project, was done completely by hand.
 
@@ -89,15 +91,56 @@ A manager must be able to safely rely on the output of the model while, at the s
 \section{Criticalities}
 The main difficulty of this project is the grounding problem, intended in a stricter sense than the one commonly used in the literature.
 It can be decomposed into two main requirements that need to hold together. 
-The first is numerical: every quantitative token in the generated text must be traceable, character by character, to the pre-computed value. 
+The first is numerical: the number must correspond exactly to the value behind the dashboard, not an approximation of it.
 The second one is causal: every explanation and every recommendation  must come from a well-defined set of causes that the domain admits, not from everything that seems reasonable.
+Figure~\ref{fig:ch1_problem} shows the two requirements and the related failure points.
 
-Consider the numerical side first. If the value that the dashboard shows is 49.0, the sentence produced by the \ac{LLM} must say 49.0, not 49 or "around 50".  
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}[
+  font=\small,
+  box/.style={rectangle, rounded corners=2pt, draw, thick, align=center,
+              minimum height=11mm, text width=22mm, inner sep=3pt},
+  data/.style={box, fill=black!4},
+  llm/.style={box, fill=black!10},
+  flow/.style={-{Latex[length=2.6mm]}, thick},
+  ref/.style={-{Latex[length=1.8mm]}, dashed, black!55},
+  fail/.style={rectangle, rounded corners=2pt, draw, dashed, align=left,
+               text width=42mm, inner sep=4pt, font=\footnotesize},
+  point/.style={-{Latex[length=1.8mm]}, densely dashed, black!70}
+]
+% --- pipeline (left to right) ---
+\node[data] (data) {Operational\\station data};
+\node[data, right=9mm of data] (dash) {BI dashboard\\\textbf{tile = 49.0}};
+\node[llm,  right=9mm of dash]  (llm)  {Large Language\\Model};
+\node[box,  right=9mm of llm]   (narr) {Narrative for\\the manager};
+\draw[flow] (data) -- (dash);
+\draw[flow] (dash) -- (llm);
+\draw[flow] (llm)  -- (narr);
+% --- requirement 1: the number must survive unchanged (arc above) ---
+\draw[ref] (dash.north) to[bend left=20]
+  node[above, font=\scriptsize, align=center, text=black]
+  {The value must reach the text\\unchanged, character by character}
+  (narr.north);
+% --- the two failure points (below) ---
+\node[fail, anchor=north] (f1) at ([yshift=-15mm]dash.south)
+  {\textbf{(1) Numeric drift}\\``49.0'' is written as ``around 50''.\\Breaks numeric fidelity.};
+\node[fail, anchor=north] (f2) at ([yshift=-15mm]narr.south)
+  {\textbf{(2) Ungrounded cause}\\a cause the domain does not admit, or an action no operator can take.\\Breaks bounded cause.};
+\draw[point] (llm.south) -- (f1.north);
+\draw[point] (llm.south) -- (f2.north);
+\end{tikzpicture}
+\caption{From dashboard value to narrative, and the two points where grounding breaks: a number that drift (1) and a cause the domain does not admit (2).}
+\label{fig:ch1_problem}
+\end{figure}
+
+
+Consider the numerical side first. The one that is shown to the user must be equal to the retrieved one, if that value is close but not exact a decision taken on the base of it can still be wrong. 
 This is more demanding than the usual faithfulness a retrieval system offers, where a claim counts as grounded if it is broadly supported by some documentation. For Operational \ac{BI} a broad support is not enough.
 The number that is shown to the final user and the one that is retrieved by the code must be the same, otherwise any decision that is taken solely based on the \ac{AI} generated text, when a figure is close but not exact, can potentially be wrong.
 
 
-The causal side is even harder. Reporting a number without changing its value is a matter of fidelity to the base data. 
+The causal side is even harder. Reporting a number without changing its value is a matter of staying true to the base data. 
 Explaining why we have that precise value, instead, is connected to the domain knowledge. 
 The set of plausible-sounding causes for any gap is enormous, while the possible set of causes admitted by the domain is small and specific. 
 A narrative defined as "useful" has to stay inside this small set. 
@@ -164,12 +207,31 @@ The requirement that matter for \ac{BI} is only the first one.
 
 Operational \ac{BI} requires a higher standard. 
 The generic support is not enough.
-A productivity figure of 49.0 is either reproduced as 49.0 or it is wrong, any representation that deviates from the defined one is non-correct. 
-So the definition that I adopt here is stricter than the common one: a narrative is grounded when every quantitative token is traceable, character by character, to a structured field, and every comparative statement agrees in sign with it.
+A figure of 49.0 is either reproduced exactly or it is wrong, any representation that deviates from the defined one is non-correct. 
+As anticipated in the introduction: a narrative is grounded when every quantitative token is traceable, character by character, to a structured field, and every comparative statement agrees in sign with it.
 This aligns more with faithfulness rather than factuality, and it is tighter than both because it asks for fidelity to an exact value and not for consistency to with a passage. 
 Controlled table-to-text work, the ToTTo dataset for instance \cite{parikh2020totto}, push the generation in that direction, by asking the model to describe only the given cells without any deviation.
-\section{Evaluation}
-Existing metrics used to measure and evaluate AI hallucinations.
+
+The casual half has no real equivalent in the standard taxonomy. 
+A phrase can have all the right numbers, but still name a cause that does not exist or an impossible solution.
+The standard question when talking about hallucinations is the following: is the claim supported? 
+Rather than: does this causal belong to the domain defined set?
+The second question is the dividing line between \ac{BI} and open-domain generation, and in fact is the reason why a single definition of grounding is not enough.
+
+\section{Retrieval-Augmented Generation (RAG)}
+\ac{RAG} conditions the model by retrieving passages pulled from a corpus of documents, and concatenates them as context into the model's input \cite{lewis2020rag}.
+It cuts extrinsic hallucinations, since now, the model has something to lean on without inventing. It has become the standard way to keep a generator close to a body of documents.
+The evaluation framework follows the same logic: RAGAS scores the faithfulness, defined as the degree to which a claim is entailed in the context retrieved \cite{es2023ragas}.
+Does the generated phrase "followed" from the passages? If yes, it is considered grounded.
+
+Here the unit of grounding is the passage, and the test is the semantic support.
+For a textual response this is reasonable, but not for a number. 
+If a passage mention a figure "in the region of fifty" entails a sentence that says "around fifty", but that sentence fails the operational test I set above.
+Retrieval works by similarity, not by schema identity. \ac{RAG} has no concept of canonical identity, so it cannot distinguish between an authoritative value and one that resemble it.
+\ac{RAG} is necessary, but not sufficient, since it has no guarantee on the value.
+
+\section{Prompt engineering and reasoning}
+
 
 \section{Literature}
 Current research and advancements in GenBI and LLM OLAP.
