@@ -1,0 +1,2 @@
+{"rule":"EN_A_VS_AN","sentence":"^\\QToolformer is a similar approach but capable of deciding on its own when call an \\E(?:Dummy|Ina|Jimmy-|Dummy-|Maniquí-|Maniquíes-|Atrapa-|Dummy\\+|Dummy's\\+)[0-9]+$"}
+{"rule":"EN_A_VS_AN","sentence":"^\\QToolformer is a similar approach but capable of deciding on its own when to call an \\E(?:Dummy|Ina|Jimmy-|Dummy-|Maniquí-|Maniquíes-|Atrapa-|Dummy\\+|Dummy's\\+)[0-9]+\\Q \\E(?:Dummy|Ina|Jimmy-|Dummy-|Maniquí-|Maniquíes-|Atrapa-|Dummy\\+|Dummy's\\+)[0-9]+$"}

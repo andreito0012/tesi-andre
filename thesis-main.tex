@@ -33,6 +33,11 @@
 \acrodef{SQL}{Structured Query Language}
 \acrodef{JSON}{JavaScript Object Notation}
 \acrodef{API}{Application Programming Interface}
+\acrodef{ReAct}{Reasoning + Acting}
+\acrodef{PAL}{Program-Aided Language}
+\acrodef{LMQL}{Language Model Query Language}
+\acrodef{PICARD}{Parsing Incrementally for Constrained Auto-Regressive Decoding}
+
 
 \mainlinespacing{1.241} % line spacing in mainmatter, comment to default (1)
 
@@ -243,8 +248,34 @@ As reported later, even capable model with a cured but generic prompt tend to in
 When sending a message to any \ac{LLM} we are making a request not a command, and being the model itself a probabilistic generator, it is free to follow our directions or not.
 On the casual side, prompt engineering helps, it makes the model reason tidier, and falling on fewer off-topic causes.
 On the operational side it cannot supply the hard guarantee that the operation use needs, since a well done prompt engineering only push the odd side, no amount of it can make the value certain.
-\section{Literature}
-Current research and advancements in GenBI and LLM OLAP.
+
+\section{Tool use and program-aided generation}
+A different family that gives the model access to external tools. 
+\ac{ReAct} represents an iterative cycle composed of thought, action and observation. It introduces the possibility to perform a search call \cite{yao2023react}.
+Toolformer is a similar approach but capable of deciding on its own when to call an \ac{API} \cite{schick2023toolformer}.
+\ac{PAL} models performs a step forward by generating the code that automatically perform an operation, for example, instead of guessing it \cite{gao2023pal}.
+Consequently, the model skips the hallucination risk associated with logic.
+In particular this last idea is close to the one I adopted: taking all the numbers out of the model hands.
+
+All those methods share one limit.
+They do a great job in securing the data, meaning the input likely will be correct, but they let the model move on this information without any control or boundary.
+Fetching the right value is only half of the job, the other half involves representing it correctly. Nothing with these techniques checks that the number that comes out in the sentence, is the same that went into the prompt.
+The tool fixes the input. The output is still free, and a free output can still drift.
+
+
+\section{Constrained and guided generation}
+When we talked about constrained decoding we refer to a family of methods that force the output into a defined shape independently of the content.
+\ac{LMQL} treat the model not as text but as a small program characterized by a set of constrains \cite{beurerkellner2023lmql}. 
+A typical obligation can be: the response must be shorter than twenty token, and the system code will enforce that.
+\ac{PICARD} bring this idea to \ac{SQL}. 
+It is an approach that by parsing incrementally, and so at each generation step, reject any token that would make the query invalid, based on the applied constraints.
+The final result is a query that is syntactically valid, otherwise any token beaking the syntax is rejected and regenerated \cite{scholak2021picard}.
+
+Constrained decoding is the closest approach to the sanitizer I implemented, and described in chapter~\ref{chap:proposed_solution}.
+This is motivated by the fact that both of them use code to enforce, before or after the generation, a rule on the output.
+When talking about \ac{PICARD} and \ac{LMQL} however, they focus only on the form level: A syntactically valid query or well-formed number where it belongs, but say nothing about the correspondence of the value to the source or the free-text cause belonging to the domain.
+
+
 
 \section{Research Gap}
 Identification of the specific gap in the current literature that this thesis aims to bridge by proposing a unified framework.
@@ -343,7 +374,7 @@ Potential next steps, such as extending the framework to support interactive Q\&
 
 
 
-\bibliographystyle{alpha}
+\bibliographystyle{unsrt}
 \bibliography{bibliography}
 
 \begin{acknowledgements} % this is optional
