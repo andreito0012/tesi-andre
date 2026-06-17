@@ -37,6 +37,9 @@
 \acrodef{PAL}{Program-Aided Language}
 \acrodef{LMQL}{Language Model Query Language}
 \acrodef{PICARD}{Parsing Incrementally for Constrained Auto-Regressive Decoding}
+\acrodef{dbt}{data build tool}
+\acrodef{RoG}{Reasoning over Graphs}
+
 
 
 \mainlinespacing{1.241} % line spacing in mainmatter, comment to default (1)
@@ -276,6 +279,21 @@ This is motivated by the fact that both of them use code to enforce, before or a
 When talking about \ac{PICARD} and \ac{LMQL} however, they focus only on the form level: A syntactically valid query or well-formed number where it belongs, but say nothing about the correspondence of the value to the source or the free-text cause belonging to the domain.
 
 
+\section{Semantic layers and knowledge-graph}
+There are two ideas from the data-engineering world are close to what I need. 
+The first one is semantic layer, used by tools like \ac{dbt} and data Cube in which the definition of a metric appears only in a single governed and controlled place \cite{dbt2024semantic} \cite{cube2024semantic}.
+The core principle is a single source of truth, the value is computed in one place and read everywhere else so two reports, for example, cannot disagree on the calculation because they have silently built their own version of the metric.
+This methodology is the one that I adopt for numbers: take a figure from a single upstream source and copying it, never let the model work it out.
+However, that approach is limited because the semantic layer stops at the narrative, this is motivated by the fact that returns clean and canonical numbers, but it doesn't say why that number moved or list, among the possible causes, the one worth reporting.
+
+The second idea regards the causal side. Grounding an \ac{LLM} in a knowledge graph is the best way to keep what the model says inside a fixed domain.
+How the two can be joined is, by now, well mapped \cite{pan2024llmkg}: a graph defines what the domain treats as true and guides the model's reasoning, preventing it from relying on whatever has been absorbed during the training.
+What matters the most for my case is the \ac{RoG}. It is an approach that "bounds" every step in the generation process to a specific path in the graph, such that a response can be traced back to a chain of specific relations rather than to a plausible-sounding guess \cite{luo2024rog}.
+Other strategies directly feed a smaller version of the tree directly into the prompt \cite{baek2023knowledgeaugmented}, but independently of the methodology that is chosen, the key idea is to give the model a structure and let that structure decide what counts as admissible to say.
+
+Neither family does the whole job alone.
+The semantic layer return the right number, no story and the knowledge tree grounding bound the story, but nothing about the value.
+What is needed is a combination of both to make sure that the framework is capable of supporting a correct operational narrative, and it is the one I build in chapter~\ref{chap:proposed_solution}.
 
 \section{Research Gap}
 Identification of the specific gap in the current literature that this thesis aims to bridge by proposing a unified framework.
