@@ -39,6 +39,7 @@
 \acrodef{PICARD}{Parsing Incrementally for Constrained Auto-Regressive Decoding}
 \acrodef{dbt}{data build tool}
 \acrodef{RoG}{Reasoning over Graphs}
+\acrodef{NL2VIS}{Natural Language to Visualization}
 
 
 
@@ -196,7 +197,7 @@ The remainder of this document is organized as follows:
 \chapter{State of the Art and Related Works}
 \label{chap:state_of_the_art}
 %----------------------------------------------------------------------------------------
-\section {Background}
+
 Chapter~\ref{chap:introduction} framed the problem as two requirements that have to hold together. 
 Every number that appears in the generated text must correspond to the actual value of it and every explanation must come from the well-defined domain.
 This chapter focus on the existing literature thought that double lens.
@@ -239,6 +240,7 @@ Retrieval works by similarity, not by schema identity. \ac{RAG} has no concept o
 \ac{RAG} is necessary, but not sufficient, since it has no guarantee on the value.
 
 \section{Prompt engineering and reasoning}
+\label{sec:prompt_engineering}
 Lots of research focus on the prompt to improve the output, shifting the focus on how something is asked rather than the model itself.
 Chain-of-thought prompting asks the model to reason by decomposing the work in steps\cite{wei2022cot}.
 Self-consistency creates many reasoning paths and keeps the most voted one \cite{wang2023selfconsistency}.
@@ -280,20 +282,40 @@ When talking about \ac{PICARD} and \ac{LMQL} however, they focus only on the for
 
 
 \section{Semantic layers and knowledge-graph}
-There are two ideas from the data-engineering world are close to what I need. 
-The first one is semantic layer, used by tools like \ac{dbt} and data Cube in which the definition of a metric appears only in a single governed and controlled place \cite{dbt2024semantic} \cite{cube2024semantic}.
-The core principle is a single source of truth, the value is computed in one place and read everywhere else so two reports, for example, cannot disagree on the calculation because they have silently built their own version of the metric.
-This methodology is the one that I adopt for numbers: take a figure from a single upstream source and copying it, never let the model work it out.
-However, that approach is limited because the semantic layer stops at the narrative, this is motivated by the fact that returns clean and canonical numbers, but it doesn't say why that number moved or list, among the possible causes, the one worth reporting.
+There are two ideas from the data-engineering world that are close to what I need. 
+The first one is the semantic layer, used by tools like \ac{dbt} and data Cube in which the definition of a metric appears only in a single governed and controlled place \cite{dbt2024semantic} \cite{cube2024semantic}.
+The core principle is a single source of truth: the value is computed in one place and read everywhere else so two reports, for example, cannot disagree on the calculations because they have silently built their own version of the metric.
+This methodology is the one that I adopt for numbers: take a figure from a single upstream source and copy it, never letting the model work it out.
+However, that approach is limited because the semantic layer stops at the narrative. It returns clean and canonical numbers, but it doesn't say why that number moved or list, among the possible causes, the one worth reporting.
 
 The second idea regards the causal side. Grounding an \ac{LLM} in a knowledge graph is the best way to keep what the model says inside a fixed domain.
 How the two can be joined is, by now, well mapped \cite{pan2024llmkg}: a graph defines what the domain treats as true and guides the model's reasoning, preventing it from relying on whatever has been absorbed during the training.
 What matters the most for my case is the \ac{RoG}. It is an approach that "bounds" every step in the generation process to a specific path in the graph, such that a response can be traced back to a chain of specific relations rather than to a plausible-sounding guess \cite{luo2024rog}.
-Other strategies directly feed a smaller version of the tree directly into the prompt \cite{baek2023knowledgeaugmented}, but independently of the methodology that is chosen, the key idea is to give the model a structure and let that structure decide what counts as admissible to say.
+Other strategies directly feed a smaller version of the tree into the prompt itself \cite{baek2023knowledgeaugmented}, but independently of the methodology that is chosen, the key idea is to give the model a structure and let that structure decide what counts as admissible to say.
 
 Neither family does the whole job alone.
 The semantic layer return the right number, no story and the knowledge tree grounding bound the story, but nothing about the value.
 What is needed is a combination of both to make sure that the framework is capable of supporting a correct operational narrative, and it is the one I build in chapter~\ref{chap:proposed_solution}.
+
+\section{Generative BI and conversational analytics}
+The applied side of turning dashboards into narrative goes under different names: Conversational \ac{BI}, augmented analytics, generative \ac{BI}.
+Its oldest thread is text-to-\ac{SQL}, where a natural language question is translated into an executable query, scored by benchmark like Spider that evaluates how effective and efficient the transformations is \cite{yu2018spider}. 
+A parallel line turns the same question into a chart \cite{shen2023nl2vis}. Two different outputs originated from the same idea: a table or a picture, nothing more. Any explanation, that a manager needs is outside their scope.
+
+It is proven that letting a model handle the numbers is risky.
+\ac{LLM} are unreliable even on simple quantitative reasoning, because of their nature as stated in section ~\ref{sec:prompt_engineering}.
+A study about text-to-\ac{SQL} reveals that, in a production environment, the \ac{BI} reports present semantic hallucinations, specifically regarding the meaning, with no domain-specific way to track them down\cite{choi2025factconsistency}.
+This is the empirical reason behind the strict rule implemented in chapter~\ref{chap:proposed_solution}: the safest number is the one the models never compute.
+
+Over time commercial tool have moved closer to the narrative side.
+Tableau Pulse \cite{tableau2024pulse} and Copilot for Power BI \cite{microsoft2024copilot} are capable of writing short insights over tiles, and they are the industry baseline for this work.
+The most advanced of them publishes an approach close to the one that I adopt: Tableau Pulse use a deterministic statistical model as ground truth for generation, keeping the \ac{LLM} away from numbers. 
+None of those tools, however, expose how that grounding holds up under measurement.
+
+Academic field has grown fast, on this topic, during the last year.
+Some systems are capable of detecting the domain by their own without any human direction and elaborate multi-perspective narratives without any predefined schema or concepts \cite{zhang2025datadash}.
+Others, especially in finance, join casual-discovery statistical algorithms with budgetary variance to automate root cause diagnosis \cite{chen2026causalvariance}, which is the case nearest to mine.
+
 
 \section{Research Gap}
 Identification of the specific gap in the current literature that this thesis aims to bridge by proposing a unified framework.
