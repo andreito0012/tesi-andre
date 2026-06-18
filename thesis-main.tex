@@ -41,6 +41,9 @@
 \acrodef{RoG}{Reasoning over Graphs}
 \acrodef{NL2VIS}{Natural Language to Visualization}
 \acrodef{VOOL}{Vocalizing OLAP}
+\acrodef{FActSCore}{Faithfulness and Accuracy Score}
+\acrodef{HaluEval}{Hallucination Evaluation}
+\acrodef{truthfulQA}{Truthful Question Answering}
 
 
 
@@ -336,17 +339,30 @@ The model does only two things: It ranks the candidate view, and it explains why
 These are the nearest neighbors of the present work, and they distinguish from it for two different aspects: their causes are generated freely or discovered statistically, no bound to any curated knowledge tree, and
 they implement numerical fidelity by keeping the numbers away from the model, not by a deterministic contract over the generated narrative.
 %Finally, none of them measures their output on a catalogue of grounding faliure modes.
-\section{Research Gap}
-Identification of the specific gap in the current literature that this thesis aims to bridge by proposing a unified framework.
+\section{Evaluating hallucination and faithfulness}
+The way faithfulness is measured decides what is counted as solved. Critical part, in fact, is choosing the right approach to the scoring, that avoid marking something "solved" that is not.
+\ac{FActSCore} is the most fine-grained approach: it works by breaking a long text into smaller fragment called "atomic facts" which are single elementary claims, and calculate the percentage of those that is supported by the source \cite{min2023factscore}.
+\ac{HaluEval} \cite{li2023halueval} and \ac{truthfulQA} \cite{lin2022truthfulqa} instead, build benchmarks of hallucinated or misleading content. A benchmark is a fixed and shared dataset of test cases that lets different system be compared on the same ground.
+SelfCeckGPT goes for a different approach:  no need for any external source, it exploits the model itself by running the same request several times. 
+The fundamental idea behind this sampling-based check is: the model is asked for the same thing repeatedly, if it is invented the fabrication drifts since the \ac{LLM} will invent slightly different version each time; if the multiple answers agree with each other it is considered a real fact  \cite{manakul2023selfcheckgpt}.
 
-I suggest referencing stuff as follows: \cref{fig:random-image} or \Cref{fig:random-image}
 
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=.8\linewidth]{figures/random-image.pdf}
-    \caption{Some random image}
-    \label{fig:random-image}
-\end{figure}
+All those instruments are not build for operational \ac{BI}.
+For example an atomic-fact check has no notion of the exact value, while the sampling-based detector is probabilistic: a run cannot be deterministic or reproducible.
+A retrieval faithfulness score measures support, not identity \cite{es2023ragas}. 
+And more to the point, none of them distinguish between a numerical error and a causal one, which is the very distinction this work is build around.
+For that reason Chapter~\ref{chap:results} measures the presence rate of each failure mode, tested across all the configurations, so the effectiveness of each contract can be read directly. 
+
+
+
+%I suggest referencing stuff as follows: \cref{fig:random-image} or \Cref{fig:random-image}
+
+%\begin{figure}[h]
+  %  \centering
+   % \includegraphics[width=.8\linewidth]{figures/random-image.pdf}
+  %  \caption{Some random image}
+   % \label{fig:random-image}
+%\end{figure}
 
 %----------------------------------------------------------------------------------------
 \chapter{Case Study: Context and Problem}
