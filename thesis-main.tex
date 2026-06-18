@@ -40,6 +40,7 @@
 \acrodef{dbt}{data build tool}
 \acrodef{RoG}{Reasoning over Graphs}
 \acrodef{NL2VIS}{Natural Language to Visualization}
+\acrodef{VOOL}{Vocalizing OLAP}
 
 
 
@@ -205,118 +206,136 @@ For each family of methods, I run the same two checks: does it guarantee the tru
 The map this build is what the last section uses to present the work.
 
 \section{The grounding problem}
-When we talk about grounding, in terms of natural language processing, usually means that the output is supported by the source.
+When we talk about grounding, in terms of natural language processing, usually mean that the output is supported by the source.
 \ac{RAG} made this idea popular: a claim counts as grounded when retrieved evidence backs it \cite{lewis2020rag}.
-There are two main failure modes as stated by the survey on hallucination in text generation \cite{ji2023survey,huang2023hallucination}.
-Intrinsic hallucination is text that contradicts the source, and extrinsic hallucinations is text that adds something the source cannot confirm.
-The same literature go further by separating faithfulness as being coherent with the input given, from factuality intended as the truth in the world.
-A text can be faithful but not factual if the input is wrong, but the narrative report it coherently.
+There are two main failure modes as stated by the survey on hallucination in text generation \cite{ji2023survey}.
+Intrinsic hallucination is text that contradicts the source, and extrinsic hallucination is text that adds something the source cannot confirm.
+The same literature goes further by separating faithfulness as being coherent with the input given, from factuality intended as the truth in the world \cite{huang2025hallucination}.
+A text can be faithful but not factual if the input is wrong, but the narrative reports it coherently.
 At the same time, a text can be factual but not faithful if it states something right in the world, but not coherent with the input.
-The requirement that matter for \ac{BI} is only the first one.
+The requirement that matters for \ac{BI} is only the first one. 
 
 Operational \ac{BI} requires a higher standard. 
 The generic support is not enough.
-A figure of 49.0 is either reproduced exactly or it is wrong, any representation that deviates from the defined one is non-correct. 
+A figure of 49.0 is either reproduced exactly or it is wrong. Any representation that deviates from the defined one is non-correct. 
 As anticipated in the introduction: a narrative is grounded when every quantitative token is traceable, character by character, to a structured field, and every comparative statement agrees in sign with it.
-This aligns more with faithfulness rather than factuality, and it is tighter than both because it asks for fidelity to an exact value and not for consistency to with a passage. 
-Controlled table-to-text work, the ToTTo dataset for instance \cite{parikh2020totto}, push the generation in that direction, by asking the model to describe only the given cells without any deviation.
+This aligns more with faithfulness rather than factuality, and it is tighter than both because it asks for fidelity to an exact value and not for consistency with a passage. 
+Controlled table-to-text work, the ToTTo dataset for instance \cite{parikh2020totto}, pushes the generation in that direction, by asking the model to describe only the given cells without any deviation.
 
-The casual half has no real equivalent in the standard taxonomy. 
+The causal half has no real equivalent in the standard taxonomy. 
 A phrase can have all the right numbers, but still name a cause that does not exist or an impossible solution.
 The standard question when talking about hallucinations is the following: is the claim supported? 
-Rather than: does this causal belong to the domain defined set?
-The second question is the dividing line between \ac{BI} and open-domain generation, and in fact is the reason why a single definition of grounding is not enough.
+Rather than: does this cause belong to the domain-defined set?
+The second question is the dividing line between \ac{BI} and open-domain generation, and in fact it is the reason why a single definition of grounding is not enough.
 
 \section{Retrieval-Augmented Generation (RAG)}
-\ac{RAG} conditions the model by retrieving passages pulled from a corpus of documents, and concatenates them as context into the model's input \cite{lewis2020rag}.
-It cuts extrinsic hallucinations, since now, the model has something to lean on without inventing. It has become the standard way to keep a generator close to a body of documents.
-The evaluation framework follows the same logic: RAGAS scores the faithfulness, defined as the degree to which a claim is entailed in the context retrieved \cite{es2023ragas}.
-Does the generated phrase "followed" from the passages? If yes, it is considered grounded.
+\ac{RAG} conditions the model by retrieving passages pulled from a corpus of documents and concatenates them as context into the model's input \cite{lewis2020rag}.
+It cuts extrinsic hallucinations, since now the model has something to lean on without inventing. It has become the standard way to keep a generator close to a body of documents.
+The evaluation framework follows the same logic: RAGAS scores the faithfulness, defined as the degree to which a claim is entailed by the retrieved context \cite{es2023ragas}.
+Does the generated phrase follow from the passages? If yes, it is considered grounded.
 
 Here the unit of grounding is the passage, and the test is the semantic support.
 For a textual response this is reasonable, but not for a number. 
-If a passage mention a figure "in the region of fifty" entails a sentence that says "around fifty", but that sentence fails the operational test I set above.
-Retrieval works by similarity, not by schema identity. \ac{RAG} has no concept of canonical identity, so it cannot distinguish between an authoritative value and one that resemble it.
+A passage that mention a figure "in the region of fifty" entails a sentence that saying "around fifty", but that sentence fails the operational test I set above.
+Retrieval works by similarity, not by schema identity. \ac{RAG} has no concept of canonical identity, so it cannot distinguish between an authoritative value and one that resembles it.
 \ac{RAG} is necessary, but not sufficient, since it has no guarantee on the value.
+
 
 \section{Prompt engineering and reasoning}
 \label{sec:prompt_engineering}
-Lots of research focus on the prompt to improve the output, shifting the focus on how something is asked rather than the model itself.
-Chain-of-thought prompting asks the model to reason by decomposing the work in steps\cite{wei2022cot}.
+Lots of research focus on the prompt to improve the output, shifting the focus to how something is asked rather than the model itself.
+Chain-of-thought prompting asks the model to reason by decomposing the work into steps\cite{wei2022cot}.
 Self-consistency creates many reasoning paths and keeps the most voted one \cite{wang2023selfconsistency}.
-Instruction tuning with human feedback (RLHF) aligns the model to what the user really want by moving the work towards what is really useful \cite{ouyang2022instructgpt}. 
-All those methods lift the average quality of what comes out, not the single case.
+Both methods lift the average quality of what comes out, not the single case.
 
-None of them enforce something. 
+None of them enforces anything. 
 They simply make the correct answer more likely, but they do not make the wrong one impossible.
-As reported later, even capable model with a cured but generic prompt tend to invent numbers. Good instructions alone cannot close this gap, but why does it lie to us?
-When sending a message to any \ac{LLM} we are making a request not a command, and being the model itself a probabilistic generator, it is free to follow our directions or not.
-On the casual side, prompt engineering helps, it makes the model reason tidier, and falling on fewer off-topic causes.
-On the operational side it cannot supply the hard guarantee that the operation use needs, since a well done prompt engineering only push the odd side, no amount of it can make the value certain.
+As reported later, even a capable model with a curated but generic prompt tend to invent numbers. Good instructions alone cannot close this gap, but why does it lie to us?
+When sending a message to any \ac{LLM} we are making a request, not a command, and being the model itself a probabilistic generator, it is free to follow our directions or not.
+On the causal side, prompt engineering helps: it makes the model reason tidier, and fall on fewer off-topic causes.
+On the operational side it cannot supply the hard guarantee that the operational use needs, since a well-done prompt engineering only pushes the odds; no amount of it can make the value certain.
+
 
 \section{Tool use and program-aided generation}
-A different family that gives the model access to external tools. 
-\ac{ReAct} represents an iterative cycle composed of thought, action and observation. It introduces the possibility to perform a search call \cite{yao2023react}.
-Toolformer is a similar approach but capable of deciding on its own when to call an \ac{API} \cite{schick2023toolformer}.
-\ac{PAL} models performs a step forward by generating the code that automatically perform an operation, for example, instead of guessing it \cite{gao2023pal}.
-Consequently, the model skips the hallucination risk associated with logic.
-In particular this last idea is close to the one I adopted: taking all the numbers out of the model hands.
+A different family gives the model access to external tools. 
+\ac{ReAct} represents an iterative cycle composed of thought, action and observation. It introduces the possibility of performing a search call \cite{yao2023react}.
+Toolformer is a similar approach, capable of deciding on its own when to call an \ac{API} \cite{schick2023toolformer}.
+\ac{PAL} models perform a step forward by generating the code that automatically performs an operation, for example, instead of guessing it \cite{gao2023pal}.
+Consequently, the model skips the hallucination risk associated with computation.
+In particular, this last idea is close to the one I adopted: taking all the numbers out of the model’s hands.
 
 All those methods share one limit.
-They do a great job in securing the data, meaning the input likely will be correct, but they let the model move on this information without any control or boundary.
-Fetching the right value is only half of the job, the other half involves representing it correctly. Nothing with these techniques checks that the number that comes out in the sentence, is the same that went into the prompt.
+They do a great job at securing the data, meaning the input will likely be correct, but they let the model build on this information without any control or boundary.
+Fetching the right value is only half of the job; the other half involves representing it correctly. Nothing in these techniques checks that the number that comes out in the sentence is the same as the one that went into the prompt.
 The tool fixes the input. The output is still free, and a free output can still drift.
 
 
 \section{Constrained and guided generation}
-When we talked about constrained decoding we refer to a family of methods that force the output into a defined shape independently of the content.
-\ac{LMQL} treat the model not as text but as a small program characterized by a set of constrains \cite{beurerkellner2023lmql}. 
-A typical obligation can be: the response must be shorter than twenty token, and the system code will enforce that.
-\ac{PICARD} bring this idea to \ac{SQL}. 
-It is an approach that by parsing incrementally, and so at each generation step, reject any token that would make the query invalid, based on the applied constraints.
-The final result is a query that is syntactically valid, otherwise any token beaking the syntax is rejected and regenerated \cite{scholak2021picard}.
+When we talk about constrained decoding we refer to a family of methods that force the output into a defined shape independently of the content.
+\ac{LMQL} treats the prompt not as plain text but as a small program characterized by a set of constraints \cite{beurerkellner2023lmql}. 
+A typical obligation can be: the response must be shorter than twenty tokens, and the system code will enforce that.
+\ac{PICARD} brings this idea to \ac{SQL}. 
+It is an approach that, by parsing incrementally at each generation step, rejects any token that would make the query invalid, based on the applied constraints.
+The final result is a query that is syntactically valid, because any token breaking the syntax is rejected and regenerated \cite{scholak2021picard}.
 
-Constrained decoding is the closest approach to the sanitizer I implemented, and described in chapter~\ref{chap:proposed_solution}.
+Constrained decoding is the closest approach to the sanitizer I implemented and described in chapter~\ref{chap:proposed_solution}.
 This is motivated by the fact that both of them use code to enforce, before or after the generation, a rule on the output.
-When talking about \ac{PICARD} and \ac{LMQL} however, they focus only on the form level: A syntactically valid query or well-formed number where it belongs, but say nothing about the correspondence of the value to the source or the free-text cause belonging to the domain.
+When talking about \ac{PICARD} and \ac{LMQL}, however, they focus only on the form level: a syntactically valid query or well-formed number where it belongs, but it says nothing about the correspondence of the value to the source or the free-text cause belonging to the domain.
 
 
-\section{Semantic layers and knowledge-graph}
+
+
+\section{Semantic layers and knowledge-graphs}
 There are two ideas from the data-engineering world that are close to what I need. 
-The first one is the semantic layer, used by tools like \ac{dbt} and data Cube in which the definition of a metric appears only in a single governed and controlled place \cite{dbt2024semantic} \cite{cube2024semantic}.
-The core principle is a single source of truth: the value is computed in one place and read everywhere else so two reports, for example, cannot disagree on the calculations because they have silently built their own version of the metric.
+The first one is the semantic layer, used by tools like \ac{dbt} and Cube in which the definition of a metric appears only in a single governed and controlled place \cite{dbt2024semantic, cube2024semantic}.
+The core principle is a single source of truth: the value is computed in one place and read everywhere else so two reports, for example, cannot disagree on the calculations by silently building their own version of the metric.
 This methodology is the one that I adopt for numbers: take a figure from a single upstream source and copy it, never letting the model work it out.
-However, that approach is limited because the semantic layer stops at the narrative. It returns clean and canonical numbers, but it doesn't say why that number moved or list, among the possible causes, the one worth reporting.
+However, that approach is limited because the semantic layer stops before the narrative. It returns clean and canonical numbers, but it doesn't say why that number moved or list, among the possible causes, the one worth reporting.
 
-The second idea regards the causal side. Grounding an \ac{LLM} in a knowledge graph is the best way to keep what the model says inside a fixed domain.
-How the two can be joined is, by now, well mapped \cite{pan2024llmkg}: a graph defines what the domain treats as true and guides the model's reasoning, preventing it from relying on whatever has been absorbed during the training.
-What matters the most for my case is the \ac{RoG}. It is an approach that "bounds" every step in the generation process to a specific path in the graph, such that a response can be traced back to a chain of specific relations rather than to a plausible-sounding guess \cite{luo2024rog}.
-Other strategies directly feed a smaller version of the tree into the prompt itself \cite{baek2023knowledgeaugmented}, but independently of the methodology that is chosen, the key idea is to give the model a structure and let that structure decide what counts as admissible to say.
+The second idea regards the causal side. Grounding an \ac{LLM} in a knowledge graph is one of the most effective way to keep what the model says inside a fixed domain.
+How the two can be joined is, by now, well mapped \cite{pan2024llmkg}: a graph defines what the domain treats as true and guides the model's reasoning, preventing it from relying on whatever has been absorbed during training.
+What matters most for my case is the \ac{RoG}. It is an approach that "bounds" every step in the generation process to a specific path in the graph, such that a response can be traced back to a chain of specific relations rather than to a plausible-sounding guess \cite{luo2024rog}.
+Other strategies directly feed a smaller portion of the graph into the prompt itself \cite{baek2023knowledgeaugmented}, but independently of the methodology that is chosen, the key idea is to give the model a structure and let that structure decide what counts as admissible to say.
 
 Neither family does the whole job alone.
-The semantic layer return the right number, no story and the knowledge tree grounding bound the story, but nothing about the value.
+The semantic layer returns the right number but no story; knowledge-graph grounding bounds the story, but nothing about the value.
 What is needed is a combination of both to make sure that the framework is capable of supporting a correct operational narrative, and it is the one I build in chapter~\ref{chap:proposed_solution}.
 
+
 \section{Generative BI and conversational analytics}
-The applied side of turning dashboards into narrative goes under different names: Conversational \ac{BI}, augmented analytics, generative \ac{BI}.
-Its oldest thread is text-to-\ac{SQL}, where a natural language question is translated into an executable query, scored by benchmark like Spider that evaluates how effective and efficient the transformations is \cite{yu2018spider}. 
-A parallel line turns the same question into a chart \cite{shen2023nl2vis}. Two different outputs originated from the same idea: a table or a picture, nothing more. Any explanation, that a manager needs is outside their scope.
+The applied side of turning dashboards into narrative goes under different names: conversational \ac{BI}, augmented analytics, generative \ac{BI}.
+Its oldest thread is text-to-\ac{SQL}, where a natural language question is translated into an executable query, scored by benchmark like Spider that evaluates how accurate the transformations is \cite{yu2018spider}. 
+A parallel line turns the same question into a chart \cite{shen2023nl2vis}. Two different outputs originated from the same idea: a table or a picture, nothing more. Any explanation that a manager needs is outside their scope.
 
 It is proven that letting a model handle the numbers is risky.
-\ac{LLM} are unreliable even on simple quantitative reasoning, because of their nature as stated in section ~\ref{sec:prompt_engineering}.
-A study about text-to-\ac{SQL} reveals that, in a production environment, the \ac{BI} reports present semantic hallucinations, specifically regarding the meaning, with no domain-specific way to track them down\cite{choi2025factconsistency}.
+\acp{LLM} are unreliable even on simple quantitative reasoning, because of their nature as stated in Section ~\ref{sec:prompt_engineering}.
+A study about text-to-\ac{SQL} reveals that, in a production environment, the \ac{BI} reports present semantic hallucinations with no domain-specific way to track them down \cite{choi2025factconsistency}.
 This is the empirical reason behind the strict rule implemented in chapter~\ref{chap:proposed_solution}: the safest number is the one the models never compute.
 
-Over time commercial tool have moved closer to the narrative side.
-Tableau Pulse \cite{tableau2024pulse} and Copilot for Power BI \cite{microsoft2024copilot} are capable of writing short insights over tiles, and they are the industry baseline for this work.
-The most advanced of them publishes an approach close to the one that I adopt: Tableau Pulse use a deterministic statistical model as ground truth for generation, keeping the \ac{LLM} away from numbers. 
+Over time commercial tools have moved closer to the narrative side.
+Tableau Pulse \cite{tableau2024pulse} and Copilot in Power BI \cite{microsoft2024copilot} are capable of writing short insights over tiles, and they are the industry baseline for this work.
+The most advanced of them documents an approach close to the one that I adopt: Tableau Pulse computes it’s metric finding with a statistical engine and uses \ac{LLM} only to phrase them, keeping it away from numbers. 
 None of those tools, however, expose how that grounding holds up under measurement.
 
 Academic field has grown fast, on this topic, during the last year.
 Some systems are capable of detecting the domain by their own without any human direction and elaborate multi-perspective narratives without any predefined schema or concepts \cite{zhang2025datadash}.
-Others, especially in finance, join casual-discovery statistical algorithms with budgetary variance to automate root cause diagnosis \cite{chen2026causalvariance}, which is the case nearest to mine.
+Others, especially in finance, join causal-discovery statistical algorithms with budgetary variance to automate root cause diagnosis \cite{chen2026causalvariance}. It is the case closest to mine, since I aim to explain a gap.
+
+Another approach works on the same structure of data as I do. 
+Paradigms like Conversational and \ac{LLM}-assisted \ac{OLAP} are capable of bringing natural language onto the multidimensional cube.
+Normally a query would have been used to retrieve the information. Now the system is not limited to conversion of text to query, but also describe what comes back.
+One such system is \ac{VOOL}: a modular insight-based framework that extracts selected quantitative insights and turns them into a description \cite{francia2025vool}. 
+It does not use every insight, \ac{VOOL} picks only the relevant ones and only those become part of the narration.
+In the field of multidimensional cube, this last approach is the closest point to a real narrative over structured analytical data.
+It stays accurate by building description from statistics and templates, without interpreting the results. 
+The numbers are safe, but the reason behind them is left to the reader.
+Then the wall again. What happens when an \ac{LLM} is put inside the loop to carry out the analysis? It can hallucinate on numbers. One of the most recent attempt, a system for \ac{LLM}-assisted navigation, keeps the language model far from numbers. 
+The model does only two things: It ranks the candidate view, and it explains why. A separate \ac{OLAP} engine then computes every value in order to preserve numbers fidelity \cite{liu2026llmolap}.
 
 
+These are the nearest neighbors of the present work, and they distinguish from it for two different aspects: their causes are generated freely or discovered statistically, no bound to any curated knowledge tree, and
+they implement numerical fidelity by keeping the numbers away from the model, not by a deterministic contract over the generated narrative.
+%Finally, none of them measures their output on a catalogue of grounding faliure modes.
 \section{Research Gap}
 Identification of the specific gap in the current literature that this thesis aims to bridge by proposing a unified framework.
 
