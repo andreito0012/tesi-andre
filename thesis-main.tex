@@ -399,7 +399,7 @@ Semantic layers & yes & no & no & \\
 Knowledge graphs & no & partial & no & \\
 Text-to-SQL / NL2VIS & partial & no & no & \\
 \addlinespace
-Commercial BI assistants & yes & partial & yes & \rdelim\}{3,8}{4mm}[\textit{narrative}] \\
+Commercial BI assistants & yes & partial & yes & \rdelim\}{4.7}{4mm}[\textit{narrative}] \\
 LLM-generated narratives & no & partial & yes & \\
 LLM-assisted OLAP & yes & no & partial & \\
 \midrule
@@ -472,14 +472,16 @@ This work sits in the top-right corner, while every other family lands off a sid
   \node[dot] (com) at (8,4.8) {};   \node[lbl,above right=1pt and 3pt,align=center] at (com.north east) {Commercial BI\\assistants};
   
   % --- this thesis ---
-  \node[mystar] (th) at (8.5,7.0) {};
+  \node[mystar] (th) at (8.5,7.7) {};
   \node[lbl,below=2pt,font=\footnotesize\bfseries] at (th.south) {This thesis};
   \end{tikzpicture}
   \caption{The reviewed approaches on the two requirements of operational \ac{BI}: numeric fidelity (horizontal) and causal grounding (vertical). }
   \label{fig:positioning}
 \end{figure}
 
-As presented, no techniques fully address both requirements, the chapters that follow go in that direction, exploring the case where the gap first appeared. 
+As presented, across the ten families reviewed, not one fully address both requirements, and still writes the explanation a manager reads the day after.
+There is a reason for it: the two sides are not the same kind of problem: the number can be made a hard guarantee, the cause only bounded to what the domain admits. 
+The chapters that follow go in that direction, exploring the case where the gap first appeared. 
 
 
 
