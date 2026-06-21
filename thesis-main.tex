@@ -89,13 +89,13 @@ I noticed the error, that morning, because I was familiar with the station and t
 That episode marked my thesis beginning and frames the general problem it addresses: what happens when a \ac{LLM} is placed on top of a \ac{BI} dashboard and asked to turn numbers into decisions? 
 That's a key question considering the setting of a \ac{DS}. 
 It is the final node of the logistic network, the place where packages are sorted in the early morning and loaded onto routes to be delivered to final customers.
-The station where I worked, DFV2 in Udine, runs on a standard daily rhythm: plan the day, run it, measure what happen, adjust for tomorrow. 
-The manager controls the rhythm through a large set of indicators that are read every day to determine if any correction is needed. Normally the window to act is narrow so it is important that a manager doesn't get the picture late or even wrong otherwise the chances to fix it would be lost.
+The station where I worked, DFV2 in Udine, runs on a standard daily rhythm: plan the day, run it, measure what happens, adjust for tomorrow. 
+The manager controls the rhythm through a large set of indicators that are read every day to determine if any correction is needed. Normally the window to act is narrow so it is important that a manager doesn't get the picture late or even wrong, otherwise the chances to fix it would be lost.
 
-Among all the indicators that we used at the station, one metric acts as the headline figure, a single number that capture how efficiently the station operates.
-Most of the days this number is close to the planned one, but not exactly on it and that gap is what a manager has to explore, understand and explain. 
+Among all the indicators that we used at the station, one metric acts as the headline figure, a single number that captures how efficiently the station operates.
+Most of the days this number is close to the planned one, but not exactly on it, and that gap is what a manager has to explore, understand and explain. 
 A process that is anything but trivial.
-This difference is the combined effect of many separate factors, some of them are internal to the station while the rest of them are completely external, and working out which factor and its weight is a task that, before this project, was done completely by hand.
+This difference is the combined effect of many separate factors: some of them are internal to the station while the rest of them are completely external, and working out which factor and its weight is a task that, before this project, was done completely by hand.
 
 When a station misses its target, the designated manager has to produce a written justification, internally referred to as the "bridge", based on a weekly Excel report that states how the previous one had closed. A manual and slow activity that said nothing about how the current week was going while there was still time to act on it.
 
@@ -103,12 +103,12 @@ This is the exact scenario where a \ac{LLM} could be the right fit.
 A model capable of reading the numbers and turning them into paragraphs within seconds, replacing hours of manual assembly.
 The downside is that the same flexibility that makes it so powerful and useful is also the source of risks.
 A language model hallucinates on numbers, quietly recomputing a value or inventing one that looks plausible, and it explains causes with the same fluency whether the cause is real or not.
-For a tool that is used to feed decisions on the floor those errors are not acceptable, and they must be reduced as much as possible, while keeping in mind that hallucinations cannot be avoided at 100\%. 
+For a tool that is used to feed decisions on the floor, those errors are not acceptable, and they must be reduced as much as possible, while keeping in mind that hallucinations cannot be avoided at 100\%. 
 A manager must be able to safely rely on the output of the model while, at the same time having a clear view of the related data. 
 
 
 \section{Criticalities}
-The main difficulty of this project is the grounding problem, intended in a stricter sense than the one commonly used in the literature.
+The main difficulty of this project is the grounding problem, understood in a stricter sense than the one commonly used in the literature.
 It can be decomposed into two main requirements that need to hold together. 
 The first is numerical: the number must correspond exactly to the value behind the dashboard, not an approximation of it.
 The second one is causal: every explanation and every recommendation  must come from a well-defined set of causes that the domain admits, not from everything that seems reasonable.
@@ -149,12 +149,12 @@ Figure~\ref{fig:ch1_problem} shows the two requirements and the related failure 
 \draw[point] (llm.south) -- (f1.north);
 \draw[point] (llm.south) -- (f2.north);
 \end{tikzpicture}
-\caption{From dashboard value to narrative, and the two points where grounding breaks: a number that drift (1) and a cause the domain does not admit (2).}
+\caption{From dashboard value to narrative, and the two points where grounding breaks: a number that drifts (1) and a cause the domain does not admit (2).}
 \label{fig:ch1_problem}
 \end{figure}
 
 
-Consider the numerical side first. The one that is shown to the user must be equal to the retrieved one, if that value is close but not exact a decision taken on the base of it can still be wrong. 
+Consider the numerical side first. The one that is shown to the user must be equal to the retrieved one, if that value is close but not exact a decision taken on the basis of it can still be wrong. 
 This is more demanding than the usual faithfulness a retrieval system offers, where a claim counts as grounded if it is broadly supported by some documentation. For Operational \ac{BI} a broad support is not enough.
 The number that is shown to the final user and the one that is retrieved by the code must be the same, otherwise any decision that is taken solely based on the \ac{AI} generated text, when a figure is close but not exact, can potentially be wrong.
 
@@ -163,14 +163,14 @@ The causal side is even harder. Reporting a number without changing its value is
 Explaining why we have that precise value, instead, is connected to the domain knowledge. 
 The set of plausible-sounding causes for any gap is enormous, while the possible set of causes admitted by the domain is small and specific. 
 A narrative defined as "useful" has to stay inside this small set. 
-It should behave like an expert analyst that among the possible explanations of the gap, chooses only the feasible ones and consequently actions that a manager can adopt in order to improve the situation.
+It should behave like an expert analyst that among the possible explanations of the gap, chooses only the feasible ones, and consequently the actions that a manager can adopt in order to improve the situation.
 Domain constraint without numerical fidelity buys very little, a right explanation based on a wrong input is meaningless.
 
 Those two requirements matter even more because a wrong output does not stay only on the screen. 
 A manager uses it as the base for decisions that influence the whole productivity.
 The standard here is therefore demanding, above all on the numbers: a number must be right every time, because one confident mistake, acted upon, can undo a week of planning.
 The causal side is a different story: the most I can require is that the explanation stays inside what the domain admits.
-In particular, this last part is where most of the failure I observed were located. 
+In particular, this last part is where most of the failures I observed were located. 
 % It is also the section that existing approaches leave largely uncovered.
 
 
@@ -180,10 +180,10 @@ I framed the work around one main question and two subsequent ones, each at a di
 
 The first question is empirical and comes before thinking about any solution: what are the common patterns of grounding failure that occur when a language model generates a narrative over a high-density \ac{BI} dashboard?
 I wanted a clear picture of how the model fails derived from the field directly, rather than borrowed from the literature. 
-This decision was motivated by the intention to build a tailored and fix design around the real failures.
+This decision was motivated by the intention to build a design tailored to the real failures.
 
 From the answer to this primary question two design questions follow. 
-The second asks what architecture can be implemented to constrain the faithfulness of the model towards both the numerical and causal sides at once, rather than patching each slip in isolation?
+The second asks what architecture can be implemented to constrain the faithfulness of the model towards both the numerical and causal sides at once, rather than patching each slip in isolation.
 The last question is narrower: what role can a curated knowledge tree, a structured map of causes and feasible actions, play as the base structure that bounds what the model is allowed to say?
 
 Those three questions mark the trace that next chapters will follow. The primary is answered by a catalogue of failure modes derived from the internship itself, the second and third by the framework that has been built to mitigate those errors and tested against the same catalogue.
@@ -226,7 +226,7 @@ The requirement that matters for \ac{BI} is only the first one.
 
 Operational \ac{BI} requires a higher standard. 
 Generic support is not enough.
-A figure of 49.0 is either reproduced exactly or it is wrong. Any representation that deviates from the defined value is non-correct. 
+A figure of 49.0 is either reproduced exactly or it is wrong. Any representation that deviates from the defined value is incorret. 
 As anticipated in the introduction: a narrative is grounded when every quantitative token is traceable, character by character, to a structured field, and every comparative statement agrees in sign with the source.
 This aligns more with faithfulness than with factuality, and it is tighter than both because it asks for fidelity to an exact value and not for consistency with a passage. 
 Controlled table-to-text work, the ToTTo dataset for instance \cite{parikh2020totto}, pushes the generation in that direction, by asking the model to describe only the given cells without any deviation.
@@ -239,7 +239,7 @@ The second question is the dividing line between \ac{BI} and open-domain generat
 
 \section{Retrieval-Augmented Generation (RAG)}
 \ac{RAG} conditions the model by retrieving passages from a corpus of documents and concatenating them as context into the model's input \cite{lewis2020rag}.
-It cuts extrinsic hallucinations, since now the model has something to lean on without inventing. It has become a common way to keep a generator close to a body of documents.
+It reduces extrinsic hallucinations, since now the model has something to lean on without inventing. It has become a common way to keep a generator close to a body of documents.
 The evaluation framework follows the same logic: RAGAS scores faithfulness, defined as the degree to which a claim is entailed by the retrieved context \cite{es2023ragas}.
 Does the generated phrase follow from the passages? If yes, it is considered grounded.
 
@@ -297,7 +297,7 @@ When talking about \ac{PICARD} and \ac{LMQL}, however, they focus only on the fo
 
 \section{Semantic layers and knowledge graphs}
 There are two ideas from the data-engineering world that are close to what I need. 
-The first one is the semantic layer, used by tools like \ac{dbt} and Cube, in which the definition of a metric appears only in a single governed and controlled place \cite{dbt2024semantic, cube2024semantic}.
+The first one is the semantic layer, used by tools like \ac{dbt} and Cube, in which the definition of a metric appears only in a single governed place \cite{dbt2024semantic, cube2024semantic}.
 The core principle is a single source of truth: the value is computed in one place and read everywhere else, so two reports cannot disagree on the calculation by silently building their own version of the metric.
 This methodology is the one that I adopt for numbers: take a figure from a single upstream source and copy it, never letting the model work it out.
 However, that approach is limited because the semantic layer stops before the narrative. It returns clean and canonical numbers, but it doesn't say why that number moved or list, among the possible causes, the one worth reporting.
@@ -325,8 +325,8 @@ This is the empirical reason behind the strict rule implemented in Chapter~\ref{
 
 Over time, commercial tools have moved closer to the narrative side.
 Tableau Pulse \cite{tableau2024pulse} and Copilot in Power BI \cite{microsoft2024copilot} are capable of writing short insights over tiles, and they are the industry baseline for this work.
-The most advanced of them documents an approach close to the one that I adopt: Tableau Pulse computes its metric finding with a statistical engine and uses the \ac{LLM} only to phrase them \cite{tableau2024insights,salesforce2024pulsesummary}.
-Templates and in-context examples reduce the risk, but there is no deterministic check on the printed value, and none of those tools publishes a reproducible measurement of how that grounding holds up under measurement.
+The most advanced of them documents an approach close to the one that I adopt: Tableau Pulse computes its metric findings with a statistical engine and uses the \ac{LLM} only to phrase them \cite{tableau2024insights,salesforce2024pulsesummary}.
+Templates and in-context examples reduce the risk, but there is no deterministic check on the printed value, and none of those tools publishes a reproducible measurement of how that grounding holds up practically.
 
 The academic field has grown fast on this topic, during the last year.
 Some systems are capable of detecting the domain on their own without any human direction and elaborating multi-perspective narratives without any predefined schema or concepts \cite{zhang2025datadash}.
@@ -336,7 +336,7 @@ Another approach works on the same structure of data as I do.
 Paradigms like Conversational and \ac{LLM}-assisted \ac{OLAP} are capable of bringing natural language to the multidimensional cube.
 Normally a query is used to retrieve the information. Now the system is not limited to the conversion of text to a query, but also describes what comes back.
 One such system is \ac{VOOL}: a modular insight-based framework that extracts selected quantitative insights and turns them into a description \cite{francia2025vool}. 
-It does not use every insight, VOOL picks only the relevant ones and only those become part of the narration.
+It does not use every insight: VOOL picks only the relevant ones and only those become part of the narration.
 In the field of multidimensional cubes, this last approach is the closest point to a real narrative over structured analytical data.
 It stays accurate by building descriptions from statistics and templates, without interpreting the results. 
 The numbers are safe, but the reason behind them is left to the reader.
@@ -344,7 +344,7 @@ Then the wall again. What happens when an \ac{LLM} is put inside the loop to car
 The model does only two things: it ranks the candidate views, and it explains why. A separate \ac{OLAP} engine then computes every value in order to preserve number fidelity \cite{liu2026llmolap}.
 
 
-These are the nearest neighbors of the present work, and they differ from it in two different aspects: their causes are generated freely or discovered statistically, not bound to any curated knowledge tree, and
+These are the nearest neighbors of the present work, and they differ from it in two aspects: their causes are generated freely or discovered statistically, not bound to any curated knowledge tree, and
 they implement numerical fidelity by keeping the numbers away from the model, not by a deterministic contract over the generated narrative.
 %Finally, none of them measures their output on a catalogue of grounding faliure modes.
 \section{Evaluating hallucination and faithfulness}
@@ -379,9 +379,9 @@ With all of them the day-after explanation, in the end, rests on trust and not o
 
 Table~\ref{tab:positioning} summarizes all those approaches. 
 The two middle columns contain the requirements from Chapter~\ref{chap:introduction}, and the last one asks whether the approach produces a written justification.
-In particular, the last row yes is present in both requirements, but they represent two different meanings. 
+In particular, the last row a yes appears in both requirements, but the two carry different meanings. 
 The numeric one is hard because every value is a copy of the upstream one and a deterministic check guarantees that.
-The causal one is soft: a knowledge tree defines the domain, but there is no enforcement of that like it happen on the value's side.
+The causal one is soft: a knowledge tree defines the domain, but there is no enforcement of that as it happens on the value's side.
 
 \begin{table}[ht]
 \centering
@@ -468,7 +468,7 @@ This work sits in the top-right corner, while every other family lands off a sid
   \node[dot] (tool) at (5.1,1.2) {};   \node[lbl,above=1pt] at (tool.north) {Tool use};
   \node[dot] (sql)  at (5.2,2.6) {};   \node[lbl,right=2pt,align=center] at (sql.east) {Text-to-SQL /\\NL2VIS};
   \node[dot] (sem)  at (8.7,1.3) {};   \node[lbl,right=2pt,align=center] at (sem.east) {Semantic layers};
-  \node[dot] (sem)  at (8.7,3) {};   \node[lbl,right=2pt,align=center] at (sem.east) {LLM-assisted\\OLAP};
+  \node[dot] (olap)  at (8.7,3) {};   \node[lbl,right=2pt,align=center] at (sem.east) {LLM-assisted\\OLAP};
   \node[dot] (com) at (6.0,5.2) {};   \node[lbl,above right=1pt and 3pt,align=center] at (com.north east) {Commercial BI\\assistants};
   
   % --- this thesis ---
@@ -479,8 +479,8 @@ This work sits in the top-right corner, while every other family lands off a sid
   \label{fig:positioning}
 \end{figure}
 
-As presented, across the ten families reviewed, not one fully address both requirements, and still writes the explanation a manager reads the day after.
-There is a reason for it: the two sides are not the same kind of problem: the number can be made a hard guarantee, the cause only bounded to what the domain admits. 
+As presented, across the ten families reviewed, not one fully addresses both requirements while also writing the explanation a manager reads the day after.
+There is a reason for it: the two sides are not the same kind of problem. The number can be made a hard guarantee, while the cause only bounded to what the domain admits. 
 The chapters that follow go in that direction, exploring the case where the gap first appeared. 
 
 
