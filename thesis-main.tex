@@ -87,7 +87,7 @@ It pointed to a structural metric that had little to do with the real cause of t
 I noticed the error, that morning, because I was familiar with the station and the metric, but a manager reading the same paragraph on a busy day, or less experienced, could have easily taken that for true and acted on it. 
 
 That episode marked my thesis beginning and frames the general problem it addresses: what happens when a \ac{LLM} is placed on top of a \ac{BI} dashboard and asked to turn numbers into decisions? 
-That's a key question considering the setting of a \ac{DS}. 
+That is a key question considering the setting of a \ac{DS}. 
 It is the final node of the logistic network, the place where packages are sorted in the early morning and loaded onto routes to be delivered to final customers.
 The station where I worked, DFV2 in Udine, runs on a standard daily rhythm: plan the day, run it, measure what happens, adjust for tomorrow. 
 The manager controls the rhythm through a large set of indicators that are read every day to determine if any correction is needed. Normally the window to act is narrow so it is important that a manager doesn't get the picture late or even wrong, otherwise the chances to fix it would be lost.
@@ -104,7 +104,7 @@ A model capable of reading the numbers and turning them into paragraphs within s
 The downside is that the same flexibility that makes it so powerful and useful is also the source of risks.
 A language model hallucinates on numbers, quietly recomputing a value or inventing one that looks plausible, and it explains causes with the same fluency whether the cause is real or not.
 For a tool that is used to feed decisions on the floor, those errors are not acceptable, and they must be reduced as much as possible, while keeping in mind that hallucinations cannot be avoided at 100\%. 
-A manager must be able to safely rely on the output of the model while, at the same time having a clear view of the related data. 
+A manager must be able to safely rely on the output of the model while, and at the same time, having the underlying numbers within reach. 
 
 
 \section{Criticalities}
@@ -154,9 +154,8 @@ Figure~\ref{fig:ch1_problem} shows the two requirements and the related failure 
 \end{figure}
 
 
-Consider the numerical side first. The one that is shown to the user must be equal to the retrieved one, if that value is close but not exact a decision taken on the basis of it can still be wrong. 
+Consider the numerical side first. The one that is shown to the user must be equal to the retrieved one. If that value is close but not exact, a decision taken on the basis of it can still be wrong. 
 This is more demanding than the usual faithfulness a retrieval system offers, where a claim counts as grounded if it is broadly supported by some documentation. For Operational \ac{BI} a broad support is not enough.
-The number that is shown to the final user and the one that is retrieved by the code must be the same, otherwise any decision that is taken solely based on the \ac{AI} generated text, when a figure is close but not exact, can potentially be wrong.
 
 
 The causal side is even harder. Reporting a number without changing its value is a matter of staying true to the base data. 
@@ -167,10 +166,10 @@ It should behave like an expert analyst that among the possible explanations of 
 Domain constraint without numerical fidelity buys very little, a right explanation based on a wrong input is meaningless.
 
 Those two requirements matter even more because a wrong output does not stay only on the screen. 
-A manager uses it as the base for decisions that influence the whole productivity.
-The standard here is therefore demanding, above all on the numbers: a number must be right every time, because one confident mistake, acted upon, can undo a week of planning.
+A manager uses it as the basis for decisions that influence the whole productivity.
+The standard here is therefore demanding, above all on the numbers: a value must be right every time, because one confident mistake, acted upon, can undo a week of planning.
 The causal side is a different story: the most I can require is that the explanation stays inside what the domain admits.
-In particular, this last part is where most of the failures I observed were located. 
+In particular, this is where most of the failures I observed were located: a wrong number is worse, but wrong causes happen more often.
 % It is also the section that existing approaches leave largely uncovered.
 
 
@@ -226,7 +225,7 @@ The requirement that matters for \ac{BI} is only the first one.
 
 Operational \ac{BI} requires a higher standard. 
 Generic support is not enough.
-A figure of 49.0 is either reproduced exactly or it is wrong. Any representation that deviates from the defined value is incorret. 
+A figure of 49.0 is either reproduced exactly or it is wrong. Any representation that deviates from the defined value is incorrect. 
 As anticipated in the introduction: a narrative is grounded when every quantitative token is traceable, character by character, to a structured field, and every comparative statement agrees in sign with the source.
 This aligns more with faithfulness than with factuality, and it is tighter than both because it asks for fidelity to an exact value and not for consistency with a passage. 
 Controlled table-to-text work, the ToTTo dataset for instance \cite{parikh2020totto}, pushes the generation in that direction, by asking the model to describe only the given cells without any deviation.
@@ -330,7 +329,7 @@ Templates and in-context examples reduce the risk, but there is no deterministic
 
 The academic field has grown fast on this topic, during the last year.
 Some systems are capable of detecting the domain on their own without any human direction and elaborating multi-perspective narratives without any predefined schema or concepts \cite{zhang2025datadash}.
-Others, especially in finance, join causal-discovery statistical algorithms with budgetary variance to automate root cause diagnosis \cite{chen2026causalvariance}. This is the case closest to mine, since I aim to explain a gap.
+Others, especially in finance, join causal-discovery statistical algorithms with budgetary variance to automate root cause diagnosis \cite{chen2026causalvariance}. This is the case closest to mine in terms of goal, since it also tries to explain a gap.
 
 Another approach works on the same structure of data as I do. 
 Paradigms like Conversational and \ac{LLM}-assisted \ac{OLAP} are capable of bringing natural language to the multidimensional cube.
@@ -379,7 +378,7 @@ With all of them the day-after explanation, in the end, rests on trust and not o
 
 Table~\ref{tab:positioning} summarizes all those approaches. 
 The two middle columns contain the requirements from Chapter~\ref{chap:introduction}, and the last one asks whether the approach produces a written justification.
-In particular, the last row a yes appears in both requirements, but the two carry different meanings. 
+In particular, in the last row a yes appears in both requirements, but the two carry different meanings. 
 The numeric one is hard because every value is a copy of the upstream one and a deterministic check guarantees that.
 The causal one is soft: a knowledge tree defines the domain, but there is no enforcement of that as it happens on the value's side.
 
