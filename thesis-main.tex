@@ -325,8 +325,8 @@ This is the empirical reason behind the strict rule implemented in Chapter~\ref{
 
 Over time, commercial tools have moved closer to the narrative side.
 Tableau Pulse \cite{tableau2024pulse} and Copilot in Power BI \cite{microsoft2024copilot} are capable of writing short insights over tiles, and they are the industry baseline for this work.
-The most advanced of them documents an approach close to the one that I adopt: Tableau Pulse computes its metric finding with a statistical engine and uses the \ac{LLM} only to phrase them, keeping it away from numbers \cite{tableau2024insights,salesforce2024pulsesummary}. 
-None of those tools, however,  publishes a reproducible measurement of how that grounding holds up under measurement.
+The most advanced of them documents an approach close to the one that I adopt: Tableau Pulse computes its metric finding with a statistical engine and uses the \ac{LLM} only to phrase them \cite{tableau2024insights,salesforce2024pulsesummary}.
+Templates and in-context examples reduce the risk, but there is no deterministic check on the printed value, and none of those tools publishes a reproducible measurement of how that grounding holds up under measurement.
 
 The academic field has grown fast on this topic, during the last year.
 Some systems are capable of detecting the domain on their own without any human direction and elaborating multi-perspective narratives without any predefined schema or concepts \cite{zhang2025datadash}.
@@ -399,7 +399,7 @@ Semantic layers & yes & no & no & \\
 Knowledge graphs & no & partial & no & \\
 Text-to-SQL / NL2VIS & partial & no & no & \\
 \addlinespace
-Commercial BI assistants & yes & partial & yes & \rdelim\}{4.7}{4mm}[\textit{narrative}] \\
+Commercial BI assistants & partial & partial & yes & \rdelim\}{4.7}{4mm}[\textit{narrative}] \\
 LLM-generated narratives & no & partial & yes & \\
 LLM-assisted OLAP & yes & no & partial & \\
 \midrule
@@ -469,7 +469,7 @@ This work sits in the top-right corner, while every other family lands off a sid
   \node[dot] (sql)  at (5.2,2.6) {};   \node[lbl,right=2pt,align=center] at (sql.east) {Text-to-SQL /\\NL2VIS};
   \node[dot] (sem)  at (8.7,1.3) {};   \node[lbl,right=2pt,align=center] at (sem.east) {Semantic layers};
   \node[dot] (sem)  at (8.7,3) {};   \node[lbl,right=2pt,align=center] at (sem.east) {LLM-assisted\\OLAP};
-  \node[dot] (com) at (8,4.8) {};   \node[lbl,above right=1pt and 3pt,align=center] at (com.north east) {Commercial BI\\assistants};
+  \node[dot] (com) at (6.0,5.2) {};   \node[lbl,above right=1pt and 3pt,align=center] at (com.north east) {Commercial BI\\assistants};
   
   % --- this thesis ---
   \node[mystar] (th) at (8.5,7.7) {};
