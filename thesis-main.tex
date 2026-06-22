@@ -511,14 +511,19 @@ Furthermore, it describes all the manual practices done before any automated sup
 
 \section{Operational setting}
 
-The setting is the one introduced in Chapter~\ref{chap:introduction}: I carried out my internship at DFV2, a last mile delivery station located in Udine.
-The focus of my work is not the station as a whole, but a repetitive task carried out by managers across Europe.
-Each week a manager has to read the gap, and understand what stands behind, in order to explain it.
+The setting is the one introduced in Chapter~\ref{chap:introduction}: I carried out my internship at DFV2, a last-mile delivery station located in Udine.
+The focus of my work is not the station as a whole, but a weekly task carried out by managers across Europe.
+Each week a manager has to read the gap, and understand what stands behind it, in order to explain it.
+In my case, this explanation does not stay local: it goes up to a higher team that oversees the whole country and looks at every \ac{DS} that missed its target.
 
-This explanation does not stay local: it goes up to a higher team that oversees the whole country and looks at every DS that missed its target.
+\section{The main indicator and its decomposition}
 
-\section{Core Metric}
-Definition of the reference indicator as a productivity ratio (output units divided by input resource), the gap between planned and actual values, and its additive decomposition into a fixed set of mutually-exclusive categories with a two-level hierarchy, heterogeneous aggregation weights, and a residual term that guarantees completeness.
+The headline indicator can be defined as: output quantity over resources that have been used to produce it, in simple words a ratio, and the difference between what was planned and the realized value is the gap that my project focusses on.
+
+This indicator is then decomposed into a pre-defined and fixed set of categories that are mutually exclusive.
+Each class is organized on two levels: a top-level that can be opened into the sub-factors that compose it, this done to give depth without losing the structure.
+The categories do not contribute to the total gap as a row value, but it gets scaled by its own weight, that being heterogenous change with the class; which means that a large movement in a lightly-weighted value can matter less than a smaller movement in a heavy one.
+There is also a residual term that absorbed whatever difference the named categories does not explain, it guarantees that the parts add back to the whole avoiding that something is forced into a named category where it does not belong.
 
 \section{Pre-AI Baseline}
 The manual workflow for monitoring (weekly cadence, tile-by-tile extraction) and for producing the bridge document (subjective cause selection, unconstrained ranking, experience-dependent actions).
