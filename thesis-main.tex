@@ -81,7 +81,7 @@ Optional. Max a few lines.
 %----------------------------------------------------------------------------------------
 
 \section{Context}
-During one of the audited weeks of my internship, the operational dashboard flagged a clear productivity gap at the station. 
+During one of the audited weeks of my internship, the operational dashboard flagged a clear gap at the station. 
 The AI summary built on top of it explained that difference with full confidence, but the explanation produced was factually incorrect. 
 It pointed to a structural metric that had little to do with the real cause of the difference, proposed corrective actions and root analyses that no manager could realistically carry out.
 I noticed the error, that morning, because I was familiar with the station and the metric, but a manager reading the same paragraph on a busy day, or less experienced, could have easily taken that for true and acted on it. 
@@ -166,7 +166,7 @@ It should behave like an expert analyst that among the possible explanations of 
 Domain constraint without numerical fidelity buys very little, a right explanation based on a wrong input is meaningless.
 
 Those two requirements matter even more because a wrong output does not stay only on the screen. 
-A manager uses it as the basis for decisions that influence the whole productivity.
+A manager uses it as the basis for decisions that influence the whole operation.
 The standard here is therefore demanding, above all on the numbers: a value must be right every time, because one confident mistake, acted upon, can undo a week of planning.
 The causal side is a different story: the most I can require is that the explanation stays inside what the domain admits.
 In particular, this is where most of the failures I observed were located: a wrong number is worse, but wrong causes happen more often.
@@ -385,7 +385,7 @@ The causal one is soft: a knowledge tree defines the domain, but there is no enf
 \begin{table}[ht]
 \centering
 \small
-\renewcommand{\arraystretch}{1.2}
+\renewcommand{\arraystretch}{1.0}
 \begin{tabular}{p{4.0cm} c c c c}
 \toprule
 \textbf{Approach} & \textbf{Exact number} & \textbf{Bounded cause} & \textbf{Day-after} & \\
@@ -467,8 +467,8 @@ This work sits in the top-right corner, while every other family lands off a sid
   \node[dot] (tool) at (5.1,1.2) {};   \node[lbl,above=1pt] at (tool.north) {Tool use};
   \node[dot] (sql)  at (5.2,2.6) {};   \node[lbl,right=2pt,align=center] at (sql.east) {Text-to-SQL /\\NL2VIS};
   \node[dot] (sem)  at (8.7,1.3) {};   \node[lbl,right=2pt,align=center] at (sem.east) {Semantic layers};
-  \node[dot] (olap)  at (8.7,3) {};   \node[lbl,right=2pt,align=center] at (sem.east) {LLM-assisted\\OLAP};
-  \node[dot] (com) at (6.0,5.2) {};   \node[lbl,above right=1pt and 3pt,align=center] at (com.north east) {Commercial BI\\assistants};
+  \node[dot] (olap)  at (8.7,3) {};   \node[lbl,right=2pt,align=center] at (olap.east) {LLM-assisted\\OLAP};
+  \node[dot] (com) at (6.0,5.2) {};   \node[lbl,above right=1pt,align=center] at (com.east) {Commercial BI\\assistants};
   
   % --- this thesis ---
   \node[mystar] (th) at (8.5,7.7) {};
@@ -503,6 +503,11 @@ The chapters that follow go in that direction, exploring the case where the gap 
 \chapter{The industrial case study}
 \label{chap:case_study}
 %----------------------------------------------------------------------------------------
+
+This chapter covers the foundations of my case study. 
+It is about the operational setting, the reference indicator the daily review turn on, and what builds it up.
+Furthermore, it describes all the manual practices done before any automated support and the related weaknesses.
+
 
 \section{Operational setting}
 The last-mile delivery station environment, the continuous improvement cycle (plan, execute, measure, adjust), and the time pressure that makes delayed data visibility a missed intervention window.
