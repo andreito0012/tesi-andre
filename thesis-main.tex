@@ -519,13 +519,16 @@ In my case, this explanation does not stay local: it goes up to a higher team th
 
 \section{The main indicator and its decomposition}
 
-The headline indicator can be defined as: output quantity over resources that have been used to produce it, in simple words a ratio, and the difference between what was planned and the realised value is the gap that my project focuses on.
+The headline indicator can be defined as output quantity over resources used to produce it, in simple words a ratio. 
+The difference between what was planned and the realised value is the gap that my project focuses on.
 This indicator is then decomposed into a pre-defined and fixed set of categories that are mutually exclusive.
-The set is organized on two levels: top-level classes that can be decomposed into sub-factors that make it up, this is done to give depth without losing the structure like in Figure~\ref{fig:ch3_decomposition}.
+The set is organized on two levels: top-level classes that can be decomposed into the sub-factors that compose them (Figure~\ref{fig:ch3_decomposition}), this gives depth without losing the structure.
 
 
-The categories do not contribute to the total gap as a raw value, but they get scaled by its own weight, that being heterogeneous change with the class; which means that a large movement in a lightly-weighted value can matter less than a smaller movement in a heavy one.
-There is also a residual term that absorbs whatever difference the named categories do not explain, it guarantees that the parts add back to the whole preventing anything from being forced into a named category where it does not belong.
+The categories do not contribute to the total gap as a raw value, but they get scaled by its own weight, which is heterogeneous and change across all the class. 
+This means that a large movement in a lightly-weighted value can matter less than a smaller movement in a heavy one.
+There is also a residual term that absorbs whatever difference the named categories do not explain. 
+It guarantees that the parts add back to the whole, and prevents anything from being forced into a named category where it does not belong.
 
 \begin{figure}[ht]
   \centering
@@ -538,7 +541,7 @@ There is also a residual term that absorbs whatever difference the named categor
     e/.style={-{Latex[length=2mm]}}
   ]
   \node[root] (g) {Gap $=$ Actual $-$ Plan\\\footnotesize (additive, parts sum to Gap)};
-  \node[cat] (c1) [above right=1.6cm and 2.4cm of g] {Category\_1\\\footnotesize weight $w_1$};
+  \node[cat] (c1) [above right=1.75cm and 2.4cm of g] {Category\_1\\\footnotesize weight $w_1$};
   \node[cat] (c2) [below=0.35cm of c1] {Category\_2\\\footnotesize weight $w_2$};
   \node[cat] (c3) [below=0.35cm of c2] {Category\_3\\\footnotesize weight $w_3$};
   \node[cat] (ck) [below=0.35cm of c3] {Category\_k\\\footnotesize weight $w_k$};
@@ -552,7 +555,6 @@ There is also a residual term that absorbs whatever difference the named categor
   \node[sub] (s4) [below=0.28cm of s3] {Sub\_kb};
   \draw[e] (ck.east) -- (s3.west);
   \draw[e] (ck.east) -- (s4.west);
-  \node[font=\footnotesize,align=left,text width=3.2cm] at ([yshift=-2.0cm]cr.south) {$N$ mutually-exclusive categories, two-level hierarchy, heterogeneous weights, a residual term that ensures completeness.};
   \end{tikzpicture}
   \caption{Two-level additive decomposition of the gap (anonymised). Top-level
   categories are mutually exclusive; selected categories open into sub-factors;
@@ -561,27 +563,33 @@ There is also a residual term that absorbs whatever difference the named categor
   \end{figure}
   
   \begin{table}[ht]
-  \centering
-  \caption{Illustrative numeric example of the decomposition. The values are synthetic: they show how positive and negative contributions can offset each other, so the net total alone is a poor guide to where the problem sits. Each contribution is the category's weighted effect on the gap, so the weight column does not map directly onto the contribution value.}
-  \label{tab:ch3_decomposition}
-  \begin{tabular}{lcc}
-  \toprule
-  Component & Weight $w_i$ & Contribution to gap \\
-  \midrule
-  Category\_1           & 0.34 & $+0.45$ \\
-  Category\_2           & 0.21 & $-0.80$ \\
-  \quad Sub\_2a         &      & $-0.55$ \\
-  \quad Sub\_2b         &      & $-0.25$ \\
-  Category\_3           & 0.28 & $-0.60$ \\
-  Category\_k           & 0.12 & $+0.10$ \\
-  \quad Sub\_ka         &      & $+0.18$ \\
-  \quad Sub\_kb         &      & $-0.08$ \\
-  Residual              &      & $-0.35$ \\
-  \midrule
-  \textbf{Total (Gap)}  &      & $\mathbf{-1.20}$ \\
-  \bottomrule
-  \end{tabular}
-  \end{table}
+    \centering
+    \renewcommand{\arraystretch}{1.3}
+    \label{tab:ch3_decomposition}
+    \begin{tabular}{lccc}
+    \toprule
+    \textbf{Component} & \textbf{Raw movement} & \textbf{Weight} $w_i$ & \textbf{Contribution} ($= \text{mov.} \times w_i$) \\
+    \midrule
+    Category\_1   & $+1.50$ & 0.30 & $+0.45$ \\
+    Category\_2   & $-2.00$ & 0.40 & $-0.80$ \\
+    \quad\quad \textit{of which Sub\_2a} &  &  & $-0.55$ \\
+    \quad\quad \textit{of which Sub\_2b} &  &  & $-0.25$ \\
+    Category\_3   & $-1.20$ & 0.50 & $-0.60$ \\
+    Category\_k   & $+1.00$ & 0.10 & $+0.10$ \\
+    \quad\quad \textit{of which Sub\_ka} &  &  & $+0.18$ \\
+    \quad\quad \textit{of which Sub\_kb} &  &  & $-0.08$ \\
+    Residual      &         &      & $-0.35$ \\
+    \midrule
+    \textbf{Total (Gap)} & & & $\mathbf{-1.20}$ \\
+    \bottomrule
+    \end{tabular}
+    \caption{Illustrative numeric example of the gap decomposition with synthetic values and weights.}
+
+    \end{table}
+
+Table~\ref{tab:ch3_decomposition} makes clear why the gap must be decomposed: the categories offset each other, some of them pushes up the difference while others down.
+A category that helps can hide a problematic one, so the net figure on its own is a poor guide on where the problems are located.
+Before my project, this whole reading was done manually, which is the starting point of the next section.
   
 \section{Pre-AI Baseline}
 The manual workflow for monitoring (weekly cadence, tile-by-tile extraction) and for producing the bridge document (subjective cause selection, unconstrained ranking, experience-dependent actions).
