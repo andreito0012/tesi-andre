@@ -512,19 +512,77 @@ Furthermore, it describes all the manual practices done before any automated sup
 \section{Operational setting}
 
 The setting is the one introduced in Chapter~\ref{chap:introduction}: I carried out my internship at DFV2, a last-mile delivery station located in Udine.
-The focus of my work is not the station as a whole, but a weekly task carried out by managers across Europe.
-Each week a manager has to read the gap, and understand what stands behind it, in order to explain it.
+The focus of my work is not the station as a whole, but a specific weekly task carried out by managers across Europe.
+Each week a manager has to read the gap and understand what stands behind it, in order to explain it.
 In my case, this explanation does not stay local: it goes up to a higher team that oversees the whole country and looks at every \ac{DS} that missed its target.
+
 
 \section{The main indicator and its decomposition}
 
-The headline indicator can be defined as: output quantity over resources that have been used to produce it, in simple words a ratio, and the difference between what was planned and the realized value is the gap that my project focusses on.
-
+The headline indicator can be defined as: output quantity over resources that have been used to produce it, in simple words a ratio, and the difference between what was planned and the realised value is the gap that my project focuses on.
 This indicator is then decomposed into a pre-defined and fixed set of categories that are mutually exclusive.
-Each class is organized on two levels: a top-level that can be opened into the sub-factors that compose it, this done to give depth without losing the structure.
-The categories do not contribute to the total gap as a row value, but it gets scaled by its own weight, that being heterogenous change with the class; which means that a large movement in a lightly-weighted value can matter less than a smaller movement in a heavy one.
-There is also a residual term that absorbed whatever difference the named categories does not explain, it guarantees that the parts add back to the whole avoiding that something is forced into a named category where it does not belong.
+The set is organized on two levels: top-level classes that can be decomposed into sub-factors that make it up, this is done to give depth without losing the structure like in Figure~\ref{fig:ch3_decomposition}.
 
+
+The categories do not contribute to the total gap as a raw value, but they get scaled by its own weight, that being heterogeneous change with the class; which means that a large movement in a lightly-weighted value can matter less than a smaller movement in a heavy one.
+There is also a residual term that absorbs whatever difference the named categories do not explain, it guarantees that the parts add back to the whole preventing anything from being forced into a named category where it does not belong.
+
+\begin{figure}[ht]
+  \centering
+  \begin{tikzpicture}[
+    font=\small,
+    cat/.style={draw,rounded corners,minimum width=3.1cm,minimum height=0.7cm,align=center},
+    sub/.style={draw,dashed,rounded corners,minimum width=2.7cm,minimum height=0.55cm,align=center,font=\footnotesize},
+    res/.style={draw,rounded corners,minimum width=3.1cm,minimum height=0.7cm,align=center,fill=black!7},
+    root/.style={draw,thick,rounded corners,minimum width=3.6cm,minimum height=0.9cm,align=center,fill=black!10},
+    e/.style={-{Latex[length=2mm]}}
+  ]
+  \node[root] (g) {Gap $=$ Actual $-$ Plan\\\footnotesize (additive, parts sum to Gap)};
+  \node[cat] (c1) [above right=1.6cm and 2.4cm of g] {Category\_1\\\footnotesize weight $w_1$};
+  \node[cat] (c2) [below=0.35cm of c1] {Category\_2\\\footnotesize weight $w_2$};
+  \node[cat] (c3) [below=0.35cm of c2] {Category\_3\\\footnotesize weight $w_3$};
+  \node[cat] (ck) [below=0.35cm of c3] {Category\_k\\\footnotesize weight $w_k$};
+  \node[res] (cr) [below=0.35cm of ck] {Residual\\\footnotesize (catch-all)};
+  \foreach \c in {c1,c2,c3,ck,cr} \draw[e] (g.east) -- (\c.west);
+  \node[sub] (s1) [right=2.1cm of c2] {Sub\_2a};
+  \node[sub] (s2) [below=0.28cm of s1] {Sub\_2b};
+  \draw[e] (c2.east) -- (s1.west);
+  \draw[e] (c2.east) -- (s2.west);
+  \node[sub] (s3) [right=2.1cm of ck] {Sub\_ka};
+  \node[sub] (s4) [below=0.28cm of s3] {Sub\_kb};
+  \draw[e] (ck.east) -- (s3.west);
+  \draw[e] (ck.east) -- (s4.west);
+  \node[font=\footnotesize,align=left,text width=3.2cm] at ([yshift=-2.0cm]cr.south) {$N$ mutually-exclusive categories, two-level hierarchy, heterogeneous weights, a residual term that ensures completeness.};
+  \end{tikzpicture}
+  \caption{Two-level additive decomposition of the gap (anonymised). Top-level
+  categories are mutually exclusive; selected categories open into sub-factors;
+  a residual term closes the sum.}
+  \label{fig:ch3_decomposition}
+  \end{figure}
+  
+  \begin{table}[ht]
+  \centering
+  \caption{Illustrative numeric example of the decomposition. The values are synthetic: they show how positive and negative contributions can offset each other, so the net total alone is a poor guide to where the problem sits. Each contribution is the category's weighted effect on the gap, so the weight column does not map directly onto the contribution value.}
+  \label{tab:ch3_decomposition}
+  \begin{tabular}{lcc}
+  \toprule
+  Component & Weight $w_i$ & Contribution to gap \\
+  \midrule
+  Category\_1           & 0.34 & $+0.45$ \\
+  Category\_2           & 0.21 & $-0.80$ \\
+  \quad Sub\_2a         &      & $-0.55$ \\
+  \quad Sub\_2b         &      & $-0.25$ \\
+  Category\_3           & 0.28 & $-0.60$ \\
+  Category\_k           & 0.12 & $+0.10$ \\
+  \quad Sub\_ka         &      & $+0.18$ \\
+  \quad Sub\_kb         &      & $-0.08$ \\
+  Residual              &      & $-0.35$ \\
+  \midrule
+  \textbf{Total (Gap)}  &      & $\mathbf{-1.20}$ \\
+  \bottomrule
+  \end{tabular}
+  \end{table}
+  
 \section{Pre-AI Baseline}
 The manual workflow for monitoring (weekly cadence, tile-by-tile extraction) and for producing the bridge document (subjective cause selection, unconstrained ranking, experience-dependent actions).
 
