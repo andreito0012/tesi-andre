@@ -97,7 +97,7 @@ Most of the days this number is close to the planned one, but not exactly on it,
 A process that is anything but trivial.
 This difference is the combined effect of many separate factors: some of them are internal to the station while the rest of them are completely external, and working out which factor and its weight is a task that, before this project, was done completely by hand.
 
-When a station misses its target, the designated manager has to produce a written justification, internally referred to as the "bridge", based on a weekly Excel report that states how the previous one had closed. A manual and slow activity that said nothing about how the current week was going while there was still time to act on it.
+When a station misses its target, the designated manager has to produce a written justification, internally referred to as the "bridge", based on a weekly spreadsheet report that states how the previous one had closed. A manual and slow activity that said nothing about how the current week was going while there was still time to act on it.
 
 This is the exact scenario where a \ac{LLM} could be the right fit. 
 A model capable of reading the numbers and turning them into paragraphs within seconds, replacing hours of manual assembly.
@@ -519,7 +519,7 @@ In my case, this explanation does not stay local: it goes up to a higher team th
 
 \section{The main indicator and its decomposition}
 
-The headline indicator can be defined as output quantity over resources used to produce it, in simple words a ratio. 
+The headline figure can be defined as output quantity over resources used to produce it, in simple words a ratio. 
 The difference between what was planned and the realised value is the gap that my project focuses on.
 This indicator is then decomposed into a pre-defined and fixed set of categories that are mutually exclusive.
 The set is organized on two levels: top-level categories that can be decomposed into the sub-factors that compose them (Figure~\ref{fig:ch3_decomposition}). 
@@ -594,14 +594,14 @@ A category that helps can hide a problematic one, so the net figure on its own i
 The starting baseline involved two main time-consuming practices: monitoring and a written explanation.
 A manager who wanted to know how the running week was going had to open one dashboard at a time and copy-paste all the data needed into a new spreadsheet file used for the analysis. 
 All the data sat in several places, in a tabular way with no graphs or visualization that could help the reader.
-The second activity was the explanation of the gap, a short document internally called the bridge.
+The second activity was the production of the bridge document, that contains the explanation of the gap.
 Each \ac{DS} that misses its target over the previous week has to produce a written breakdown of what caused the gap, why it happened, and what actions will be taken to improve or solve the situation.
 
 That manual approach has three different weaknesses starting from limited reactivity: a manager had to wait for the weekly report to know how the previous week had closed exactly; any intra-week visibility, when needed, depended on pulling data manually, tile by tile.
-The second one is subjective root-cause selection: the choice of which causes needed to be added to the report was up to the analyst, who would typically scan the spreadsheet for KPIs sitting below target and write them up as the explanation. 
+The second one is incomplete root-cause coverage: the choice of which causes needed to be added to the report was up to the analyst, who would typically scan the spreadsheet for KPIs sitting below target and write them up as the explanation. 
 There was no decomposition guaranteeing that the listed causes summed back to the total gap, nor that they were ranked by impact.
 The last one is analyst dependence: the depth and granularity of the diagnosis, and the realism of the recommended actions, varied considerably with the individual experience of the analyst preparing the document.
-I organized the three weaknesses in Figure~\ref{fig:ch3_weaknesses}, and how they are answered.
+The three weaknesses are visible in Figure~\ref{fig:ch3_weaknesses} together with a description of how each one is answered.
 
 
 \begin{figure}[ht]
@@ -617,29 +617,33 @@ I organized the three weaknesses in Figure~\ref{fig:ch3_weaknesses}, and how the
   \node[wk] (w1) at (0,0)
     {\textbf{Limited reactivity}\\[6pt]\textit{(operational)}};
   \node[wk, below=0.7cm of w1] (w2)
-    {\textbf{Subjective root-cause selection}\\[6pt]\textit{(causal)}};
+    {\textbf{Incomplete root-cause coverage}\\[6pt]\textit{(causal)}};
   \node[wk, below=0.7cm of w2] (w3)
     {\textbf{Analyst dependence}\\[6pt]\textit{(consistency)}};
   
   \node[ans, right=2cm of w1] (a1)
     {An automated view replaces the manual weekly pull and is available during the running week, not only once it has closed.};
   \node[ans, right=2cm of w2] (a2)
-    { Code ranks causes by impact, and a curated knowledge-tree fixes the admissable ones.};
+    { Code ranks the full set of causes by impact, drawn from a curated knowledge tree.};
   \node[ans, right=2cm of w3] (a3)
     {The explanation is produced by a fixed, automated generation step.};
   
-  \draw[ar] (w1.east) -- (a1.west);
-  \draw[ar] (w2.east) -- (a2.west);
-  \draw[ar] (w3.east) -- (a3.west);
+  \draw[ar] (w1.east) -- node[above, font=\footnotesize\itshape, text=black!55]{solved by} (a1.west);
+  \draw[ar] (w2.east) -- node[above, font=\footnotesize\itshape, text=black!55]{solved by} (a2.west);
+  \draw[ar] (w3.east) -- node[above, font=\footnotesize\itshape, text=black!55]{solved by} (a3.west);
   \end{tikzpicture}
   \caption{The three weaknesses of the manual baseline, the dimension each one
   touches, and how the rest of the thesis answers each one.}
   \label{fig:ch3_weaknesses}
   \end{figure}
 
+The three weaknesses do not sit all on the same level.
+On the causal side, the causes the manager wrote were often correct but rarely complete, with smaller contributors sometimes not included. 
+The other two are not the same either: one is operational involving the wait and manual pulls, the other is a matter of consistency.
+The numbers, by contrast, were never a problem at all: the analyst directly copy-paste them from the spreadsheet, and they turn in a risk only when processed by an \ac{LLM}.
+How each of these is adressed is discussed in the next Chapter~\ref{chap:proposed_solution}, where the three-contract framework is introduced.
 
 \section{Methodology}
-Single-case longitudinal design where the researcher is embedded in the operational team for six months. Development followed an iterative pattern: observe a failure in the AI output, isolate it, fix it, validate against real data, check for regressions. Failure instances were collected and classified into families for the analysis in Chapter 5. A synthetic dataset preserving the structural properties of the real data built for the controlled evaluation.
 
 %----------------------------------------------------------------------------------------
 \chapter{Proposed Solution: Three-Contract Framework}
