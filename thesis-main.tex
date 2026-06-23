@@ -592,12 +592,34 @@ A category that helps can hide a problematic one, so the net figure on its own i
   
 \section{The manual baseline and its weaknesses}
 The starting baseline involved two main practices: monitoring and a written explanation.
-A manager, who wanted to know how the running week was going, had to open one dashboard at a time and copy-paste all the data needed in a new Excel file used to for the analysis. 
+A manager who wanted to know how the running week was going had to open one dashboard at a time and copy-paste all the data needed in a new Excel file used for the analysis. 
 Furthermore, all the data sat in several places, in a tabular way with no graphs or visualization that could help the reader.
 The second activity was the explanation of the gap, a short document internally called the bridge.
-Each \ac{DS} that miss its target over the previous week has to produce a written breakdown of what causes the inefficiency, why does it have caused it, and what are the actions that will be taken to improve or solve the situation.
+Each \ac{DS} that misses its target over the previous week has to produce a written breakdown of what causes the gap, why it happened, and what actions that will be taken to improve or solve the situation.
 
-That manual approach carries three main weaknesses.
+That manual approach has three different weaknesses starting from a limited reactivity: a manager had to wait for the weekly report to know how the previous week had closed exactly; any intra-week visibility, when needed, depended on pulling data tile by hand.
+The second one is a subjective root-cause selection: the choice of which causes needed to be added to the report was up to the analyst, who would typically scan the spreadsheet for KPIs sitting below target and write them up as the explanation. 
+There was no decomposition guaranteeing that the listed causes summed back to the total gap, nor that they were ranked by impact.
+The las one is the analyst dependence: The depth and granularity of the diagnosis, and the realism of the recommended actions, varied considerably with the individual experience of the analyst preparing the document.
+
+
+\begin{table}[ht]
+  \centering
+  \renewcommand{\arraystretch}{1.3}
+  \caption{The three weaknesses of the manual baseline, the grounding requirement each one touches, and how the rest of the thesis answers it.}
+  \label{tab:ch3_weaknesses}
+  \begin{tabular}{p{0.22\textwidth}p{0.24\textwidth}p{0.40\textwidth}}
+  \toprule
+  \textbf{Weakness} & \textbf{What it touches} & \textbf{How the thesis answers it} \\
+  \midrule
+  Limited reactivity & Operational, outside the two grounding requirements & Monitoring moves off the manual weekly path onto an automated view available during the running week (Chapter~\ref{chap:proposed_solution}). \\
+  \addlinespace
+  Subjective root-cause selection & The causal requirement & The space of admissible causes is constrained by a curated knowledge tree. \\
+  \addlinespace
+  Analyst dependence & Both requirements: numbers and causes were handled by hand & Numbers are tied to a pre-computed source (tile-as-source) and enforced by a sanitizer; causes are constrained by the same knowledge tree. \\
+  \bottomrule
+  \end{tabular}
+  \end{table}
 
 
 \section{Methodology}
