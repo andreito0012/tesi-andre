@@ -522,11 +522,12 @@ In my case, this explanation does not stay local: it goes up to a higher team th
 The headline indicator can be defined as output quantity over resources used to produce it, in simple words a ratio. 
 The difference between what was planned and the realised value is the gap that my project focuses on.
 This indicator is then decomposed into a pre-defined and fixed set of categories that are mutually exclusive.
-The set is organized on two levels: top-level classes that can be decomposed into the sub-factors that compose them (Figure~\ref{fig:ch3_decomposition}), this gives depth without losing the structure.
+The set is organized on two levels: top-level classes that can be decomposed into the sub-factors that compose them (Figure~\ref{fig:ch3_decomposition}). 
+This second level is needed because shows which is the specific part that caused the shift.
 
 
-The categories do not contribute to the total gap as a raw value, but they get scaled by its own weight, which is heterogeneous and change across all the class. 
-This means that a large movement in a lightly-weighted value can matter less than a smaller movement in a heavy one.
+The categories do not contribute to the total gap as a raw value, but they get scaled by their own weight, which is heterogeneous and changes across all classes. 
+This means that a large movement in a lightly-weighted category can matter less than a smaller movement in a heavy one.
 There is also a residual term that absorbs whatever difference the named categories do not explain. 
 It guarantees that the parts add back to the whole, and prevents anything from being forced into a named category where it does not belong.
 
@@ -565,7 +566,6 @@ It guarantees that the parts add back to the whole, and prevents anything from b
   \begin{table}[ht]
     \centering
     \renewcommand{\arraystretch}{1.3}
-    \label{tab:ch3_decomposition}
     \begin{tabular}{lccc}
     \toprule
     \textbf{Component} & \textbf{Raw movement} & \textbf{Weight} $w_i$ & \textbf{Contribution} ($= \text{mov.} \times w_i$) \\
@@ -584,11 +584,11 @@ It guarantees that the parts add back to the whole, and prevents anything from b
     \bottomrule
     \end{tabular}
     \caption{Illustrative numeric example of the gap decomposition with synthetic values and weights.}
-
+    \label{tab:ch3_decomposition}
     \end{table}
 
-Table~\ref{tab:ch3_decomposition} makes clear why the gap must be decomposed: the categories offset each other, some of them pushes up the difference while others down.
-A category that helps can hide a problematic one, so the net figure on its own is a poor guide on where the problems are located.
+Table~\ref{tab:ch3_decomposition} makes clear why the gap must be decomposed: the categories offset each other, some of them push the difference up while others pull it down.
+A category that helps can hide a problematic one, so the net figure on its own is a poor guide to where the problems are located.
 Before my project, this whole reading was done manually, which is the starting point of the next section.
   
 \section{Pre-AI Baseline}
