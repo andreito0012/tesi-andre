@@ -3,3 +3,4 @@
 {"rule":"EN_A_VS_AN","sentence":"^\\QWhat happens when an \\E(?:Dummy|Ina|Jimmy-|Dummy-|Maniquí-|Maniquíes-|Atrapa-|Dummy\\+|Dummy's\\+)[0-9]+\\Q is put inside the loop\\E$"}
 {"rule":"EN_A_VS_AN","sentence":"^\\QThe numbers, by contrast, were never a problem at all: the analyst copy-paste them directly from the spreadsheet, and they turn into a risk only when processed by an \\E(?:Dummy|Ina|Jimmy-|Dummy-|Maniquí-|Maniquíes-|Atrapa-|Dummy\\+|Dummy's\\+)[0-9]+\\Q.\\E$"}
 {"rule":"THIS_NNS","sentence":"^\\QThere the framework is put to the test against those failure mode highlighted during the development.\\E$"}
+{"rule":"THIS_NNS","sentence":"^\\QThere the framework is put to the test against those failure mode highlighted during the development, and the system output is compared against the one manually written by managers, in order to give validity to the framework itself.\\E$"}

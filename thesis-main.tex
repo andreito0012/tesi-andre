@@ -597,9 +597,9 @@ All the data sat in several places, in a tabular way with no graphs or visualiza
 The second activity was the production of the bridge document that contains the breakdown of the gap, what caused it, why, and actions taken to improve the situation.
 
 That manual approach has three different weaknesses starting from limited reactivity: a manager had to wait for the weekly report to know how the previous week had closed exactly; any intra-week visibility, when needed, depended on pulling data manually, tile by tile.
-The second one is incomplete root-cause coverage: the choice of which causes needed to be added to the report was up to the analyst, who would typically scan the spreadsheet for KPIs sitting below target and write them up as the explanation. 
+The second one is incomplete root-cause coverage: the choice of which causes needed to be added to the report was up to the manager, who would typically scan the spreadsheet for KPIs sitting below target and write them up as the explanation. 
 There was no decomposition guaranteeing that the listed causes summed back to the total gap, nor that they were ranked by impact.
-The last one is analyst dependence: the depth and granularity of the diagnosis, and the realism of the recommended actions, varied considerably with the individual experience of the analyst preparing the document.
+The last one is analyst dependence: the depth and granularity of the diagnosis, and the realism of the recommended actions, varied considerably with the individual experience of the manager preparing the document.
 The three weaknesses are visible in Figure~\ref{fig:ch3_weaknesses} together with a description of how each one is answered.
 
 
@@ -638,14 +638,14 @@ The three weaknesses are visible in Figure~\ref{fig:ch3_weaknesses} together wit
 
 The three weaknesses do not all sit on the same level.
 On the causal side, the causes the manager wrote were often correct but rarely complete, with smaller contributors sometimes not included. 
-The other two are not the same either: one is operational, involving wait and manual pulls, the last is a matter of consistency.
+The other two are not the same either: one is operational, involving waiting and manual pulls, the last is a matter of consistency.
 The numbers, by contrast, were never a problem at all: the manager pastes them directly from the spreadsheet, and they turn into a risk only when processed by an \ac{LLM}.
 How each of these is addressed is discussed in Chapter~\ref{chap:proposed_solution}, where the three-contract framework is introduced.
 
 \section{Methodology}
-The study is organized around a single operation, developed following by a longitudinal design: I worked on the system observing day after day the working routine.
-The system presented in Chapter~\ref{chap:proposed_solution} is developed through an iterative loop: code, observe what the output is, isolate one issue at the time, fix it, validate the solution, and repeat; this loop ran roughly several dozen times, and each pass left a record of what had gone wrong and why.
-Those traces are the base material of the analysis: I organized them into families by the kind of error they represent, and label them as grounding failure in Chapter~\ref{chap:results}. 
+The study is organized around a single operation, developed following a longitudinal design: I worked on the system observing day after day the working routine.
+The system presented in Chapter~\ref{chap:proposed_solution} is developed through an iterative loop: code, observe what the output is, isolate one issue at a time, fix it, validate the solution, and repeat; this loop ran roughly several dozen times, and each pass left a record of what had gone wrong and why.
+Those traces are the base material of the analysis: I organized them into families by the kind of error they represent, and labelled them as grounding failures in Chapter~\ref{chap:results}. 
 There the framework is put to the test against those failure mode highlighted during the development, and the system output is compared against the one manually written by managers, in order to give validity to the framework itself.
 
 
