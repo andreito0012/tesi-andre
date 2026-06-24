@@ -505,7 +505,7 @@ The chapters that follow go in that direction, exploring the case where the gap 
 %----------------------------------------------------------------------------------------
 
 This chapter covers the foundations of my case study. 
-It is about the operational setting, the reference indicator the daily review turns on, and what builds it up.
+It is about the operational setting, the headline indicator the weekly review turns on, and what builds it up.
 Furthermore, it describes all the manual practices done before any automated support and the related weaknesses.
 
 
@@ -517,9 +517,9 @@ Each week a manager has to read the gap and understand what stands behind it, in
 In my case, this explanation does not stay local: it goes up to a higher team that oversees the whole country and looks at every \ac{DS} that missed its target.
 
 
-\section{The main indicator and its decomposition}
+\section{The headline indicator and its decomposition}
 
-The headline figure can be defined as output quantity over resources used to produce it, in simple words a ratio. 
+The headline indicator can be defined as output quantity over resources used to produce it, in simple words a ratio. 
 The difference between what was planned and the realised value is the gap that my project focuses on.
 This indicator is then decomposed into a pre-defined and fixed set of categories that are mutually exclusive.
 The set is organized on two levels: top-level categories that can be decomposed into the sub-factors that compose them (Figure~\ref{fig:ch3_decomposition}). 
@@ -594,8 +594,7 @@ A category that helps can hide a problematic one, so the net figure on its own i
 The starting baseline involved two main time-consuming practices: monitoring and a written explanation.
 A manager who wanted to know how the running week was going had to open one dashboard at a time and copy-paste all the data needed into a new spreadsheet file used for the analysis. 
 All the data sat in several places, in a tabular way with no graphs or visualization that could help the reader.
-The second activity was the production of the bridge document that contains the explanation of the gap.
-Each \ac{DS} that misses its target over the previous week has to produce a written breakdown of what caused the gap, why it happened, and what actions will be taken to improve or solve the situation.
+The second activity was the production of the bridge document that contains the breakdown of the gap, what caused it, why, and actions taken to improve the situation.
 
 That manual approach has three different weaknesses starting from limited reactivity: a manager had to wait for the weekly report to know how the previous week had closed exactly; any intra-week visibility, when needed, depended on pulling data manually, tile by tile.
 The second one is incomplete root-cause coverage: the choice of which causes needed to be added to the report was up to the analyst, who would typically scan the spreadsheet for KPIs sitting below target and write them up as the explanation. 
@@ -644,6 +643,14 @@ The numbers, by contrast, were never a problem at all: the manager pastes them d
 How each of these is addressed is discussed in Chapter~\ref{chap:proposed_solution}, where the three-contract framework is introduced.
 
 \section{Methodology}
+The study is organized around a singe operation develop following a longitudinal design: I worked on the system observing day after day the working routine rather then watching from the outside.
+The sistem presented in Chapter~\ref{chap:proposed_solution} is developed trought an iterative loop: do, observe what the output is, isolate one fix at the time, solve the issue, validate the solution, and repeat; this loop run rughtly severla dozen times, and each phases left a record of what gobe wrong and why.
+Those traces left are the base material of the analysis: i organized them into families by the kind of error they represent, and represent them s grounding faliure in Chapter~\ref{chap:results}. 
+There the framework is put to test against those faliure mode highlited during the development.
+
+
+
+
 
 %----------------------------------------------------------------------------------------
 \chapter{Proposed Solution: Three-Contract Framework}
