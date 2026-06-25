@@ -638,7 +638,7 @@ The three weaknesses are visible in Figure~\ref{fig:ch3_weaknesses} together wit
 
 The three weaknesses do not all sit on the same level.
 On the causal side, the causes the manager wrote were often correct but rarely complete, with smaller contributors sometimes not included.
-This causal weakness and the analyst dependence share the same root in the manual nature of the process, but they are not the same defect: whether the listed causes cover the whole gap and are ranked by impact, and the other is about whether the output survives the absence of a specific person.  
+This causal weakness and the analyst dependence share the same root in the manual judgment of the manager, but they are not the same defect: whether the listed causes cover the whole gap and are ranked by impact, and the other is about whether the output survives the absence of a specific person.  
 Reactivity stands apart, the only operational one.
 The numbers, by contrast, were never a problem at all: the manager pastes them directly from the spreadsheet, and they turn into a risk only when processed by an \ac{LLM}.
 How each of these is addressed is discussed in Chapter~\ref{chap:proposed_solution}, where the three-contract framework is introduced.
@@ -659,10 +659,17 @@ There the framework is put to the test against those failure modes highlighted d
 
 Chapter~\ref{chap:case_study} closed by listing the three weaknesses, and the iterative process followed during the development.
 The summarized data a manager reads after the week closes came too late, the gap explanation depends entirely on the person in charge, possibly causing an incomplete coverage of the causes.
+This chapter presents the iterative process developed to beat those weaknesses. 
+
+
+Each answer takes its shape from the problem.
+Grounding has two dimension as introduced in Chapter~\ref{chap:introduction}: the numeric one, which is hard and deterministic, and the causal one, which is soft and bounded to a curated knowledge tree.
+The narrative produced on this basis must be right in both the cases.
+Literature on hallucinations verify the claim against the source \cite{min2023factscore}, it does not enforce both simultaneously.
+The framework, instead, hold both of them in its pipeline where a guarantee can attach.
 %----------------------------------------------------------------------------------------
 
 \section{Core Concept}
-Introduction of the three contracts (tile-as-source, curated knowledge tree, and post-generation sanitizer) as a unified solution to the grounding problem, each acting at a different point of the generation chain.
 
 \section{Prompt Engineering}
 The design of the system prompt as an explicit encoding of fidelity rules, with one directive per observed failure mode rather than generic accuracy instructions.
