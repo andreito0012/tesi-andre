@@ -92,7 +92,7 @@ It is the final node of the logistic network, the place where packages are sorte
 The station where I worked, DFV2 in Udine, runs on a standard daily rhythm: plan the day, run it, measure what happens, adjust for tomorrow. 
 The manager controls the rhythm through a large set of indicators that are read every day to determine if any correction is needed. Normally the window to act is narrow so it is important that a manager doesn't get the picture late or even wrong, otherwise the chances to fix it would be lost.
 
-Among all the indicators that we used at the station, one metric acts as the headline figure, a single number that captures how efficiently the station operates.
+Among all the indicators that we used at the station, one metric acts as the headline indicator, a single number that captures how efficiently the station operates.
 Most of the days this number is close to the planned one, but not exactly on it, and that gap is what a manager has to explore, understand and explain. 
 A process that is anything but trivial.
 This difference is the combined effect of many separate factors: some of them are internal to the station while the rest of them are completely external, and working out which factor and its weight is a task that, before this project, was done completely by hand.
@@ -513,7 +513,7 @@ Furthermore, it describes all the manual practices done before any automated sup
 
 The setting is the one introduced in Chapter~\ref{chap:introduction}: I carried out my internship at DFV2, a last-mile delivery station located in Udine.
 The focus of my work is not the station as a whole, but a specific weekly task carried out by managers across Europe.
-Each week a manager has to read the gap and understand what stands behind it, in order to explain it.
+The numbers are whatch daily while, the gap explanation, is prepared only once a week.
 In my case, this explanation does not stay local: it goes up to a higher team that oversees the whole country and looks at every \ac{DS} that missed its target.
 
 
@@ -637,15 +637,15 @@ The three weaknesses are visible in Figure~\ref{fig:ch3_weaknesses} together wit
   \end{figure}
 
 The three weaknesses do not all sit on the same level.
-On the causal side, the causes the manager wrote were often correct but rarely complete, with smaller contributors sometimes not included.
+On the causal side, the causes the manager wrote were often correct but rarely complete, with smaller contributors sometimes not included: the manual problem is one of coverage, not of invented causes.
 This causal weakness and the analyst dependence share the same root in the manual judgment of the manager, but they are not the same defect: whether the listed causes cover the whole gap and are ranked by impact, and the other is about whether the output survives the absence of a specific person.  
-Reactivity stands apart, the only operational one.
+Reactivity stands apart, as the only operational one.
 The numbers, by contrast, were never a problem at all: the manager pastes them directly from the spreadsheet, and they turn into a risk only when processed by an \ac{LLM}.
 How each of these is addressed is discussed in Chapter~\ref{chap:proposed_solution}, where the three-contract framework is introduced.
 
 \section{Methodology}
 The study is organized around a single operation, developed following a longitudinal design: I worked on the system observing day after day the working routine.
-The system presented in Chapter~\ref{chap:proposed_solution} is developed through an iterative loop: code, observe what the output is, isolate one issue at a time, fix it, validate the solution, and repeat; this loop ran roughly several dozen times, and each pass left a record of what had gone wrong and why.
+The system presented in Chapter~\ref{chap:proposed_solution} was developed through an iterative loop: code, observe what the output is, isolate one issue at a time, fix it, validate the solution, and repeat; this loop ran roughly several dozen times, and each pass left a record of what had gone wrong and why.
 Those traces are the base material of the analysis: I organized them into families by the kind of error they represent, and labelled them as grounding failures in Chapter~\ref{chap:results}. 
 There the framework is put to the test against those failure modes highlighted during the development, and the system output is compared against the one manually written by managers, in order to give validity to the framework itself.
 
@@ -657,16 +657,16 @@ There the framework is put to the test against those failure modes highlighted d
 \chapter{The three-Contract Framework}
 \label{chap:proposed_solution}
 
-Chapter~\ref{chap:case_study} closed by listing the three weaknesses and describing the iterative process followed during the development.
-The summarized data a manager reads after the week closes came too late; the listed causes were rarely complete or ranked by impact, and the level on the analysis rode on the person in charge.
-This chapter presents the iterative process those weaknesses push me forward. 
+Chapter~\ref{chap:case_study} closed by listing the three weaknesses and describing the iterative process followed during development.
+The summarized data a manager reads after the week closes came too late; the listed causes were rarely complete or ranked by impact, and the depth of the analysis rode on the person in charge.
+This chapter presents the iterative process those weaknesses push me through. 
 
 
 Each answer takes its shape from the problem.
 Grounding has two dimensions as introduced in Chapter~\ref{chap:introduction}: the numeric one, which is hard and deterministic, and the causal one, which is soft and bounded by a curated knowledge tree.
 The narrative produced on this basis must be right in both cases.
 Literature on hallucinations verifies the claim against the source \cite{min2023factscore}; it does not enforce both simultaneously.
-The framework, instead, hold both at the three points of the pipeline where a guarantee can attach.
+The framework, instead, holds both at the three points of the pipeline where a guarantee can attach.
 %----------------------------------------------------------------------------------------
 
 \section{Core Concept}
@@ -678,6 +678,7 @@ The design of the system prompt as an explicit encoding of fidelity rules, with 
 The overall system architecture of the AI-BI pipeline, from data aggregation to final narrative output.
 
 \section{Application}
+\label{sec:application}
 How the framework was derived from the iterative development of the case study, showing the concrete implementation of each contract.
 
 You may also put some code snippet (which is NOT float by default), eg: \cref{lst:random-code}.
