@@ -682,6 +682,12 @@ there is the moment after the model runs, when the generated text can be cross-c
 None of them alone does the full job, because each one acts where the others cannot reach; that is why a framework is needed. 
 
 
+As presented in image~\ref{fig:architecture}, the first contract, \emph{tle-as-source}, sits on top of the framework.
+It is positioned at the beginning because it freezes the numbers before the model sees them, to avoid any \ac{LLM} recomputation.
+The second, the \emph{curated knowledge tree}, is postioned directly aside the prompt itself; it is used to instruct the model with the necessary causes and actions the domain admits.
+The last contract, the \emph{sanitizer}, is located at the end of this pipeline; it servs as determinist check on the finalized output to repairs the narrow class of formal slips that survive the first two.
+
+
 \begin{figure}[htbp]
   \centering
   \begin{tikzpicture}[
@@ -722,9 +728,9 @@ None of them alone does the full job, because each one acts where the others can
   \node[llm,minimum width=0.5cm,minimum height=0.32cm,anchor=west] (s3) at ([yshift=-0.5cm]s2.west) {};
   \node[anchor=west,font=\footnotesize] at (s3.east) {\,Frontier language model};
   \draw[e] ([yshift=-0.5cm]s3.west) -- ++(0.5,0) coordinate (a4) node[anchor=west,font=\footnotesize] at (a4) {\,Data flow (solid)};
-  \draw[e,dashed] ([yshift=-1.1cm]a4) -- ++(0.6,0) coordinate (a5) node[anchor=west,font=\footnotesize] at (a5) {\,Ground-truth path for canonical resolution (dashed)};
+  \draw[e,dashed] ([yshift=-1.1cm]s3.west) -- ++(0.6,0) coordinate (a5) node[anchor=west,font=\footnotesize] at (a5) {\,Ground-truth path for canonical resolution (dashed)};
   \end{tikzpicture}
-  \caption{The AI-BI pipeline with the three contracts in place, drawn top to bottom. Operational data is aggregated into pre-computed tiles (Contract~1, upstream); the prompt is assembled from those tiles and from the curated knowledge tree (Contract~2, mid); a frontier language model writes the narrative; the sanitizer (Contract~3, downstream) checks the text against the canonical tile values before it is shown. The dashed arrow is the ground-truth path the sanitizer uses for canonical resolution. Box shading distinguishes the three contracts (thick border) from ordinary pipeline stages, as the legend shows. All labels are anonymized.}
+  \caption{The AI-BI pipeline with the three contracts in place, drawn top to bottom.}
   \label{fig:architecture}
   \end{figure}
   
