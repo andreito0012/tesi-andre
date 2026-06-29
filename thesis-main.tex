@@ -674,28 +674,25 @@ The framework, instead, holds both at the three points of the pipeline where a g
 
 \section{Core Concept}
 
-The core concept can be described as a generation pipeline that with three guarantee transforms a broad of indicators intro a complete narrative.
 In software engineering a contract is the deal between a component and its caller: meet the precondition and the component guarantees its postcondition \cite{meyer1992}.
-Each guarantee is placed, therefore, to guard a precise moment: one before the models run, when the numbers get assembled; 
-the second is the prompt itself, where the space of things the model may say is set, and
-there is the moment after the model runs, when the generated text can be cross-checked against the truth.
-None of them alone does the full job, because each one acts where the others cannot reach; that is why a framework is needed. 
+The core concept applys the same idea to a generational pipeline that with three contracts transforms a broad set of indicators into a complete narrative.
+None of them alone does the full job, because each one acts where the others cannot reach; that is why a complete framework is needed. 
 
 
-As presented in image~\ref{fig:architecture}, the first contract, \emph{tle-as-source}, sits on top of the framework.
+As presented in Figure~\ref{fig:architecture}, the first contract, \emph{tile-as-source}, sits on top of the pipeline.
 It is positioned at the beginning because it freezes the numbers before the model sees them, to avoid any \ac{LLM} recomputation.
-The second, the \emph{curated knowledge tree}, is postioned directly aside the prompt itself; it is used to instruct the model with the necessary causes and actions the domain admits.
-The last contract, the \emph{sanitizer}, is located at the end of this pipeline; it servs as determinist check on the finalized output to repairs the narrow class of formal slips that survive the first two.
+The second, the \emph{curated knowledge tree}, is positioned directly aside the prompt itself; it is used to instruct the model with the necessary causes and actions the domain admits.
+The last contract, the \emph{sanitizer}, is located at the end of this pipeline; it serves as a determinist check on the finalized output to repair the narrow class of formal slips that survive the first two.
 
 
 \begin{figure}[htbp]
   \centering
   \begin{tikzpicture}[
     font=\small,
-    node distance=0.65cm,
+    node distance=0.45cm,
     box/.style={draw,rounded corners,minimum height=0.85cm,minimum width=2.6cm,align=center},
-    data/.style={box,thick,dotted},
-    llm/.style={box,fill=black!10},
+    data/.style={box},
+    llm/.style={box,thick,dotted},
     contract/.style={draw, rounded corners,minimum height=0.85cm,minimum width=2.6cm,align=center,fill=black!12, thick, double, double distance=1.2pt},
     e/.style={-{Latex[length=2.2mm]},thick},
     lbl/.style={font=\footnotesize\itshape,align=center,text=black!60}
@@ -730,7 +727,7 @@ The last contract, the \emph{sanitizer}, is located at the end of this pipeline;
   \draw[e] ([yshift=-0.5cm]s3.west) -- ++(0.5,0) coordinate (a4) node[anchor=west,font=\footnotesize] at (a4) {\,Data flow (solid)};
   \draw[e,dashed] ([yshift=-1.1cm]s3.west) -- ++(0.6,0) coordinate (a5) node[anchor=west,font=\footnotesize] at (a5) {\,Ground-truth path for canonical resolution (dashed)};
   \end{tikzpicture}
-  \caption{The AI-BI pipeline with the three contracts in place, drawn top to bottom.}
+  \caption{The AI-BI pipeline with the three contracts in place.}
   \label{fig:architecture}
   \end{figure}
   
