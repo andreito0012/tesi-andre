@@ -13,6 +13,7 @@
 \usepackage{amsmath}
 \usepackage{graphicx}
 \usepackage{float}
+\usepackage{array}
 \usetikzlibrary{backgrounds}      % Risolve l'errore su \begin{scope}[on background layer]
 \usetikzlibrary{shapes.geometric} % Risolve l'errore sul nodo \node[star]
 \usetikzlibrary{arrows.meta, positioning}
@@ -732,21 +733,45 @@ The last contract, the \emph{sanitizer}, is located at the end of this pipeline;
   \end{figure}
   
 
-  \begin{table}[ht]
-    \centering
-    \small
-    \begin{tabular}{p{3.0cm} p{2.0cm} p{4.0cm} p{3.2cm}}
-    \toprule
-    \textbf{Contract} & \textbf{Position} & \textbf{Targets} & \textbf{Guarantee} \\
-    \midrule
-    Tile-as-source        & Upstream   & Recalculation (F1), rate-value hallucination (F6), value-as-gap (F7); helps precision drift (F3) & Hard \\
-    Curated knowledge tree & Mid (prompt) & Metric conflation (F2), non-actionable recommendations (F5) & Soft \\
-    Sanitizer             & Downstream & Precision drift (F3), sign inversion (F4), token concatenation (F8), residual drift & Hard, on what it catches \\
-    \bottomrule
-    \end{tabular}
-    \caption{The three contracts, the point of the pipeline each one acts on, the failure modes it targets, and the kind of guarantee it gives. The failure modes (F1 to F8) are the catalogue defined in Chapter~\ref{chap:results}; here they only locate each contract against the problem. The numeric contracts (tile-as-source, sanitizer) are hard, since a value either matches its source or it does not and code can settle it; the causal contract (the tree) is soft, since the admissible set is bounded and inspectable but the choice within it is not deterministically verifiable.}
-    \label{tab:contracts}
-    \end{table}
+
+
+\begin{table}[ht]
+  \centering
+  \small
+  \renewcommand{\arraystretch}{1.3} % Leggermente aumentato (da 1.25 a 1.3) per dare più respiro
+  % Uso raggedright per allineare a sinistra ed evitare gli spazi enormi tra le parole
+  \begin{tabular}{@{} >{\raggedright\arraybackslash}p{3cm} l >{\raggedright\arraybackslash}p{5.5cm} l @{}}
+  \toprule
+  \textbf{Contract} & \textbf{Position} & \textbf{Failure modes addressed} & \textbf{Guarantee} \\
+  \midrule
+  Tile-as-source &
+    Upstream &
+    Recalculation (F1)\newline
+    Rate-value hallucination (F6)\newline
+    Value-as-gap (F7)\newline
+    Precision drift (F3, partial) &
+    Hard \\
+  \addlinespace
+  Curated knowledge tree &
+    Mid (prompt) &
+    Metric conflation (F2)\newline
+    Non-actionable recommendations (F5) &
+    Soft \\
+  \addlinespace
+  Sanitizer &
+    Downstream &
+    Precision drift (F3)\newline
+    Sign inversion (F4)\newline
+    Token concatenation (F8) &
+    Hard\textsuperscript{\dag} \\
+  \bottomrule
+  \end{tabular}
+  
+  \vspace{0.3cm} % Aggiunge uno spazio verticale tra la tabella e la didascalia
+  
+  \caption{The three contracts: where each acts on the pipeline, the failure modes it targets, and the kind of guarantee it gives. Failure modes F1--F8 are catalogued in Chapter~\ref{chap:results}; here they only place each contract against the problem. The numeric contracts (tile-as-source, sanitizer) are hard: a value either matches its source or it does not, and code settles it. The causal contract (the tree) is soft: the admissible set is bounded and inspectable, but the choice within it is not deterministically verifiable. \dag~The sanitizer is deterministic only on the slips it catches, it does not prevent them upstream.}
+  \label{tab:contracts}
+\end{table}
     
 \section{Prompt Engineering}
 The design of the system prompt as an explicit encoding of fidelity rules, with one directive per observed failure mode rather than generic accuracy instructions.
