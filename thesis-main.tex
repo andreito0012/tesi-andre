@@ -10,6 +10,9 @@
 \usepackage{tikz}
 \usepackage{multirow}
 \usepackage{bigdelim}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{float}
 \usetikzlibrary{backgrounds}      % Risolve l'errore su \begin{scope}[on background layer]
 \usetikzlibrary{shapes.geometric} % Risolve l'errore sul nodo \node[star]
 \usetikzlibrary{arrows.meta, positioning}
@@ -92,7 +95,7 @@ It is the final node of the logistic network, the place where packages are sorte
 The station where I worked, DFV2 in Udine, runs on a standard daily rhythm: plan the day, run it, measure what happens, adjust for tomorrow. 
 The manager controls the rhythm through a large set of indicators that are read every day to determine if any correction is needed. Normally the window to act is narrow so it is important that a manager doesn't get the picture late or even wrong, otherwise the chances to fix it would be lost.
 
-Among all the indicators that we used at the station, one metric acts as the headline indicator, a single number that captures how efficiently the station operates.
+Among all the indicators that we used at the station, one metric acts as the headline indicator, a single number that captures how the station operates.
 Most of the days this number is close to the planned one, but not exactly on it, and that gap is what a manager has to explore, understand and explain. 
 A process that is anything but trivial.
 This difference is the combined effect of many separate factors: some of them are internal to the station while the rest of them are completely external, and working out which factor and its weight is a task that, before this project, was done completely by hand.
@@ -671,6 +674,61 @@ The framework, instead, holds both at the three points of the pipeline where a g
 
 \section{Core Concept}
 
+The core concept can be described as a generation pipeline that with three guarantee transforms a broad of indicators intro a complete narrative.
+In software engineering a contract is the deal between a component and its caller: meet the precondition and the component guarantees its postcondition \cite{meyer1992}.
+Each guarantee is placed, therefore, to guard a precise moment: one before the models run, when the numbers get assembled; 
+the second is the prompt itself, where the space of things the model may say is set, and
+there is the moment after the model runs, when the generated text can be cross-checked against the truth.
+None of them alone does the full job, because each one acts where the others cannot reach; that is why a framework is needed. 
+
+
+\begin{figure}[htbp]
+  \centering
+  \begin{tikzpicture}[
+    font=\small,
+    node distance=0.65cm,
+    box/.style={draw,rounded corners,minimum height=0.85cm,minimum width=2.6cm,align=center},
+    data/.style={box,fill=black!5},
+    llm/.style={box,fill=black!10},
+    contract/.style={draw,thick,rounded corners,minimum height=0.85cm,minimum width=2.6cm,align=center,fill=black!12},
+    e/.style={-{Latex[length=2.2mm]},thick},
+    lbl/.style={font=\footnotesize\itshape,align=center,text=black!60}
+  ]
+  % main vertical chain (top to bottom)
+  \node[data] (op) {Operational data};
+  \node[data,below=of op] (agg) {Aggregation (weighted)};
+  \node[contract,below=of agg] (tile) {Pre-computed \textbf{tiles}};
+  \node[box,below=of tile] (prompt) {Prompt assembly};
+  \node[llm,below=of prompt] (llm) {Frontier LLM};
+  \node[contract,below=of llm] (san) {\textbf{Sanitizer}};
+  \node[data,below=of san] (out) {Grounded narrative};
+  \foreach \a/\b in {op/agg,agg/tile,tile/prompt,prompt/llm,llm/san,san/out} \draw[e] (\a) -- (\b);
+  % knowledge tree feeding the prompt from the left (Contract 2)
+  \node[contract,left=1.5cm of prompt] (tree) {Curated\\\textbf{knowledge tree}};
+  \draw[e] (tree) -- (prompt);
+  % contract annotations on the left
+  \node[lbl,left=0.35cm of tile,align=right] {Contract 1\\tile-as-source\\(upstream)};
+  \node[lbl,below=0.08cm of tree] {Contract 2 (mid)};
+  \node[lbl,left=0.35cm of san,align=right] {Contract 3\\sanitizer\\(downstream)};
+  % canonical ground-truth path tiles -> sanitizer (dashed), down the right side
+  \draw[e,dashed] (tile.east) to[out=0,in=0,looseness=1.5]
+    node[lbl,right,align=center]{ground truth\\(canonical\\resolution)} (san.east);
+  % ---- legend ----
+  \node[anchor=west,font=\footnotesize\bfseries] (legt) at ([xshift=-3.0cm,yshift=-1.1cm]out.south) {Legend};
+  \node[contract,minimum width=0.5cm,minimum height=0.32cm,anchor=west] (s1) at ([yshift=-0.5cm]legt.west) {};
+  \node[anchor=west,font=\footnotesize] at (s1.east) {\,Contract (contribution of this thesis)};
+  \node[data,minimum width=0.5cm,minimum height=0.32cm,anchor=west] (s2) at ([yshift=-0.5cm]s1.west) {};
+  \node[anchor=west,font=\footnotesize] at (s2.east) {\,Pipeline stage / data};
+  \node[llm,minimum width=0.5cm,minimum height=0.32cm,anchor=west] (s3) at ([yshift=-0.5cm]s2.west) {};
+  \node[anchor=west,font=\footnotesize] at (s3.east) {\,Frontier language model};
+  \draw[e] ([yshift=-0.5cm]s3.west) -- ++(0.5,0) coordinate (a4) node[anchor=west,font=\footnotesize] at (a4) {\,Data flow (solid)};
+  \draw[e,dashed] ([yshift=-0.5cm]a4) -- ++(0.5,0) coordinate (a5) node[anchor=west,font=\footnotesize] at (a5) {\,Ground-truth path for canonical resolution (dashed)};
+  \end{tikzpicture}
+  \caption{The AI-BI pipeline with the three contracts in place, drawn top to bottom. Operational data is aggregated into pre-computed tiles (Contract~1, upstream); the prompt is assembled from those tiles and from the curated knowledge tree (Contract~2, mid); a frontier language model writes the narrative; the sanitizer (Contract~3, downstream) checks the text against the canonical tile values before it is shown. The dashed arrow is the ground-truth path the sanitizer uses for canonical resolution. Box shading distinguishes the three contracts (thick border) from ordinary pipeline stages, as the legend shows. All labels are anonymized.}
+  \label{fig:architecture}
+  \end{figure}
+  
+
 \section{Prompt Engineering}
 The design of the system prompt as an explicit encoding of fidelity rules, with one directive per observed failure mode rather than generic accuracy instructions.
 
@@ -681,9 +739,9 @@ The overall system architecture of the AI-BI pipeline, from data aggregation to 
 \label{sec:application}
 How the framework was derived from the iterative development of the case study, showing the concrete implementation of each contract.
 
-You may also put some code snippet (which is NOT float by default), eg: \cref{lst:random-code}.
+%You may also put some code snippet (which is NOT float by default), eg: \cref{lst:random-code}.
 
-\lstinputlisting[float,language=Java,label={lst:random-code}]{listings/HelloWorld.java}
+%\lstinputlisting[float,language=Java,label={lst:random-code}]{listings/HelloWorld.java}
 
 \section{Fancy formulas here} % Mantenuto dal template originale
 
