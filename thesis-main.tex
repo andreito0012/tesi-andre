@@ -662,8 +662,8 @@ There the framework is put to the test against those failure modes highlighted d
 \label{chap:proposed_solution}
 
 Chapter~\ref{chap:case_study} closed by listing the three weaknesses and describing the iterative process followed during development.
-The summarized data a manager reads after the week closes comes too late; the listed causes were rarely complete or ranked by impact, and the depth of the analysis rode on the person in charge.
-This chapter presents the framework those weaknesses push me through. 
+The summarized data a manager read after the week closes came too late; the listed causes were rarely complete or ranked by impact, and the depth of the analysis rode on the person in charge.
+This chapter presents the framework those weaknesses push me to build. 
 
 
 Each answer takes its shape from the problem.
@@ -675,15 +675,15 @@ The framework, instead, holds both at the three points of the pipeline where a g
 
 \section{Core Concept}
 
-In software engineering a contract is the deal between a component and its caller: meet the precondition and the component guarantees its postcondition \cite{meyer1992}.
+In software engineering, a contract is the deal between a component and its caller: meet the precondition and the component guarantees its postcondition \cite{meyer1992}.
 The core concept applies the same idea to a generation pipeline that, through three contracts, transforms a broad set of indicators into a complete narrative.
 None of them alone does the full job, because each one acts where the others cannot reach; that is why a complete framework is needed. 
 
 
 As presented in Figure~\ref{fig:architecture}, the first contract, \emph{tile-as-source}, sits at the top of the pipeline.
 It is positioned at the beginning because it freezes the numbers before the model sees them, to avoid any \ac{LLM} recomputation.
-The second, the \emph{curated knowledge tree}, is positioned directly inside the prompt itself; it is used to instruct the model with the admissable causes and actions the domain admits.
-The last contract, the \emph{sanitizer}, is located at the end of this pipeline; it serves as a deterministic check on the finalized output to repair the narrow class of formal slips that survive the first two.
+The second, the \emph{curated knowledge tree}, is positioned directly inside the prompt; it is used to instruct the model with causes and actions the domain admits.
+The last contract, the \emph{sanitizer}, is located at the end of this pipeline; it serves as a deterministic check on the finished output to repair the narrow class of formal slips that survive the first two.
 
 
 \begin{figure}[htbp]
@@ -734,9 +734,9 @@ The last contract, the \emph{sanitizer}, is located at the end of this pipeline;
   
 
 Table~\ref{tab:contracts}, located below, holds the key conceptual difference.
-Two of the contracts implemented bring a hard guarantee, the third a soft one instead. 
-The first two differs on what they contrains: a number either match its source or it does not, and a deterministic ceck settles that with no judjment, so the numeric side admits the hard guarantee.
-For the last one, instead, we cannot talk about hard guarantees because the tree buonds the set the model may pick from, but which number represents the best fit to explain the number is left to the \ac{LLM} , so no deterministic wall.
+Two of the three contracts bring a hard guarantee, the third a soft one instead. 
+The first two differ in what they contrains: a number either matches its source or it does not, and a deterministic check settles that with no judgment, so the numeric side admits a hard guarantee.
+For the last one, instead, we cannot talk about hard guarantees because the tree bounds the set the model may pick from, but which number represents the best fit to explain the number is left to the \ac{LLM}, so no deterministic wall.
 
 
 \begin{table}[ht]
