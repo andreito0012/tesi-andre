@@ -813,7 +813,7 @@ It starts with the headline figure (\texttt{Metric\_R}) that represents the over
 The hard guarantee of this contract, as presented in Table~\ref{tab:contracts} can be motivated since it carries most of the numeric load by directly copying the number: it avoids any recalculation (F1), invented rates (F6), confuse values for deltas (F7), and helps with any precision drift since a copied value arrive with the right decimals (F3).
 
 There are two main buondaries for this contract: it binds only number that exist as tiles in the dashboard, not those the model may compute itself.
-The second one is deeper than the first, since it is true that it binds the number to the tile computed upstream, but there is no guarantee that the value represents the truth in the world. There is no check about the intrinsic correctness of the value itself. 
+The second one is deeper than the first, since it is true that it binds the number to the tile computed upstream, but there is no guarantee that the value represents the truth in the world. There is no check about the intrinsic correctness of the value itself, infact this is faithfulness not factuality: line of Chapter~\ref{chap:state_of_the_art}. 
 
 
 \section{Application}
