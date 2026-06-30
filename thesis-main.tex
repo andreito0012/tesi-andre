@@ -791,7 +791,7 @@ A semantic layer manages the value inside a dashboard and stops there; instead I
 
 Listing~\ref{lst:tiles} shows how this rule is applied in the pipeline, through a frozen block of tiles that is directly injected into the model's prompt with a specific instruction to copy it verbatim.
 Each tile is a signed, pre-computed contribution, organized in a hierarchical order.
-It starts with the headline figure (\texttt{Metric\_R}) that represents the overall metric, followed by the others (\texttt{Category\_k}) that are decomposed tiles ranked by absolute movement, each already carring its share of the gap, so the model has no reason to compute one
+It starts with the headline figure (\texttt{Metric\_R}) that represents the overall metric, followed by the others (\texttt{Category\_k}) that are decomposition tiles ranked by absolute movement, each already carrying its share of the gap, so the model has no reason to compute one.
 
 
 \begin{lstlisting}[language=Python, caption={Building the frozen-tiles block.}, label={lst:tiles}]
@@ -810,10 +810,11 @@ It starts with the headline figure (\texttt{Metric\_R}) that represents the over
   \end{lstlisting}
 
 
-The hard guarantee of this contract, as presented in Table~\ref{tab:contracts} can be motivated since it carries most of the numeric load by directly copying the number: it avoids any recalculation (F1), invented rates (F6), confuse values for deltas (F7), and helps with any precision drift since a copied value arrive with the right decimals (F3).
+The hard guarantee of this contract, as presented in Table~\ref{tab:contracts} can be motivated since it carries most of the numeric load by directly copying the number: it avoids any recalculation (F1), invented rates (F6), confusing values for deltas (F7), and helps with any precision drift since a copied value arrives with the right decimals (F3).
 
-There are two main buondaries for this contract: it binds only number that exist as tiles in the dashboard, not those the model may compute itself.
-The second one is deeper than the first, since it is true that it binds the number to the tile computed upstream, but there is no guarantee that the value represents the truth in the world. There is no check about the intrinsic correctness of the value itself, infact this is faithfulness not factuality: line of Chapter~\ref{chap:state_of_the_art}. 
+There are two main boundaries for this contract: it binds only numbers that exist as tiles in the dashboard, not those the model may compute itself.
+The second one is deeper than the first, since it is true that it binds the number to the tile computed upstream, but there is no guarantee that the value represents the truth in the world. 
+There is no check about the intrinsic correctness of the value itself, this is faithfulness, not factuality, a line from Chapter~\ref{chap:state_of_the_art}. 
 
 
 \section{Application}
