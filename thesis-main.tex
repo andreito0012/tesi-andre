@@ -663,11 +663,11 @@ There the framework is put to the test against those failure modes highlighted d
 \label{chap:proposed_solution}
 
 Chapter~\ref{chap:case_study} closed by listing the three weaknesses and describing the iterative process followed during development.
-The summarized data a manager read after the week closes came too late; the listed causes were rarely complete or ranked by impact, and the depth of the analysis rode on the person in charge.
+The summarized data a manager read after the week closed came too late; the listed causes were rarely complete or ranked by impact, and the depth of the analysis rode on the person in charge.
 This chapter presents the framework those weaknesses push me to build. 
 
 
-Each answer takes its shape from the problem.
+The answer takes its shape from the problem.
 Grounding has two dimensions as introduced in Chapter~\ref{chap:introduction}: the numeric one, which is hard and deterministic, and the causal one, which is soft and bounded by a curated knowledge tree.
 The narrative produced on this basis must be right in both cases.
 Literature on hallucinations verifies the claim against the source \cite{min2023factscore}; it does not enforce both simultaneously.
@@ -736,8 +736,8 @@ The last contract, the \emph{sanitizer}, is located at the end of this pipeline;
 
 Table~\ref{tab:contracts}, located below, holds the key conceptual difference.
 Two of the three contracts bring a hard guarantee, the third a soft one instead. 
-The two sides differ in what they contrains: a number either matches its source or it does not, and a deterministic check settles that with no judgment, so the numeric side admits a hard guarantee.
-For the last one, instead, we cannot talk about hard guarantees because the tree bounds the set the model may pick from, but which cause represents the best fit to explain the movemennt is left to the \ac{LLM}, so no deterministic wall to enforce it.
+The two sides differ in what they constrain: a number either matches its source or it does not, and a deterministic check settles that with no judgment, so the numeric side admits a hard guarantee.
+For the last one, instead, we cannot talk about hard guarantees because the tree bounds the set the model may pick from, but which cause represents the best fit to explain the movement is left to the \ac{LLM}, so there is no deterministic wall to enforce it.
 
 
 \begin{table}[ht]
@@ -779,16 +779,16 @@ For the last one, instead, we cannot talk about hard guarantees because the tree
 \end{table}
     
 \section{Contract 1: tile-as-source}
-The first contract, is founded on the idea that the safest number is the number that the model never computes.
-It is one single rule that might seem boring and almost too plain to matter: every number that mght appear in the narrative is only computed once, the \ac{LLM} is never asked to calculate a percentage, a difference or anything that has not been deterministically precalculated.
+The first contract is founded on the idea that the safest number is the number that the model never computes.
+It is one single rule that might seem boring and almost too plain to matter: every number that might appear in the narrative is only computed once, the \ac{LLM} is never asked to calculate a percentage, a difference or anything that has not been deterministically precalculated.
 
-The idea is consistent with the one introduced in Chapter~\ref{chap:state_of_the_art} for what regards semantic layers: a metric is defined in one and only one governed place, so two reports cannot disagree by building their own version of the figure \cite{dbt2024semantic}
+The idea is consistent with the one introduced in Chapter~\ref{chap:state_of_the_art} for what regards semantic layers: a metric is defined in one and only one governed place, so two reports cannot disagree by building their own version of the figure \cite{dbt2024semantic}.
 What is specific here is the target. 
-A semantic layer manages the value inside a dashboard and stops there; intead I decided to push the same concept further onto the generated text, so what a manager reads is only the upstream computed tile, carried trought unchanged.
+A semantic layer manages the value inside a dashboard and stops there; instead I decided to push the same concept further onto the generated text, so what a manager reads is only the upstream computed tile, carried through unchanged.
 
-Listing~\ref{lst:tiles} shows this rule is applied in the pipeline, through a frozen block of tiles that is directly injected in the models prompt with a specif instruction to copy it as verbatim.
-Each tile is a signed, pre-computed contribution, organized in a hyerartical order.
-It starts with the headline figure (\texttt{Metric\_R}) that represents the highest absolute movement, followed by the others (\texttt{Category\_R})each already carring its share of the gap, so the model has no reason to compute one
+Listing~\ref{lst:tiles} shows how this rule is applied in the pipeline, through a frozen block of tiles that is directly injected into the model's prompt with a specific instruction to copy it as verbatim.
+Each tile is a signed, pre-computed contribution, organized in a hierarchical order.
+It starts with the headline figure (\texttt{Metric\_R}) that represents the highest absolute movement, followed by the others (\texttt{Category\_k})each already carryng its share of the gap, so the model has no reason to compute one
 
 
 \begin{lstlisting}[language=Python, caption={Building the frozen-tiles block.}, label={lst:tiles}]
