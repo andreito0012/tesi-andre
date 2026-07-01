@@ -340,7 +340,7 @@ Another approach works on the same structure of data as I do.
 Paradigms like Conversational and \ac{LLM}-assisted \ac{OLAP} are capable of bringing natural language to the multidimensional cube.
 Normally a query is used to retrieve the information. Now the system is not limited to the conversion of text to a query, but also describes what comes back.
 One such system is \ac{VOOL}: a modular insight-based framework that extracts selected quantitative insights and turns them into a description \cite{francia2025vool}. 
-It does not use every insight: VOOL picks only the relevant ones and only those become part of the narration.
+It does not use every insight: VOOL picks only the relevant ones and only those become part of the narrative.
 In the field of multidimensional cubes, this last approach is the closest point to a real narrative over structured analytical data.
 It stays accurate by building descriptions from statistics and templates, without interpreting the results. 
 The numbers are safe, but the reason behind them is left to the reader.
@@ -820,15 +820,15 @@ There is no check about the intrinsic correctness of the value itself, this is f
 \label{sec:knowledgetree}
 
 The tree utilised in the framework is a compact map, compiled from existing operational documentation, containing the causes each single metric admits together with feasable actions to improve the situation.
-Given the aim of the tree concieving a single specific narration, and not open question answering, the tree is small enough to mantain and be read in full.
-It is injected in the prompt as a list the model has to stay inside, and it is paired with the numeric rule so the narrative held both on the numerical and causal side.
+Given that the aim of the tree is conceiving a single specific narrative, and not open question answering, the tree is small enough to maintain and be read in full.
+It is injected into the prompt as a list the model has to stay inside, and it is paired with the numeric rule so the narrative is held both on the numerical and causal side.
 
 During the generation time the pipeline does not hand the whole tree to the model. 
 Based on the drivers that caused the gap on the day, only a subset of the full causes together with the paired actions is selected and passed to the prompt.
-The main idea over this design choice is to turn an open question, \emph{why did the metric move}, into a closed one, \emph{which of these admitted causes fits the movement}; this makes any responce far more reliable. 
-Listings~\ref{lst:tree} shows this concept well, and on top of that, in that way the set presented to the \ac{LLM} is the complete one.
-The decomposition those drivers come from reconsiles to the total gap, so every materia contribution is present and ranked by impact.
-This last phrase is the weakness highlater in Chapter~\ref{chap:case_study} solved by design instead of manual checks.
+The main idea over this design choice is to turn an open question, \emph{why did the metric move}, into a closed one, \emph{which of these admitted causes fits the movement}; this makes any response far more reliable. 
+Listing~\ref{lst:tree} shows this concept well, and on top of that, in that way the set presented to the \ac{LLM} is the complete one.
+The decomposition those drivers come from reconciles to the total gap, so every material contribution is present and ranked by impact.
+This last point is the weakness highlighted in Chapter~\ref{chap:case_study} solved by design instead of manual checks.
 
 
 
@@ -848,10 +848,10 @@ This last phrase is the weakness highlater in Chapter~\ref{chap:case_study} solv
   \end{lstlisting}
 
 
-What the tree buys is the casual side of the narrative, the one that the other two contracts do not touch.
-With tile-as-source in place the model can still get the meaning wrong of a metric (F2), and the sanitizer don't guarantee that all actions produced are inside the feasable set (F5).
-The tree is what bounds both, closest in spirit to the methods that feed a small slice of graph into the prompt \cite{baek2023knowledgeaugmented}.
-Its guarantee is therefore soft, even by injecting any admissable set, the result is still left to the model judjment that can make errors, Chapter~\ref{chap:results} reports how often that judgement lands on the causes the manager choose.
+What the tree buys is the causal side of the narrative, the one that the other two contracts do not touch.
+With tile-as-source in place the model can still get the meaning of a metric wrong (F2), and the sanitizer does not guarantee that all actions produced are inside the feasible set (F5).
+The tree is what bounds both, closest in spirit to the methods that feed a small slice of a graph into the prompt \cite{baek2023knowledgeaugmented}.
+Its guarantee is therefore soft: even by injecting any admissible set, the result is still left to the model's judgment that can make errors. Chapter~\ref{chap:results} reports how often that judgment lands on the causes the manager chose.
 
   
 \section{Application}
