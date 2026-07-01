@@ -819,13 +819,13 @@ There is no check about the intrinsic correctness of the value itself, this is f
 \section{Contract 2: curated knowledge tree}
 \label{sec:knowledgetree}
 
-The tree utilised in the framework is a compact map compiled from existing operational documentation, containing the causes each single metric admits together with feasable actions to improve the situation.
+The tree utilised in the framework is a compact map, compiled from existing operational documentation, containing the causes each single metric admits together with feasable actions to improve the situation.
 Given the aim of the tree concieving a single specific narration, and not open question answering, the tree is small enough to mantain and be read in full.
 It is injected in the prompt as a list the model has to stay inside, and it is paired with the numeric rule so the narrative held both on the numerical and causal side.
 
 During the generation time the pipeline does not hand the whole tree to the model. 
 Based on the drivers that caused the gap on the day, only a subset of the full causes together with the paired actions is selected and passed to the prompt.
-The main idea over this design choice is to turn an open questio like "why do I have a gap?" into a closed one: "which of the admitted causes fit the gap?"; this makes any responce far more reliable. 
+The main idea over this design choice is to turn an open question, \emph{why did the metric move}, into a closed one, \emph{which of these admitted causes fits the movement}; this makes any responce far more reliable. 
 Listings~\ref{lst:tree} shows this concept well, and on top of that, in that way the set presented to the \ac{LLM} is the complete one.
 The decomposition those drivers come from reconsiles to the total gap, so every materia contribution is present and ranked by impact.
 This last phrase is the weakness highlater in Chapter~\ref{chap:case_study} solved by design instead of manual checks.
