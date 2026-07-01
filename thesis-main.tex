@@ -810,13 +810,48 @@ It starts with the headline figure (\texttt{Metric\_R}) that represents the over
   \end{lstlisting}
 
 
-The hard guarantee of this contract, as presented in Table~\ref{tab:contracts} can be motivated since it carries most of the numeric load by directly copying the number: it avoids any recalculation (F1), invented rates (F6), confusing values for deltas (F7), and helps with any precision drift since a copied value arrives with the right decimals (F3).
+The hard guarantee of this contract, as presented in Table~\ref{tab:contracts} can be motivated since it carries most of the numeric load by directly copying the number: it avoids any recalculation (F1), invented rates (F6), confusing values for deltas (F7), and helps with any precision drift since a copied value arrives with the right decimals (F3) \cite{baek2023knowledgeaugmented}.
 
 There are two main boundaries for this contract: it binds only numbers that exist as tiles in the dashboard, not those the model may compute itself.
 The second one is deeper than the first, since it is true that it binds the number to the tile computed upstream, but there is no guarantee that the value represents the truth in the world. 
-There is no check about the intrinsic correctness of the value itself, this is faithfulness, not factuality, a line from Chapter~\ref{chap:state_of_the_art}. 
+There is no check about the intrinsic correctness of the value itself, this is faithfulness, not factuality, as stated in Chapter~\ref{chap:state_of_the_art}. 
+
+\section{Contract 2: curated knowledge tree}
+\label{sec:knowledgetree}
+
+The tree utilised in the framework is a compact map compiled from existing operational documentation, containing the causes each single metric admits together with feasable actions to improve the situation.
+Given the aim of the tree concieving a single specific narration, and not open question answering, the tree is small enough to mantain and be read in full.
+It is injected in the prompt as a list the model has to stay inside, and it is paired with the numeric rule so the narrative held both on the numerical and causal side.
+
+During the generation time the pipeline does not hand the whole tree to the model. 
+Based on the drivers that caused the gap on the day, only a subset of the full causes together with the paired actions is selected and passed to the prompt.
+The main idea over this design choice is to turn an open questio like "why do I have a gap?" into a closed one: "which of the admitted causes fit the gap?"; this makes any responce far more reliable. 
+Listings~\ref{lst:tree} shows this concept well, and on top of that, in that way the set presented to the \ac{LLM} is the complete one.
+The decomposition those drivers come from reconsiles to the total gap, so every materia contribution is present and ranked by impact.
+This last phrase is the weakness highlater in Chapter~\ref{chap:case_study} solved by design instead of manual checks.
 
 
+
+\begin{lstlisting}[language=Python, caption={Building the scoped knowledge-tree block.}, label={lst:tree}]
+  def tree_block(c):
+      L = ["=== CURATED KNOWLEDGE TREE (use ONLY these causes/actions) ==="]
+      for k, v in material(c):
+          e = TREE[k]                              # curated entry for this driver
+          L.append(f"\nCategory_{k} (defectStage: {e['defectStage']}):")
+          L.append("  Allowed root causes:")
+          for rc in e["primary_root_causes"]:
+              L.append(f"    - {rc}")
+          L.append("  Allowed actions:")
+          for a in e["immediate_actions"]:
+              L.append(f"    - {a}")
+      return "\n".join(L)
+  \end{lstlisting}
+
+
+What the tree buys is the casual side of the narrative, the one that the other two contracts do not touch.
+With tile-as-source in place the model can still get the meaning wrong of a metric (F2), and the sanitizer don't guarantees that no action outside the feasable set is produced (F5).
+The tree is what bounds both.
+  
 \section{Application}
 \label{sec:application}
 How the framework was derived from the iterative development of the case study, showing the concrete implementation of each contract.
