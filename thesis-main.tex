@@ -849,8 +849,10 @@ This last phrase is the weakness highlater in Chapter~\ref{chap:case_study} solv
 
 
 What the tree buys is the casual side of the narrative, the one that the other two contracts do not touch.
-With tile-as-source in place the model can still get the meaning wrong of a metric (F2), and the sanitizer don't guarantees that no action outside the feasable set is produced (F5).
-The tree is what bounds both.
+With tile-as-source in place the model can still get the meaning wrong of a metric (F2), and the sanitizer don't guarantee that all actions produced are inside the feasable set (F5).
+The tree is what bounds both, closest in spirit to the methods that feed a small slice of graph into the prompt \cite{baek2023knowledgeaugmented}.
+Its guarantee is therefore soft, even by injecting any admissable set, the result is still left to the model judjment that can make errors, Chapter~\ref{chap:results} reports how often that judgement lands on the causes the manager choose.
+
   
 \section{Application}
 \label{sec:application}
