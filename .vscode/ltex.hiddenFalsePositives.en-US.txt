@@ -6,3 +6,4 @@
 {"rule":"THIS_NNS","sentence":"^\\QThere the framework is put to the test against those failure mode highlighted during the development, and the system output is compared against the one manually written by managers, in order to give validity to the framework itself.\\E$"}
 {"rule":"A_NUMBER_NNS","sentence":"^\\QA number gets\\E$"}
 {"rule":"COMMA_COMPOUND_SENTENCE_2","sentence":"^\\QIt is injected in the prompt as a list the model has to stay inside, and it is paired with the numeric rule so the narrative held both on the numerical and causal side.\\E$"}
+{"rule":"VERB_NOUN_CONFUSION","sentence":"^\\QAn aggressive sanitizer that corrects any value close to the canonical one in a broken senstence, would wash the break away leaving a clean-looking lie.\\E$"}

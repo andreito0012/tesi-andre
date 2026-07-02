@@ -19,6 +19,8 @@
 \usetikzlibrary{shapes.geometric} % Risolve l'errore sul nodo \node[star]
 \usetikzlibrary{arrows.meta, positioning}
 
+
+
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{6pt}
 
@@ -858,12 +860,35 @@ Its guarantee is therefore soft: even by injecting any admissible set, the resul
 \label{sec:sanitizer}
 
 This last deterministic contract runs directly on the finished text after the model.
-The first two shape what the \ac{LLM} sees, while the sanitizer audits what the model produced, comparing every cited figure against the canonical values, and repairs a small set of specific errors.
+The first two shape what the \ac{LLM} sees, while the sanitizer audits what the model produced, comparing every cited figure against its canonical value, and repairs a small set of specific errors.
 It works through four mechanisms. The precision lock holds a value in its canonical shape, so a figure that should read one way does not appear in another.
 The magnitude guard corrects the number when the gap between the generated one and the dashboard one is small enough to be a precision or recalculation drift, and refuses when the gap is large.
 Label disambiguation decides which metric a number belongs to before deciding whether to replace it, so it does not swap one driver's value for another's.
-The canonical resolution is the precondition for all the three above since it checks that the value really exists in the pipeline at all, the ground-truth path drawn in Figure~\ref{fig:architecture}.
+The canonical resolution is the precondition for all three above since it checks that the value really exists in the pipeline at all, the ground-truth path drawn dashed in Figure~\ref{fig:architecture}.
 
+\begin{lstlisting}[language=Python, caption={Precision lock and magnitude guard.}, label={lst:sanitizer}]
+  def sanitize(text, canonical):
+      for span in cited_numbers(text):            # every figure the model wrote
+          m = canonical.get(span.metric)          # label disambiguation: which metric?
+          if m is None:                           # canonical resolution: must exist
+              continue
+          if abs(span.value - m) <= abs(m) / 2:   # magnitude guard: small gap = drift
+              text = replace(text, span, fmt(m))  # precision lock: canonical form
+          # else: gap too large, leave the text untouched
+      return text
+  \end{lstlisting}
+
+  Listings~\ref{lst:sanitizer} shows the core of the numeric repair cited above and the choice to refuse the correction rather than force it.
+  The reason for that comes diretly from the operational setting: the wrost result is a wrong sentence that reads as correct, worse than a visible error a reader could catch.
+  An aggressive sanitizer that corrects any value close to the canonical one in a broken senstence, would wash the break away leaving a clean-looking lie.
+  The conservative option I decided to go for preserve a big mismatch troutht the magnitude guard, so the reader has more possibiles to notice it.
+
+  The sanitizer is a corrector rather than a preventor. 
+  it acts a smoke detector that probably its gonna stay off as demostrated in the Chapter~\ref{chap:results}, because tile as a source has already frozen every number upstream, but is needed becquse it acts as a safety net.
+  this last contract is not free of risks. Label disambiguion can collide if two drivers share the same number, in that case the calue could end up matched with the wrong label; or the cleanup of ophaned formatting around rate values can, if written too broadly, strip a figure that should have stayed.
+  The risk is real but small, it is the price of having a dowstream ceck that runs without judgment.
+
+  
   
 \section{Application}
 \label{sec:application}
