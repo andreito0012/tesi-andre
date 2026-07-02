@@ -853,6 +853,17 @@ With tile-as-source in place the model can still get the meaning of a metric wro
 The tree is what bounds both, closest in spirit to the methods that feed a small slice of a graph into the prompt \cite{baek2023knowledgeaugmented}.
 Its guarantee is therefore soft: even by injecting any admissible set, the result is still left to the model's judgment that can make errors. Chapter~\ref{chap:results} reports how often that judgment lands on the causes the manager chose.
 
+
+\section{Contract 3: the sanitizer}
+\label{sec:sanitizer}
+
+This last deterministic contract runs drectly on the finished text after the model, instead of acting before generation.
+The first two sahpe what the \ac{LLM} sees, while the sanitizer audits what the model produced by comparing every cited figure against the canonical values and repairs a small set of specif errors.
+It works through a four mechanisms code. The precision lock to hold a value into its canonical shape, so a figure that should read one way does not appear in another.
+The magnitue guard that correct the number when the gap between the generated one and the dahsboard one is small enought to be a precision or recalculation drift, and refused when the gap is large.
+Label disambiguation decides which metric a number belongs to before decising whether to replace it, so it does not swap one driver's value for another's.
+The Canonical resolution is the prercondition for all the threee above since it ceck that the value really exist in the pipeline at all, the ground-truth path drawn in Figure~\ref{fig:architecture}.
+
   
 \section{Application}
 \label{sec:application}
