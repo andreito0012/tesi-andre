@@ -884,8 +884,10 @@ The canonical resolution is the precondition for all three above since it checks
   The conservative option I decided to go for preserves a big mismatch through the magnitude guard, so the reader has more chances to notice it.
 
   The sanitizer is a corrector rather than a preventer. 
-  It acts like a smoke detector that will probably stay off, as demonstrated in the Chapter~\ref{chap:results}, because tile as a source has already frozen every number upstream, but is needed because it acts as a safety net.
-  This last contract is not free of risks. Label disambiguation can collide if two drivers share the same number: in that case the value could end up matched with the wrong label; or the cleanup of orphaned formatting around rate values can, if written too broadly, strip a figure that should have stayed.
+  It acts like a smoke detector that will probably stay off, as demonstrated in the Chapter~\ref{chap:results}, because tile as a source has already frozen every number upstream.
+  It is needed as it acts like a safety net confirming the hard bounding toward the numerical side.
+  It is not free of risks.
+  Label disambiguation can collide if two drivers share the same number: in that case the value could end up matched with the wrong label; or the cleanup of orphaned formatting around rate values can, if written too broadly, strip a figure that should have stayed.
   The risk is real but small. It is the price of having a downstream check that runs without judgment.
 
   
