@@ -878,15 +878,15 @@ The canonical resolution is the precondition for all three above since it checks
       return text
   \end{lstlisting}
 
-  Listings~\ref{lst:sanitizer} shows the core of the numeric repair cited above and the choice to refuse the correction rather than force it.
-  The reason for that comes diretly from the operational setting: the wrost result is a wrong sentence that reads as correct, worse than a visible error a reader could catch.
-  An aggressive sanitizer that corrects any value close to the canonical one in a broken senstence, would wash the break away leaving a clean-looking lie.
-  The conservative option I decided to go for preserve a big mismatch troutht the magnitude guard, so the reader has more possibiles to notice it.
+  Listing~\ref{lst:sanitizer} shows the core of the numeric repair cited above and the choice to refuse the correction rather than force it.
+  The reason for that comes directly from the operational setting: the worst result is a wrong sentence that reads as correct, worse than a visible error a reader could catch.
+  An aggressive sanitizer that corrects any value close to the canonical one in a broken sentence would wash the break away, leaving a clean-looking lie.
+  The conservative option I decided to go for preserves a big mismatch through the magnitude guard, so the reader has more chances to notice it.
 
-  The sanitizer is a corrector rather than a preventor. 
-  it acts a smoke detector that probably its gonna stay off as demostrated in the Chapter~\ref{chap:results}, because tile as a source has already frozen every number upstream, but is needed becquse it acts as a safety net.
-  this last contract is not free of risks. Label disambiguion can collide if two drivers share the same number, in that case the calue could end up matched with the wrong label; or the cleanup of ophaned formatting around rate values can, if written too broadly, strip a figure that should have stayed.
-  The risk is real but small, it is the price of having a dowstream ceck that runs without judgment.
+  The sanitizer is a corrector rather than a preventer. 
+  It acts like a smoke detector that will probably stay off, as demonstrated in the Chapter~\ref{chap:results}, because tile as a source has already frozen every number upstream, but is needed because it acts as a safety net.
+  This last contract is not free of risks. Label disambiguation can collide if two drivers share the same number: in that case the value could end up matched with the wrong label; or the cleanup of orphaned formatting around rate values can, if written too broadly, strip a figure that should have stayed.
+  The risk is real but small. It is the price of having a downstream check that runs without judgment.
 
   
   
