@@ -95,7 +95,7 @@ Optional. Max a few lines.
 
 \section{Context}
 During one of the audited weeks of my internship, the operational dashboard flagged a clear gap at the station. 
-The AI summary built on top of it explained that difference with full confidence, but the explanation produced was factually incorrect. 
+The AI summary built on top of it, an early version of the system this thesis describes, explained that difference with full confidence, but the explanation produced was factually incorrect. 
 It pointed to a structural metric that had little to do with the real cause of the difference, proposed corrective actions and root analyses that no manager could realistically carry out.
 I noticed the error, that morning, because I was familiar with the station and the metric, but a manager reading the same paragraph on a busy day, or less experienced, could have easily taken that for true and acted on it. 
 
@@ -182,7 +182,7 @@ Those two requirements matter even more because a wrong output does not stay onl
 A manager uses it as the basis for decisions that influence the whole operation.
 The standard here is therefore demanding, above all on the numbers: a value must be right every time, because one confident mistake, acted upon, can undo a week of planning.
 The causal side is a different story: the most I can require is that the explanation stays inside what the domain admits.
-In particular, this is where most of the failures I observed were located: a wrong number is worse, but wrong causes happen more often.
+In particular, once the numeric side was frozen upstream, most of the failures I observed were causal: a wrong number is worse, but in the running system wrong causes were what remained.
 % It is also the section that existing approaches leave largely uncovered.
 
 
@@ -272,7 +272,7 @@ Both methods lift the average quality of what comes out, not the single case.
 None of them enforces anything. 
 They simply make the correct answer more likely, but they do not make the wrong one impossible.
 As reported later, even a capable model with a competent but generic prompt tends to invent numbers or causes. 
-Good instructions alone cannot close this gap, but why does it lie to us?
+Good instructions alone cannot close this gap.
 When sending a message to an \ac{LLM} we are making a request, not a command, and since the model itself is a probabilistic generator, it is free to follow our directions or not.
 On the causal side, prompt engineering helps: it makes the model reason in a cleaner way, and produce fewer off-topic causes.
 On the operational side it cannot supply the hard guarantee that this use needs, since well-done prompt engineering only pushes the odds; no amount of it can make the value certain.
@@ -330,7 +330,7 @@ Its oldest thread is text-to-\ac{SQL}, where a natural language question is tran
 A parallel line turns the same question into a chart \cite{shen2023nl2vis}. 
 Two different outputs originate from the same idea: a table or a picture, nothing more. Any explanation that a manager needs is outside their scope.
 
-It is proven that letting a model handle the numbers is risky \cite{wu2024statisticians}.
+It has been shown that letting a model handle the numbers is risky \cite{wu2024statisticians}.
 \acp{LLM} are unreliable even on simple quantitative reasoning, because of their nature, as stated in Section~\ref{sec:prompt_engineering}.
 A study about text-to-\ac{SQL} reveals that, in a production environment, the \ac{BI} reports present semantic hallucinations with no domain-specific way to track them down \cite{choi2025factconsistency}.
 This is the empirical reason behind the strict rule implemented in Chapter~\ref{chap:proposed_solution}: the safest number is the one the model never computes.
@@ -340,7 +340,7 @@ Tableau Pulse \cite{tableau2024pulse} and Copilot in Power BI \cite{microsoft202
 The most advanced of them documents an approach close to the one that I adopt: Tableau Pulse computes its metric findings with a statistical engine and uses the \ac{LLM} only to phrase them \cite{tableau2024insights,salesforce2024pulsesummary}.
 Templates and in-context examples reduce the risk, but there is no deterministic check on the printed value, and none of those tools publishes a reproducible measurement of how that grounding holds up practically.
 
-The academic field has grown fast on this topic, during the last year.
+The academic field has grown fast on this topic during the last year.
 Some systems are capable of detecting the domain on their own without any human direction and elaborating multi-perspective narratives without any predefined schema or concepts \cite{zhang2025datadash}.
 Others, especially in finance, join causal-discovery statistical algorithms with budgetary variance to automate root cause diagnosis \cite{chen2026causalvariance}. This is the case closest to mine in terms of goal, since it also tries to explain a gap.
 
@@ -411,7 +411,7 @@ Semantic layers & yes & no & no & \\
 Knowledge graphs & no & partial & no & \\
 Text-to-SQL / NL2VIS & partial & no & no & \\
 \addlinespace
-Commercial BI assistants & partial & partial & yes & \rdelim\}{4.7}{4mm}[\textit{narrative}] \\
+Commercial BI assistants & partial & partial & yes & \rdelim\}{5}{4mm}[\textit{narrative}] \\
 LLM-generated narratives & no & partial & yes & \\
 LLM-assisted OLAP & yes & no & partial & \\
 \midrule
@@ -526,7 +526,7 @@ Furthermore, it describes all the manual practices done before any automated sup
 
 The setting is the one introduced in Chapter~\ref{chap:introduction}: I carried out my internship at DFV2, a last-mile delivery station located in Udine.
 The focus of my work is not the station as a whole, but a specific weekly task carried out by managers across Europe.
-The numbers are watched daily while the gap explanation is prepared only once a week.
+The numbers are watched daily, at the cost of pulling them by hand, while the gap explanation is prepared only once a week.
 In my case, this explanation does not stay local: it goes up to a higher team that oversees the whole country and looks at every \ac{DS} that missed its target.
 
 
@@ -607,7 +607,7 @@ A category that helps can hide a problematic one, so the net figure on its own i
 The starting baseline involved two main time-consuming practices: monitoring and a written explanation.
 A manager who wanted to know how the running week was going had to open one dashboard at a time and copy-paste all the data needed into a new spreadsheet file used for the analysis. 
 All the data sat in several places, in a tabular way with no graphs or visualization that could help the reader.
-The second activity was the production of the bridge document that contains the breakdown of the gap, what caused it, why, and actions taken to improve the situation.
+The second activity was the production of the bridge document that explains the gap: what caused it, why, and actions taken to improve the situation.
 
 That manual approach has three different weaknesses starting from limited reactivity: a manager had to wait for the weekly report to know how the previous week had closed exactly; any intra-week visibility, when needed, depended on pulling data manually, tile by tile.
 The second one is incomplete root-cause coverage: the choice of which causes needed to be added to the report was up to the manager, who would typically scan the spreadsheet for KPIs sitting below target and write them up as the explanation. 
@@ -819,7 +819,7 @@ It starts with the headline figure (\texttt{Metric\_R}) that represents the over
   \end{lstlisting}
 
 
-The hard guarantee of this contract, as presented in Table~\ref{tab:contracts} can be motivated since it carries most of the numeric load by directly copying the number: it avoids any recalculation (F1), invented rates (F6), confusing values for deltas (F7), and helps with any precision drift since a copied value arrives with the right decimals (F3) \cite{baek2023knowledgeaugmented}.
+The hard guarantee of this contract, as presented in Table~\ref{tab:contracts}, can be motivated since it carries most of the numeric load by directly copying the number: it avoids any recalculation (F1), invented rates (F6), confusing values for deltas (F7), and helps with any precision drift since a copied value arrives with the right decimals (F3).
 
 There are two main boundaries for this contract: it binds only numbers that exist as tiles in the dashboard, not those the model may compute itself.
 The second one is deeper than the first, since it is true that it binds the number to the tile computed upstream, but there is no guarantee that the value represents the truth in the world. 
@@ -873,7 +873,7 @@ The magnitude guard corrects the number when the gap between the generated one a
 Label disambiguation decides which metric a number belongs to before deciding whether to replace it, so it does not swap one driver's value for another's.
 The canonical resolution is the precondition for all three above since it checks that the value really exists in the pipeline at all, the ground-truth path drawn dashed in Figure~\ref{fig:architecture}.
 
-\begin{lstlisting}[language=TypeScript, caption={Precision lock and magnitude guard.}, label={lst:sanitizer}]
+\begin{lstlisting}[language=Python, caption={Precision lock and magnitude guard.}, label={lst:sanitizer}]
   def sanitize(text, canonical):
       for span in cited_numbers(text):            # every figure the model wrote
           m = canonical.get(span.metric)          # label disambiguation: which metric?
@@ -898,16 +898,17 @@ The canonical resolution is the precondition for all three above since it checks
   The risk is real but small. It is the price of having a downstream check that runs without judgment.
 
   
+  \section{Prompt engineering}
+  \label{promptengineering}
+
+  The three contract above are not isolated concepts with respect to the prompt, but they are wired to it.
+
   
 \section{Application}
 \label{sec:application}
 How the framework was derived from the iterative development of the case study, showing the concrete implementation of each contract.
 
-%You may also put some code snippet (which is NOT float by default), eg: \cref{lst:random-code}.
-
-%\lstinputlisting[float,language=Java,label={lst:random-code}]{listings/HelloWorld.java}
-
-\section{Fancy formulas here} % Mantenuto dal template originale
+The approach that has been developed does not ask the model symply to be accurate; Chapter~\ref{chap:state_of_the_art} already explained that being the prompt a request and not a command it simply raise the odds of a correct answer, without making any specific error impossible
 
 %----------------------------------------------------------------------------------------
 \chapter{Results and Evaluation}
