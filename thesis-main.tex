@@ -7,7 +7,6 @@
 \usepackage{acronym}
 \usepackage{tikz}
 \usepackage{booktabs}
-\usepackage{tikz}
 \usepackage{multirow}
 \usepackage{bigdelim}
 \usepackage{amsmath}
@@ -51,13 +50,20 @@
 \acrodef{LMQL}{Language Model Query Language}
 \acrodef{PICARD}{Parsing Incrementally for Constrained Auto-Regressive Decoding}
 \acrodef{dbt}{data build tool}
-\acrodef{RoG}{Reasoning over Graphs}
+\acrodef{RoG}{Reasoning on Graphs}
 \acrodef{NL2VIS}{Natural Language to Visualization}
 \acrodef{VOOL}{Vocalizing OLAP}
-\acrodef{FActSCore}{Faithfulness and Accuracy Score}
+\acrodef{FActSCore}{FActual precision in Atomicity Score}
 \acrodef{HaluEval}{Hallucination Evaluation}
 \acrodef{TruthfulQA}{Truthful Question Answering}
 
+
+\lstdefinelanguage{TypeScript}{
+  keywords={const,let,var,function,return,if,else,for,of,in,new,typeof,class,interface,extends,import,export,from,async,await,true,false,null,undefined,continue},
+  comment=[l]{//}, morecomment=[s]{/*}{*/},
+  string=[b]', morestring=[b]", morestring=[b]`,
+  sensitive=true
+}
 
 
 \mainlinespacing{1.241} % line spacing in mainmatter, comment to default (1)
@@ -180,7 +186,7 @@ In particular, this is where most of the failures I observed were located: a wro
 % It is also the section that existing approaches leave largely uncovered.
 
 
-\section{Framework}
+\section{Research questions}
 The two criticalities highlighted in the previous section shape the questions that guide the thesis.
 I framed the work around one main question and two subsequent ones, each at a different level.
 
@@ -228,7 +234,7 @@ Intrinsic hallucination is text that contradicts the source, and extrinsic hallu
 The same literature goes further by separating faithfulness as being coherent with the input given, from factuality intended as the truth in the world \cite{huang2025hallucination}.
 A text can be faithful but not factual if the input is wrong, but the narrative reports it coherently.
 At the same time, a text can be factual but not faithful if it states something right in the world, but is not coherent with the input.
-The requirement that matters for \ac{BI} is only the first one. 
+The requirement that matters for \ac{BI} is faithfulness. 
 
 Operational \ac{BI} requires a higher standard. 
 Generic support is not enough.
@@ -265,7 +271,7 @@ Both methods lift the average quality of what comes out, not the single case.
 
 None of them enforces anything. 
 They simply make the correct answer more likely, but they do not make the wrong one impossible.
-As reported later, even a capable model with a curated but generic prompt tends to invent numbers or causes. 
+As reported later, even a capable model with a competent but generic prompt tends to invent numbers or causes. 
 Good instructions alone cannot close this gap, but why does it lie to us?
 When sending a message to an \ac{LLM} we are making a request, not a command, and since the model itself is a probabilistic generator, it is free to follow our directions or not.
 On the causal side, prompt engineering helps: it makes the model reason in a cleaner way, and produce fewer off-topic causes.
@@ -278,7 +284,7 @@ A different family gives the model access to external tools.
 Toolformer is a similar approach, capable of deciding on its own when to call an \ac{API} \cite{schick2023toolformer}.
 \ac{PAL} models take a step forward by generating the code that automatically performs an operation, instead of guessing it \cite{gao2023pal}.
 Consequently, the model avoids the hallucination risk associated with computation.
-In particular, this last idea is close to the one I adopted: taking all the numbers out of the model’s hands.
+In particular, this last idea is close to the one I adopted: taking the computation out of the model’s hands.
 
 All those methods share one limit.
 They do a great job at securing the data, meaning the input will likely be correct, but they let the model build on this information without any control or boundary.
@@ -355,7 +361,7 @@ they implement numerical fidelity by keeping the numbers away from the model, no
 %Finally, none of them measures their output on a catalogue of grounding faliure modes.
 \section{Evaluating hallucination and faithfulness}
 The way faithfulness is measured decides what is counted as solved. A critical part, in fact, is choosing the right approach to the scoring, one that avoids marking something as "addressed" that is not.
-FActSCore is the most fine-grained approach: it works by breaking a long text into smaller fragments called "atomic facts" which are single elementary claims, and by calculating the percentage of those that are supported by the source \cite{min2023factscore}.
+FActScore is the most fine-grained approach: it works by breaking a long text into smaller fragments called "atomic facts" which are single elementary claims, and by calculating the percentage of those that are supported by the source \cite{min2023factscore}.
 HaluEval \cite{li2023halueval} and TruthfulQA \cite{lin2022truthfulqa}, instead, build benchmarks of hallucinated or misleading content. A benchmark is a fixed and shared dataset of test cases that lets different systems be compared on the same ground.
 SelfCheckGPT goes for a different approach:  with no need for any external source, it exploits the model itself by running the same request several times. 
 The fundamental idea behind this sampling-based check is: the model is asked for the same thing repeatedly, if the answer is fabricated, it drifts since the \ac{LLM} will invent slightly different versions each time; if the multiple answers agree with each other it is considered a real fact  \cite{manakul2023selfcheckgpt}.
@@ -481,7 +487,7 @@ This work sits in the top-right corner, while every other family lands off a sid
   \node[mystar] (th) at (8.5,7.7) {};
   \node[lbl,below=2pt,font=\footnotesize\bfseries] at (th.south) {This thesis};
   \end{tikzpicture}
-  \caption{The reviewed approaches on the two requirements of operational \ac{BI}: numeric fidelity (horizontal) and causal grounding (vertical). }
+  \caption{The reviewed approaches on the two requirements of operational \ac{BI}: numeric fidelity (horizontal) and causal grounding (vertical). The star marks this work; on the causal axis the guarantee is bounded rather than verified (soft, see Chapter~\ref{chap:proposed_solution}).}
   \label{fig:positioning}
 \end{figure}
 
@@ -674,6 +680,7 @@ Grounding has two dimensions, as introduced in Chapter~\ref{chap:introduction}: 
 The narrative produced on this basis must be right in both cases.
 Literature on hallucinations verifies the claim against the source \cite{min2023factscore}; it does not enforce both simultaneously.
 The framework, instead, holds both at the three points of the pipeline where a guarantee can attach.
+Throughout the chapter I refer to individual failure modes by the codes F1 to F8; the catalogue behind those codes is defined in Chapter~\ref{chap:results}, and here the codes serve only to locate each contract against the problem.
 %----------------------------------------------------------------------------------------
 
 \section{Core Concept}
@@ -866,7 +873,7 @@ The magnitude guard corrects the number when the gap between the generated one a
 Label disambiguation decides which metric a number belongs to before deciding whether to replace it, so it does not swap one driver's value for another's.
 The canonical resolution is the precondition for all three above since it checks that the value really exists in the pipeline at all, the ground-truth path drawn dashed in Figure~\ref{fig:architecture}.
 
-\begin{lstlisting}[language=Python, caption={Precision lock and magnitude guard.}, label={lst:sanitizer}]
+\begin{lstlisting}[language=TypeScript, caption={Precision lock and magnitude guard.}, label={lst:sanitizer}]
   def sanitize(text, canonical):
       for span in cited_numbers(text):            # every figure the model wrote
           m = canonical.get(span.metric)          # label disambiguation: which metric?
