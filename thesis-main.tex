@@ -200,7 +200,7 @@ From the answer to this primary question two design questions follow.
 The second asks what architecture can be implemented to constrain the faithfulness of the model towards both the numerical and causal sides at once, rather than patching each slip in isolation.
 The last question is narrower: what role can a curated knowledge tree, a structured map of causes and feasible actions, play as the base structure that bounds what the model is allowed to say?
 
-Those three questions mark the trace that the next chapters will follow. The primary is answered by a catalog of failure modes derived from the internship itself, the second and third by the framework that has been built to mitigate those errors and tested against the same catalogue.
+Those three questions mark the trace that the next chapters will follow. The primary is answered by a catalog of failure modes derived from the internship itself, the second and third by the framework that has been built to mitigate those errors and tested against the same catalog.
 
 \paragraph{Structure of the Thesis}
 The remainder of this document is organized as follows:
@@ -536,11 +536,12 @@ In my case, this explanation does not stay local: it goes up to a higher team th
 The headline indicator can be defined as output quantity over resources used to produce it, in simple words a ratio. 
 The difference between what was planned and the realized value is the gap that my project focuses on.
 This indicator is then decomposed into a pre-defined and fixed set of categories that are mutually exclusive.
-The set is organized on two levels: top-level categories that can be open into sub-factors (Figure~\ref{fig:ch3_decomposition}). 
+The set is organized on two levels: top-level categories that open into sub-factors (Figure~\ref{fig:ch3_decomposition}). 
 This second level is needed because it shows which specific part caused the shift.
 
 
 The categories do not contribute to the total gap as a raw value, but they get scaled by their own weight, which is heterogeneous and changes across all categories. 
+Each category has its own unit of measure, weights translate that movement into points of the headline ratio that can now be summed up since they speak the same language.
 This means that a large movement in a lightly-weighted category can matter less than a smaller movement in a heavy one.
 There is also a residual term that absorbs whatever difference the named categories do not explain. 
 It guarantees that the parts add back to the whole, and prevents anything from being forced into a named category where it does not belong.
@@ -605,14 +606,19 @@ Table~\ref{tab:ch3_decomposition} makes clear why the gap must be decomposed: th
 A category that helps can hide a problematic one, so the net figure on its own is a poor guide to where the problems are located. Before my project, this whole reading was done manually.
   
 \section{The manual baseline and its weaknesses}
-The starting baseline involved two main time-consuming practices: monitoring and a writing the explanation.
-A manager who wanted to know how the running week was going had to open one dashboard at a time and copy-paste all the data needed into a new spreadsheet file used for the analysis. 
+The starting baseline involved two main time-consuming practices: monitoring and writing the explanation.
+A manager who wanted to know how the running week was going had to open one dashboard at a time and copy-paste all the data needed into a new spreadsheet file used for the analysis.
+Each of those dashboards is a grid precomputed values that a manager reads as it is, each of them is a tile.
 All the data sat in several places, in a tabular way with no graphs or visualization that could help the reader.
 The second activity was the production of the bridge document that explains the gap: what caused it, why, and actions taken to improve the situation.
+A bridge is not a complex report, but a compact paragraph that is carachterized by the same three ingredients: numbers, causes and actions.
+The causes a manager identifies as responsable for the gap, proved by the related pasted numbers from the spreadsheet; and the feasable actions the station will take to imporove the situation.
+Those ingredients, together with the overall structure of the document, are the four axes the generated narrative is scored on in Chapter~\ref{chap:results}.
+
 
 That manual approach has three different weaknesses starting from limited reactivity: a manager had to wait for the weekly report to know how the previous week had closed exactly; any intra-week visibility, when needed, depended on pulling data manually, tile by tile.
 The second one is incomplete root-cause coverage: the choice of which causes needed to be added to the report was up to the manager, who would typically scan the spreadsheet for KPIs sitting below target and write them up as the explanation. 
-There was no decomposition guaranteeing that the listed causes summed back to the total gap, nor that they were ranked by impact.
+The decomposition existed in data, but nothing forces the written explanation to follow it: no guarantee that the listed causes summed back to the total gap, nor that they were ranked by impact.
 The last one is analyst dependence: the depth and granularity of the diagnosis, and the realism of the recommended actions, varied considerably with the individual experience of the manager preparing the document.
 The three weaknesses are visible in Figure~\ref{fig:ch3_weaknesses} together with a description of how each one is answered.
 
@@ -661,12 +667,14 @@ How each of these is addressed is discussed in Chapter~\ref{chap:proposed_soluti
 
 \section{Methodology}
 The study is organized around a single operation, developed following a longitudinal design: I worked on the system observing day after day the working routine.
-Every metric in this thesis is anonymized: The headline indicator is denominated as Metric\_R, its components Category\_1 to Category\_k. 
+Every metric in this thesis is anonymized: the headline indicator is denominated as Metric\_R, its components Category\_1 to Category\_k. 
 The values are synthetic in the illustrative examples and real in the operational data behind Chapter~\ref{chap:results}.
 The system presented in Chapter~\ref{chap:proposed_solution} was developed through an iterative loop: code, observe what the output is, isolate one issue at a time, fix it, validate the solution, and repeat; this loop ran roughly several dozen times, and each pass left a record of what had gone wrong and why.
-Those traces are the base material of the analysis: I organized them into families by the kind of error they represent, and labeled them as grounding failures in the results Chapter. 
-There the framework is put to the test against those failure modes highlighted during the development, and the system output is compared against the one manually written by managers, in order to give validity to the framework itself.
-
+Those traces are the base material of the analysis: I organized them into families by the kind of error they represent, and labeled them as grounding failures in Chapter~\ref{chap:results}. 
+The data behind the test sits on two layers.
+The development layer is the pilot site itself: three months of daily observation at DFV2, which is where failures came from.
+The evaluation layer, instead, is much wither being a corpus of thirty undertarget stations in a specific week; they were retrieven from the internal netowork, and paired with the explanations managers wrote for that same week.
+In Chapter~\ref{chap:results} the framework is measured against both failure modes, and how its generated narrative matches the human-written bridges.
 
 
 
