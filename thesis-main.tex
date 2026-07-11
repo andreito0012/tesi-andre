@@ -112,7 +112,7 @@ Most of the days this number is close to the planned one, but not exactly on it,
 A process that is anything but trivial.
 This difference is the combined effect of many separate factors: some of them are internal to the station while the rest of them are completely external, and working out which factor and its weight is a task that, before this project, was done completely by hand.
 
-When a station misses its target, the designated manager has to produce a written justification, internally referred to as the "bridge", based on a weekly spreadsheet report that states how the previous one had closed. A manual and slow activity that said nothing about how the current week was going while there was still time to act on it.
+When a station misses its target, the designated manager has to produce a written justification, internally referred to as the \enquote{bridge}, based on a weekly spreadsheet report that states how the previous one had closed. A manual and slow activity that said nothing about how the current week was going while there was still time to act on it.
 
 This is the exact scenario where a \ac{LLM} could be the right fit. 
 A model capable of reading the numbers and turning them into paragraphs within seconds, replacing hours of manual assembly.
@@ -176,7 +176,7 @@ This is more demanding than the usual faithfulness a retrieval system offers, wh
 The causal side is even harder. Reporting a number without changing its value is a matter of staying true to the base data. 
 Explaining why we have that precise value, instead, is connected to the domain knowledge. 
 The set of plausible-sounding causes for any gap is enormous, while the possible set of causes admitted by the domain is small and specific. 
-A narrative defined as "useful" has to stay inside this small set. 
+A narrative defined as \enquote{useful} has to stay inside this small set. 
 It should behave like an expert analyst that among the possible explanations of the gap, chooses only the feasible ones, and consequently the actions that a manager can adopt in order to improve the situation.
 Domain constraint without numerical fidelity buys very little, a right explanation based on a wrong input is meaningless.
 
@@ -258,7 +258,7 @@ Does the generated phrase follow from the passages? If yes, it is considered gro
 
 Here the unit of grounding is the passage, and the test is semantic support.
 For a textual response this is reasonable, but not for a number. 
-A passage that mentions a figure "in the region of fifty" entails a sentence that says "around fifty", but that sentence fails the operational test I set above.
+A passage that mentions a figure \enquote{in the region of fifty} entails a sentence that says \enquote{around fifty}, but that sentence fails the operational test I set above.
 Retrieval works by similarity, not by schema identity. \ac{RAG} has no concept of canonical identity, so it cannot distinguish between an authoritative value and one that resembles it.
 \ac{RAG} is necessary, but not sufficient, since it has no guarantee about the value.
 
@@ -316,7 +316,7 @@ However, that approach is limited because the semantic layer stops before the na
 
 The second idea regards the causal side. Grounding an \ac{LLM} in a knowledge graph is one of the most effective ways to keep what the model says inside a fixed domain.
 How the two can be joined is, by now, well mapped \cite{pan2024llmkg}: a graph defines what the domain treats as true and guides the model's reasoning, preventing it from relying on whatever has been absorbed during training.
-What matters most for my case is the \ac{RoG}. It is an approach that "bounds" every step in the generation process to a specific path in the graph, such that a response can be traced back to a chain of specific relations rather than to a plausible-sounding guess \cite{luo2024rog}.
+What matters most for my case is the \ac{RoG}. It is an approach that \enquote{bounds} every step in the generation process to a specific path in the graph, such that a response can be traced back to a chain of specific relations rather than to a plausible-sounding guess \cite{luo2024rog}.
 Other strategies directly feed a smaller portion of the graph into the prompt itself \cite{baek2023knowledgeaugmented}, but independently of the methodology that is chosen, the key idea is to give the model a structure and let that structure decide what counts as admissible to say.
 
 Neither family does the whole job alone.
@@ -360,8 +360,8 @@ These are the nearest neighbors of the present work, and they differ from it in 
 they implement numerical fidelity by keeping the numbers away from the model, not by a deterministic contract over the generated narrative.
 %Finally, none of them measures their output on a catalogue of grounding faliure modes.
 \section{Evaluating hallucination and faithfulness}
-The way faithfulness is measured decides what is counted as solved. A critical part, in fact, is choosing the right approach to the scoring, one that avoids marking something as "addressed" that is not.
-FActScore is the most fine-grained approach: it works by breaking a long text into smaller fragments called "atomic facts" which are single elementary claims, and by calculating the percentage of those that are supported by the source \cite{min2023factscore}.
+The way faithfulness is measured decides what is counted as solved. A critical part, in fact, is choosing the right approach to the scoring, one that avoids marking something as \enquote{addressed} that is not.
+FActScore is the most fine-grained approach: it works by breaking a long text into smaller fragments called \enquote{atomic facts} which are single elementary claims, and by calculating the percentage of those that are supported by the source \cite{min2023factscore}.
 HaluEval \cite{li2023halueval} and TruthfulQA \cite{lin2022truthfulqa}, instead, build benchmarks of hallucinated or misleading content. A benchmark is a fixed and shared dataset of test cases that lets different systems be compared on the same ground.
 SelfCheckGPT goes for a different approach:  with no need for any external source, it exploits the model itself by running the same request several times. 
 The fundamental idea behind this sampling-based check is: the model is asked for the same thing repeatedly, if the answer is fabricated, it drifts since the \ac{LLM} will invent slightly different versions each time; if the multiple answers agree with each other it is considered a real fact  \cite{manakul2023selfcheckgpt}.
