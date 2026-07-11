@@ -15,6 +15,7 @@
 \usepackage{array}
 \usepackage{listings}
 \usepackage[section]{placeins}
+\usepackage[english]{csquotes}
 \usetikzlibrary{backgrounds}      % Risolve l'errore su \begin{scope}[on background layer]
 \usetikzlibrary{shapes.geometric} % Risolve l'errore sul nodo \node[star]
 \usetikzlibrary{arrows.meta, positioning}
@@ -98,7 +99,7 @@ Optional. Max a few lines.
 During one of the audited weeks of my internship, the operational dashboard flagged a clear gap at the station. 
 The AI summary built on top of it, an early version of the system this thesis describes, explained that difference with full confidence, but the explanation produced was factually incorrect. 
 It pointed to a structural metric that had little to do with the real cause of the difference, proposed corrective actions and root analyses that no manager could realistically carry out.
-I noticed the error, that morning, because I was familiar with the station and the metric, but a manager reading the same paragraph on a busy day, or less experienced one, could have easily taken that for true and acted on it. 
+I noticed the error, that morning, because I was familiar with the station and the metric, but a manager reading the same paragraph on a busy day, or a less experienced one, could have easily taken that for true and acted on it. 
 
 That episode marked the beginning of my thesis and frames the general problem it addresses: what happens when a \ac{LLM} is placed on top of a \ac{BI} dashboard and asked to turn numbers into decisions? 
 That is a key question considering the setting of a \ac{DS}. 
@@ -222,7 +223,7 @@ The remainder of this document is organized as follows:
 %----------------------------------------------------------------------------------------
 
 Chapter~\ref{chap:introduction} framed the problem as two requirements that have to hold together. 
-Every number that appears in the generated text must correspond to the actual value of it and every explanation must come from a well-defined domain.
+Every number that appears in the generated text must correspond to its actual value and every explanation must come from a well-defined domain.
 This chapter focuses on the existing literature through that double lens.
 For each family of methods, I run the same two checks: does it guarantee the truthfulness of the number, and does it bound the cause?
 The map this builds is what the last section uses to present the work.
@@ -311,7 +312,7 @@ There are two ideas from the data-engineering world that are close to what I nee
 The first one is the semantic layer, used by tools like \ac{dbt} and Cube, in which the definition of a metric appears only in a single governed place \cite{dbt2024semantic, cube2024semantic}.
 The core principle is a single source of truth: the value is computed in one place and read everywhere else, so two reports cannot disagree on the calculation by silently building their own version of the metric.
 This methodology is the one that I adopt for numbers: take a figure from a single upstream source and copy it, never letting the model work it out.
-However, that approach is limited because the semantic layer stops before the narrative. It returns clean and canonical numbers, but it doesn't say why that number moved or list, among the possible causes, the one worth reporting.
+However, that approach is limited because the semantic layer stops before the narrative. It returns clean and canonical numbers, but it does not say why that number moved or list, among the possible causes, the one worth reporting.
 
 The second idea regards the causal side. Grounding an \ac{LLM} in a knowledge graph is one of the most effective ways to keep what the model says inside a fixed domain.
 How the two can be joined is, by now, well mapped \cite{pan2024llmkg}: a graph defines what the domain treats as true and guides the model's reasoning, preventing it from relying on whatever has been absorbed during training.
@@ -533,10 +534,10 @@ In my case, this explanation does not stay local: it goes up to a higher team th
 \section{The headline indicator and its decomposition}
 
 The headline indicator can be defined as output quantity over resources used to produce it, in simple words a ratio. 
-The difference between what was planned and the realised value is the gap that my project focuses on.
+The difference between what was planned and the realized value is the gap that my project focuses on.
 This indicator is then decomposed into a pre-defined and fixed set of categories that are mutually exclusive.
 The set is organized on two levels: top-level categories that can be open into sub-factors (Figure~\ref{fig:ch3_decomposition}). 
-This second level is needed because it shows which is the specific part that caused the shift.
+This second level is needed because it shows which specific part caused the shift.
 
 
 The categories do not contribute to the total gap as a raw value, but they get scaled by their own weight, which is heterogeneous and changes across all categories. 
@@ -570,7 +571,7 @@ It guarantees that the parts add back to the whole, and prevents anything from b
   \draw[e] (ck.east) -- (s3.west);
   \draw[e] (ck.east) -- (s4.west);
   \end{tikzpicture}
-  \caption{Two-level additive decomposition of the gap (anonymised). Top-level
+  \caption{Two-level additive decomposition of the gap (anonymized). Top-level
   categories are mutually exclusive; selected categories open into sub-factors;
   a residual term closes the sum.}
   \label{fig:ch3_decomposition}
@@ -663,7 +664,7 @@ The study is organized around a single operation, developed following a longitud
 Every metric in this thesis is anonymized: The headline indicator is denominated as Metric\_R, its components Category\_1 to Category\_k. 
 The values are synthetic in the illustrative examples and real in the operational data behind Chapter~\ref{chap:results}.
 The system presented in Chapter~\ref{chap:proposed_solution} was developed through an iterative loop: code, observe what the output is, isolate one issue at a time, fix it, validate the solution, and repeat; this loop ran roughly several dozen times, and each pass left a record of what had gone wrong and why.
-Those traces are the base material of the analysis: I organized them into families by the kind of error they represent, and labelled them as grounding failures in the results Chapter. 
+Those traces are the base material of the analysis: I organized them into families by the kind of error they represent, and labeled them as grounding failures in the results Chapter. 
 There the framework is put to the test against those failure modes highlighted during the development, and the system output is compared against the one manually written by managers, in order to give validity to the framework itself.
 
 
@@ -686,7 +687,7 @@ Grounding has two dimensions, as introduced in Chapter~\ref{chap:introduction}: 
 The narrative produced on this basis must be right in both cases.
 Literature on hallucinations verifies the claim against the source \cite{min2023factscore}; it does not enforce both simultaneously.
 The framework, instead, holds both at the three points of the pipeline where a guarantee can attach.
-Throughout the chapter I refer to individual failure modes by the codes F1 to F8; the catalogue behind those codes is defined in Chapter~\ref{chap:results}, and here the codes serve only to locate each contract against the problem.
+Throughout the chapter I refer to individual failure modes by the codes F1 to F8; the catalog behind those codes is defined in Chapter~\ref{chap:results}, and here the codes serve only to locate each contract against the problem.
 %----------------------------------------------------------------------------------------
 
 \section{Core Concept}
@@ -840,7 +841,7 @@ It is injected into the prompt as a list the model has to stay inside, and it is
 
 During the generation time the pipeline does not hand the whole tree to the model. 
 Based on the drivers that caused the gap on the day, only a subset of the full causes together with the paired actions is selected and passed to the prompt.
-The main idea over this design choice is to turn an open question, \emph{why did the metric move}, into a closed one, \emph{which of these admitted causes fits the movement}; this makes any response far more reliable. 
+The main idea behind this design choice is to turn an open question, \emph{why did the metric move}, into a closed one, \emph{which of these admitted causes fits the movement}; this makes any response far more reliable. 
 Listing~\ref{lst:tree} shows this concept well, and  the complete set presented to the \ac{LLM}.
 The decomposition those drivers come from reconciles to the total gap, so every material contribution is present and ranked by impact.
 This last point is the weakness highlighted in Chapter~\ref{chap:case_study}, solved by design instead of manual checks.
