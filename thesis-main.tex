@@ -15,7 +15,7 @@
 \usepackage{array}
 \usepackage{listings}
 \usepackage[section]{placeins}
-\usepackage[english]{csquotes}
+\usepackage[style=american]{csquotes}
 \usetikzlibrary{backgrounds}      % Risolve l'errore su \begin{scope}[on background layer]
 \usetikzlibrary{shapes.geometric} % Risolve l'errore sul nodo \node[star]
 \usetikzlibrary{arrows.meta, positioning}
@@ -218,7 +218,7 @@ The remainder of this document is organized as follows:
 \end{itemize}
 
 %----------------------------------------------------------------------------------------
-\chapter{State of the Art and Related Works}
+\chapter{State of the Art and Related Work}
 \label{chap:state_of_the_art}
 %----------------------------------------------------------------------------------------
 
@@ -751,7 +751,7 @@ The last contract, the \emph{sanitizer}, is located at the end of this pipeline;
   \end{figure}
   
 
-Table~\ref{tab:contracts}, located below, holds the key conceptual difference.
+Table~\ref{tab:contracts}, holds the key conceptual difference.
 Two of the three contracts bring a hard guarantee, the third a soft one instead. 
 The two sides differ in what they constrain: a number either matches its source or it does not, and a deterministic check settles that with no judgment, so the numeric side admits a hard guarantee.
 For the last one, instead, we cannot talk about hard guarantees because the tree bounds the set the model may pick from, but which cause represents the best fit to explain the movement is left to the \ac{LLM}, so there is no deterministic wall to enforce it.
@@ -899,7 +899,7 @@ The canonical resolution is the precondition for all three above since it checks
 
   The sanitizer is a corrector rather than a preventer. 
   It acts like a smoke detector that will probably stay off, as demonstrated in Chapter~\ref{chap:results}, because tile-as-source has already frozen every number upstream.
-  It is needed as it acts like a safety net, confirming the hard bound on the numerical side of grounding.
+  It is needed anyway: it is what confirms the hard bound on the numerical side of grounding.
   This last contract is not free of risks.
   Label disambiguation can collide if two drivers share the same number: in that case the value could end up matched with the wrong label; or the cleanup of orphaned formatting around rate values can, if written too broadly, strip a figure that should have stayed.
   The risk is real but small. It is the price of having a downstream check that runs without judgment.
