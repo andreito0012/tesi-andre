@@ -14,6 +14,7 @@
 \usepackage{float}
 \usepackage{array}
 \usepackage{listings}
+\usepackage[section]{placeins}
 \usetikzlibrary{backgrounds}      % Risolve l'errore su \begin{scope}[on background layer]
 \usetikzlibrary{shapes.geometric} % Risolve l'errore sul nodo \node[star]
 \usetikzlibrary{arrows.meta, positioning}
@@ -619,6 +620,7 @@ The three weaknesses are visible in Figure~\ref{fig:ch3_weaknesses} together wit
 
 \begin{figure}[ht]
   \centering
+  \resizebox{0.85/textwidth}{!}{
   \begin{tikzpicture}[
     font=\small,
     wk/.style={rounded corners, draw, line width=0.9pt, fill=black!8, align=center,
@@ -645,6 +647,7 @@ The three weaknesses are visible in Figure~\ref{fig:ch3_weaknesses} together wit
   \draw[ar] (w2.east) -- node[above, font=\footnotesize\itshape, text=black!55]{solved by} (a2.west);
   \draw[ar] (w3.east) -- node[above, font=\footnotesize\itshape, text=black!55]{solved by} (a3.west);
   \end{tikzpicture}
+  }
   \caption{The three weaknesses of the manual baseline, the dimension each one
   touches, and how the rest of the thesis answers each one.}
   \label{fig:ch3_weaknesses}
@@ -659,10 +662,13 @@ How each of these is addressed is discussed in Chapter~\ref{chap:proposed_soluti
 
 \section{Methodology}
 The study is organized around a single operation, developed following a longitudinal design: I worked on the system observing day after day the working routine.
+Every metric in this thesis is anonymized: The headline indicator is denominated as Metric\_R, its components Category\_1 to Category\_k. 
+The values are synthetic in the illustrative examples and real in the operational data behind Chapter~\ref{chap:results}.
 The system presented in Chapter~\ref{chap:proposed_solution} was developed through an iterative loop: code, observe what the output is, isolate one issue at a time, fix it, validate the solution, and repeat; this loop ran roughly several dozen times, and each pass left a record of what had gone wrong and why.
-Those traces are the base material of the analysis: I organized them into families by the kind of error they represent, and labelled them as grounding failures in Chapter~\ref{chap:results}. 
+Those traces are the base material of the analysis: I organized them into families by the kind of error they represent, and labelled them as grounding failures in the results Chapter. 
 There the framework is put to the test against those failure modes highlighted during the development, and the system output is compared against the one manually written by managers, in order to give validity to the framework itself.
-Every metric and value in this thesis is anonymized: The headline indicator is denominated as Metric\_R, its components Category\_1 to Category\_k.
+
+
 
 
 
