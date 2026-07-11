@@ -200,7 +200,7 @@ From the answer to this primary question two design questions follow.
 The second asks what architecture can be implemented to constrain the faithfulness of the model towards both the numerical and causal sides at once, rather than patching each slip in isolation.
 The last question is narrower: what role can a curated knowledge tree, a structured map of causes and feasible actions, play as the base structure that bounds what the model is allowed to say?
 
-Those three questions mark the trace that the next chapters will follow. The primary is answered by a catalogue of failure modes derived from the internship itself, the second and third by the framework that has been built to mitigate those errors and tested against the same catalogue.
+Those three questions mark the trace that the next chapters will follow. The primary is answered by a catalog of failure modes derived from the internship itself, the second and third by the framework that has been built to mitigate those errors and tested against the same catalogue.
 
 \paragraph{Structure of the Thesis}
 The remainder of this document is organized as follows:
@@ -751,7 +751,7 @@ The last contract, the \emph{sanitizer}, is located at the end of this pipeline;
   \end{figure}
   
 
-Table~\ref{tab:contracts}, holds the key conceptual difference.
+Table~\ref{tab:contracts} holds the key conceptual difference.
 Two of the three contracts bring a hard guarantee, the third a soft one instead. 
 The two sides differ in what they constrain: a number either matches its source or it does not, and a deterministic check settles that with no judgment, so the numeric side admits a hard guarantee.
 For the last one, instead, we cannot talk about hard guarantees because the tree bounds the set the model may pick from, but which cause represents the best fit to explain the movement is left to the \ac{LLM}, so there is no deterministic wall to enforce it.
