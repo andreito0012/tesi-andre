@@ -694,8 +694,8 @@ This chapter presents the framework those weaknesses pushed me to build.
 
 
 The answer takes its shape from the problem.
-Grounding has two dimensions, as introduced in Chapter~\ref{chap:introduction}: the numeric one, which is hard and deterministic, and the causal one, which is soft.
-The narrative produced on this basis must be right in both cases.
+Grounding has two dimensions, as introduced in Chapter~\ref{chap:introduction}: the numeric one, where a hard guarantee is possible, and the causal one, where the most that can be enforced is a bound.
+The narrative produced on this basis must hold on both cases.
 Literature on hallucinations verifies the claim against the source \cite{min2023factscore}; it does not enforce both simultaneously.
 The framework, instead, holds both at the three points of the pipeline where a guarantee can attach.
 Throughout the chapter I refer to individual failure modes by the codes F1 to F8; the catalog behind those codes is defined in Chapter~\ref{chap:results}, and here the codes serve only to locate each contract against the problem.
@@ -707,7 +707,7 @@ Throughout the chapter I refer to individual failure modes by the codes F1 to F8
 In software engineering, a contract is the deal between a component and its caller: meet the precondition and the component guarantees its postcondition \cite{meyer1992}.
 The core concept applies the same idea to a generation pipeline that, through three contracts, transforms a broad set of indicators into a complete narrative.
 None of them alone does the full job, because each one acts where the others cannot reach; that is why a complete framework is needed. 
-
+A pipeline of this shape offers exactly three points where a guarantee can attach: before the model, on what is received; inside the prompt, on what it might say ; after the model, on what it produced.
 
 As presented in Figure~\ref{fig:architecture}, the first contract, \emph{tile-as-source}, sits at the top of the pipeline.
 It is positioned at the beginning because it freezes the numbers before the model sees them, to avoid any \ac{LLM} recomputation.
@@ -757,7 +757,7 @@ The last contract, the \emph{sanitizer}, is located at the end of this pipeline;
   \draw[e] ([yshift=-0.5cm]s3.west) -- ++(0.5,0) coordinate (a4) node[anchor=west,font=\footnotesize] at (a4) {\,Data flow (solid)};
   \draw[e,dashed] ([yshift=-1.1cm]s3.west) -- ++(0.6,0) coordinate (a5) node[anchor=west,font=\footnotesize] at (a5) {\,Ground-truth path for canonical resolution (dashed)};
   \end{tikzpicture}
-  \caption{The AI-BI pipeline with the three contracts in place.}
+  \caption{The AI-BI pipeline with the three contracts in place: tile-as-soruce freezes the numbers upstream, the knowledge tree bound causes and actions inside the promot, and the sanitizer audits the final narrative against the same tiles used to generate it.}
   \label{fig:architecture}
   \end{figure}
   
@@ -847,7 +847,7 @@ There is no check about the intrinsic correctness of the value itself, this is f
 \section{Contract 2: curated knowledge tree}
 \label{sec:knowledgetree}
 
-The tree used in the framework is a compact map, compiled from existing operational documentation, containing the causes each single metric admits together with feasible actions to improve the situation.
+The tree used in the framework is a compact map, compiled from existing operational documentation, containing the causes each single driver admits together with feasible actions to improve the situation.
 Given that the aim of the tree is producing a single specific narrative, and not open question answering, the tree is small enough to maintain and be read in full.
 It is injected into the prompt as a list the model has to stay inside, and it is paired with the numeric rule so the narrative is held both on the numerical and causal side.
 In contract terms: the \emph{precondition} is having a tree that carries the admitted causes and actions for the drivers; the \emph{postcondition} is that every cause and action named in the narrative belongs to that set, bounded but not verified.
@@ -881,6 +881,7 @@ What the tree buys is the causal side of the narrative, the one that the other t
 With tile-as-source in place the model can still get the meaning of a metric wrong (F2), and the sanitizer does not guarantee that all actions produced are inside the feasible set (F5).
 The tree is what bounds both, closest in spirit to the methods that feed a small slice of a graph into the prompt \cite{baek2023knowledgeaugmented}.
 Its guarantee is therefore soft: even with the admissible set injected, the result is still left to the model's judgment that can make errors. Chapter~\ref{chap:results} reports how often that judgment lands on the causes the manager chose.
+Being a hand-curated tree is major downside that allows on one side for compactness, but on the other side the quality of it runs entirely on how fresh that curation stays; the discussion Chapter~\ref{chap:discussion} returns on this point. 
 
 
 \section{Contract 3: the sanitizer}
