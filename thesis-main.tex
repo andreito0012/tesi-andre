@@ -98,13 +98,13 @@ Optional. Max a few lines.
 During one of the audited weeks of my internship, the operational dashboard flagged a clear gap at the station. 
 The AI summary built on top of it, an early version of the system this thesis describes, explained that difference with full confidence, but the explanation produced was factually incorrect. 
 It pointed to a structural metric that had little to do with the real cause of the difference, proposed corrective actions and root analyses that no manager could realistically carry out.
-I noticed the error, that morning, because I was familiar with the station and the metric, but a manager reading the same paragraph on a busy day, or less experienced, could have easily taken that for true and acted on it. 
+I noticed the error, that morning, because I was familiar with the station and the metric, but a manager reading the same paragraph on a busy day, or less experienced one, could have easily taken that for true and acted on it. 
 
-That episode marked my thesis beginning and frames the general problem it addresses: what happens when a \ac{LLM} is placed on top of a \ac{BI} dashboard and asked to turn numbers into decisions? 
+That episode marked the beginning of my thesis and frames the general problem it addresses: what happens when a \ac{LLM} is placed on top of a \ac{BI} dashboard and asked to turn numbers into decisions? 
 That is a key question considering the setting of a \ac{DS}. 
 It is the final node of the logistic network, the place where packages are sorted in the early morning and loaded onto routes to be delivered to final customers.
 The station where I worked, DFV2 in Udine, runs on a standard daily rhythm: plan the day, run it, measure what happens, adjust for tomorrow. 
-The manager controls the rhythm through a large set of indicators that are read every day to determine if any correction is needed. Normally the window to act is narrow so it is important that a manager doesn't get the picture late or even wrong, otherwise the chances to fix it would be lost.
+The manager controls the rhythm through a large set of indicators that are read every day to determine if any correction is needed. Normally the window to act is narrow so it is important that a manager does not get the picture late or even wrong, otherwise the chances to fix it would be lost.
 
 Among all the indicators that we used at the station, one metric acts as the headline indicator, a single number that captures how the station operates.
 Most of the days this number is close to the planned one, but not exactly on it, and that gap is what a manager has to explore, understand and explain. 
@@ -118,14 +118,14 @@ A model capable of reading the numbers and turning them into paragraphs within s
 The downside is that the same flexibility that makes it so powerful and useful is also the source of risks.
 A language model hallucinates on numbers, quietly recomputing a value or inventing one that looks plausible, and it explains causes with the same fluency whether the cause is real or not.
 For a tool that is used to feed decisions on the floor, those errors are not acceptable, and they must be reduced as much as possible, while keeping in mind that hallucinations cannot be avoided at 100\%. 
-A manager must be able to safely rely on the output of the model while at the same time, having the underlying numbers within reach. 
+A manager must be able to safely rely on the output of the model while at the same time having the underlying numbers within reach. 
 
 
 \section{Criticalities}
 The main difficulty of this project is the grounding problem, understood in a stricter sense than the one commonly used in the literature.
 It can be decomposed into two main requirements that need to hold together. 
 The first is numerical: the number must correspond exactly to the value behind the dashboard, not an approximation of it.
-The second one is causal: every explanation and every recommendation  must come from a well-defined set of causes that the domain admits, not from everything that seems reasonable.
+The second one is causal: every explanation and every recommendation must come from a well-defined set of causes that the domain admits, not from everything that seems reasonable.
 Figure~\ref{fig:ch1_problem} shows the two requirements and the related failure points.
 
 \begin{figure}[ht]
@@ -199,7 +199,7 @@ From the answer to this primary question two design questions follow.
 The second asks what architecture can be implemented to constrain the faithfulness of the model towards both the numerical and causal sides at once, rather than patching each slip in isolation.
 The last question is narrower: what role can a curated knowledge tree, a structured map of causes and feasible actions, play as the base structure that bounds what the model is allowed to say?
 
-Those three questions mark the trace that next chapters will follow. The primary is answered by a catalogue of failure modes derived from the internship itself, the second and third by the framework that has been built to mitigate those errors and tested against the same catalogue.
+Those three questions mark the trace that the next chapters will follow. The primary is answered by a catalogue of failure modes derived from the internship itself, the second and third by the framework that has been built to mitigate those errors and tested against the same catalogue.
 
 \paragraph{Structure of the Thesis}
 The remainder of this document is organized as follows:
@@ -246,8 +246,7 @@ Controlled table-to-text work, the ToTTo dataset for instance \cite{parikh2020to
 
 The causal half has no real equivalent in the standard taxonomy. 
 A phrase can have all the right numbers, but still name a cause that does not exist or propose an impossible solution.
-The standard question when talking about hallucinations is the following: is the claim supported? 
-Rather than: does this cause belong to the domain-defined set?
+The standard question when talking about hallucinations is the following: is the claim supported?, and not: does this cause belong to the domain-defined set?
 The second question is the dividing line between \ac{BI} and open-domain generation, and in fact it is the reason why a single definition of grounding is not enough.
 
 \section{Retrieval-Augmented Generation (RAG)}
@@ -298,8 +297,7 @@ When we talk about constrained decoding, we refer to a family of methods that fo
 \ac{LMQL} treats the prompt not as plain text but as a small program characterized by a set of constraints \cite{beurerkellner2023lmql}. 
 A typical obligation can be: the response must be shorter than twenty tokens, and the system code will enforce that.
 \ac{PICARD} brings this idea to \ac{SQL}. 
-It is an approach that, by parsing incrementally at each generation step, rejects any token that would make the query invalid, based on the applied constraints.
-The final result is a query that is syntactically valid, because any token breaking the syntax is rejected and regenerated \cite{scholak2021picard}.
+It is an approach that, by parsing incrementally at each generation step, rejects any token that would make the query invalid, based on the applied constraints \cite{scholak2021picard}.
 
 Constrained decoding is the closest approach to the sanitizer I implemented and described in Chapter~\ref{chap:proposed_solution}.
 This is motivated by the fact that both of them use code to enforce, before or after the generation, a rule on the output.
@@ -327,7 +325,7 @@ What is needed is a combination of both, together with the downstream check seen
 
 \section{Generative BI and conversational analytics}
 The applied side of turning dashboards into narrative goes under different names: conversational \ac{BI}, augmented analytics, generative \ac{BI}.
-Its oldest thread is text-to-\ac{SQL}, where a natural language question is translated into an executable query, scored by benchmarks like Spider that evaluates how accurate the transformation is \cite{yu2018spider}. 
+Its oldest thread is text-to-\ac{SQL}, where a natural language question is translated into an executable query, scored by benchmarks like Spider that evaluate how accurate the transformation is \cite{yu2018spider}. 
 A parallel line turns the same question into a chart \cite{shen2023nl2vis}. 
 Two different outputs originate from the same idea: a table or a picture, nothing more. Any explanation that a manager needs is outside their scope.
 
@@ -537,7 +535,7 @@ In my case, this explanation does not stay local: it goes up to a higher team th
 The headline indicator can be defined as output quantity over resources used to produce it, in simple words a ratio. 
 The difference between what was planned and the realised value is the gap that my project focuses on.
 This indicator is then decomposed into a pre-defined and fixed set of categories that are mutually exclusive.
-The set is organized on two levels: top-level categories that can be decomposed into the sub-factors that compose them (Figure~\ref{fig:ch3_decomposition}). 
+The set is organized on two levels: top-level categories that can be open into sub-factors (Figure~\ref{fig:ch3_decomposition}). 
 This second level is needed because it shows which is the specific part that caused the shift.
 
 
@@ -606,7 +604,7 @@ Table~\ref{tab:ch3_decomposition} makes clear why the gap must be decomposed: th
 A category that helps can hide a problematic one, so the net figure on its own is a poor guide to where the problems are located. Before my project, this whole reading was done manually.
   
 \section{The manual baseline and its weaknesses}
-The starting baseline involved two main time-consuming practices: monitoring and a written explanation.
+The starting baseline involved two main time-consuming practices: monitoring and a writing the explanation.
 A manager who wanted to know how the running week was going had to open one dashboard at a time and copy-paste all the data needed into a new spreadsheet file used for the analysis. 
 All the data sat in several places, in a tabular way with no graphs or visualization that could help the reader.
 The second activity was the production of the bridge document that explains the gap: what caused it, why, and actions taken to improve the situation.
@@ -620,7 +618,7 @@ The three weaknesses are visible in Figure~\ref{fig:ch3_weaknesses} together wit
 
 \begin{figure}[ht]
   \centering
-  \resizebox{0.85/textwidth}{!}{
+  \resizebox{1\textwidth}{!}{%
   \begin{tikzpicture}[
     font=\small,
     wk/.style={rounded corners, draw, line width=0.9pt, fill=black!8, align=center,
@@ -675,7 +673,7 @@ There the framework is put to the test against those failure modes highlighted d
 
 
 %----------------------------------------------------------------------------------------
-\chapter{The three-Contract Framework}
+\chapter{The Three-Contract Framework}
 \label{chap:proposed_solution}
 
 Chapter~\ref{chap:case_study} closed by listing the three weaknesses and describing the iterative process followed during development.
@@ -836,16 +834,16 @@ There is no check about the intrinsic correctness of the value itself, this is f
 \section{Contract 2: curated knowledge tree}
 \label{sec:knowledgetree}
 
-The tree utilised in the framework is a compact map, compiled from existing operational documentation, containing the causes each single metric admits together with feasable actions to improve the situation.
-Given that the aim of the tree is conceiving a single specific narrative, and not open question answering, the tree is small enough to maintain and be read in full.
+The tree used in the framework is a compact map, compiled from existing operational documentation, containing the causes each single metric admits together with feasible actions to improve the situation.
+Given that the aim of the tree is producing a single specific narrative, and not open question answering, the tree is small enough to maintain and be read in full.
 It is injected into the prompt as a list the model has to stay inside, and it is paired with the numeric rule so the narrative is held both on the numerical and causal side.
 
 During the generation time the pipeline does not hand the whole tree to the model. 
 Based on the drivers that caused the gap on the day, only a subset of the full causes together with the paired actions is selected and passed to the prompt.
 The main idea over this design choice is to turn an open question, \emph{why did the metric move}, into a closed one, \emph{which of these admitted causes fits the movement}; this makes any response far more reliable. 
-Listing~\ref{lst:tree} shows this concept well, and on top of that, in that way the set presented to the \ac{LLM} is the complete one.
+Listing~\ref{lst:tree} shows this concept well, and  the complete set presented to the \ac{LLM}.
 The decomposition those drivers come from reconciles to the total gap, so every material contribution is present and ranked by impact.
-This last point is the weakness highlighted in Chapter~\ref{chap:case_study} solved by design instead of manual checks.
+This last point is the weakness highlighted in Chapter~\ref{chap:case_study}, solved by design instead of manual checks.
 
 
 
@@ -868,7 +866,7 @@ This last point is the weakness highlighted in Chapter~\ref{chap:case_study} sol
 What the tree buys is the causal side of the narrative, the one that the other two contracts do not touch.
 With tile-as-source in place the model can still get the meaning of a metric wrong (F2), and the sanitizer does not guarantee that all actions produced are inside the feasible set (F5).
 The tree is what bounds both, closest in spirit to the methods that feed a small slice of a graph into the prompt \cite{baek2023knowledgeaugmented}.
-Its guarantee is therefore soft: even by injecting any admissible set, the result is still left to the model's judgment that can make errors. Chapter~\ref{chap:results} reports how often that judgment lands on the causes the manager chose.
+Its guarantee is therefore soft: even with the admissible set injected, the result is still left to the model's judgment that can make errors. Chapter~\ref{chap:results} reports how often that judgment lands on the causes the manager chose.
 
 
 \section{Contract 3: the sanitizer}
