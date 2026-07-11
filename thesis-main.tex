@@ -608,7 +608,7 @@ A category that helps can hide a problematic one, so the net figure on its own i
 \section{The manual baseline and its weaknesses}
 The starting baseline involved two main time-consuming practices: monitoring and writing the explanation.
 A manager who wanted to know how the running week was going had to open one dashboard at a time and copy-paste all the data needed into a new spreadsheet file used for the analysis.
-Each of those dashboards is a grid of precomputed values that a manager reads as it is: each of those value is a tile.
+Each of those dashboards is a grid of precomputed values that a manager reads as they are: each of those valus is a tile.
 All the data sat in several places, in a tabular way with no graphs or visualization that could help the reader.
 The second activity was the production of the bridge document that explains the gap: what caused it, why, and actions taken to improve the situation.
 A bridge is not a complex report, but a compact paragraph that is characterized by the same three ingredients: numbers, causes and actions.
@@ -644,13 +644,13 @@ The three weaknesses are visible in Figure~\ref{fig:ch3_weaknesses} together wit
   \node[ans, right=2cm of w1] (a1)
     {An automated view replaces the manual weekly pull and is available during the running week, not only once it has closed.};
   \node[ans, right=2cm of w2] (a2)
-    {The decomposition ranks all drivers by impact; causes and actions come from a curated knowledge three.};
+    {The decomposition ranks all drivers by impact; causes and actions come from a curated knowledge tree.};
   \node[ans, right=2cm of w3] (a3)
     {The explanation is produced by a fixed, automated generation step.};
   
-  \draw[ar] (w1.east) -- node[above, font=\footnotesize\itshape, text=black!55]{adressed by} (a1.west);
-  \draw[ar] (w2.east) -- node[above, font=\footnotesize\itshape, text=black!55]{adressed by} (a2.west);
-  \draw[ar] (w3.east) -- node[above, font=\footnotesize\itshape, text=black!55]{adressed by} (a3.west);
+  \draw[ar] (w1.east) -- node[above, font=\footnotesize\itshape, text=black!55]{addressed by} (a1.west);
+  \draw[ar] (w2.east) -- node[above, font=\footnotesize\itshape, text=black!55]{addressed by} (a2.west);
+  \draw[ar] (w3.east) -- node[above, font=\footnotesize\itshape, text=black!55]{addressed by} (a3.west);
   \end{tikzpicture}
   }
   \caption{The three weaknesses of the manual baseline, the dimension each one
@@ -671,8 +671,8 @@ The system presented in Chapter~\ref{chap:proposed_solution} was developed throu
 Those traces are the base material of the analysis: I organized them into families by the kind of error they represent, and labeled them as grounding failures in Chapter~\ref{chap:results}. 
 The data behind the test sits on two layers.
 The development layer is the pilot site itself: three months of daily observation at DFV2, which is where failures came from.
-The evaluation layer is much wider, being a corpus of thirty under-target stations for a specific week; they were retrieved from the internal network, and paired with the explanations managers wrote for those same weeks.
-In Chapter~\ref{chap:results} the framework is measured against failure modes, and on how its generated narrative matches the human-written bridges.
+The evaluation layer is much wider, being a corpus of thirty under-target stations, each for a specific week; they were retrieved from the internal network, and paired with the explanations managers wrote for those same weeks.
+In Chapter~\ref{chap:results} the framework is measured on two fronts: against the failure modes, and on how its generated narrative matches the human-written bridges.
 
 
 Every metric in this thesis is anonymized: the headline indicator is denominated as Metric\_R, its components Category\_1 to Category\_k. 
