@@ -850,7 +850,7 @@ There is no check about the intrinsic correctness of the value itself, this is f
 The tree used in the framework is a compact map, compiled from existing operational documentation, containing the causes each single metric admits together with feasible actions to improve the situation.
 Given that the aim of the tree is producing a single specific narrative, and not open question answering, the tree is small enough to maintain and be read in full.
 It is injected into the prompt as a list the model has to stay inside, and it is paired with the numeric rule so the narrative is held both on the numerical and causal side.
-In contract terms: the \emph{precondition} is having a tree that carries the admitted causes and actions for the divers; the \emph{postcondition} is that every cause and actin named in the narrative belongs to that set, bounded but not verified.
+In contract terms: the \emph{precondition} is having a tree that carries the admitted causes and actions for the drivers; the \emph{postcondition} is that every cause and action named in the narrative belongs to that set, bounded but not verified.
 
 During the generation time the pipeline does not hand the whole tree to the model. 
 Based on the drivers that caused the gap on the day, only a subset of the full causes together with the paired actions is selected and passed to the prompt.
@@ -888,7 +888,7 @@ Its guarantee is therefore soft: even with the admissible set injected, the resu
 
 This last deterministic contract runs directly on the finished text after the model.
 The first two shape what the \ac{LLM} sees, while the sanitizer audits what the model produced, comparing every cited figure against its canonical value, and repairs a small set of specific errors.
-In contract terms: the \emph{precondition} is that for every metric in the narrative, a known-correct value of it must exist; the \emph{postcondition} is that every cited figure either matches the known value or is left visibly broken.
+In contract terms: the \emph{precondition} is that for every metric in the narrative, a known-correct value of it exist; the \emph{postcondition} is that every cited figure either matches the known value or is left visibly broken.
 It works through four mechanisms. The precision lock holds a value in its canonical shape, so a figure that should read one way does not appear in another.
 The magnitude guard corrects the number when the gap between the generated one and the dashboard one is small enough to be a precision or recalculation drift, and refuses when the gap is large.
 Label disambiguation decides which metric a number belongs to before deciding whether to replace it, so it does not swap one driver's value for another's.
