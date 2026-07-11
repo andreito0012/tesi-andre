@@ -541,7 +541,7 @@ This second level is needed because it shows which specific part caused the shif
 
 
 The categories do not contribute to the total gap as a raw value, but they get scaled by their own weight, which is heterogeneous and changes across all categories. 
-Each category has its own unit of measure, weights translate that movement into points of the headline ratio that can now be summed up since they speak the same language.
+Each category has its own unit of measure; the weight translates a movement in that unit into points of the headline ratio that can now be summed up since they speak the same language.
 This means that a large movement in a lightly-weighted category can matter less than a smaller movement in a heavy one.
 There is also a residual term that absorbs whatever difference the named categories do not explain. 
 It guarantees that the parts add back to the whole, and prevents anything from being forced into a named category where it does not belong.
@@ -608,17 +608,17 @@ A category that helps can hide a problematic one, so the net figure on its own i
 \section{The manual baseline and its weaknesses}
 The starting baseline involved two main time-consuming practices: monitoring and writing the explanation.
 A manager who wanted to know how the running week was going had to open one dashboard at a time and copy-paste all the data needed into a new spreadsheet file used for the analysis.
-Each of those dashboards is a grid precomputed values that a manager reads as it is, each of them is a tile.
+Each of those dashboards is a grid of precomputed values that a manager reads as it is: each of those value is a tile.
 All the data sat in several places, in a tabular way with no graphs or visualization that could help the reader.
 The second activity was the production of the bridge document that explains the gap: what caused it, why, and actions taken to improve the situation.
-A bridge is not a complex report, but a compact paragraph that is carachterized by the same three ingredients: numbers, causes and actions.
-The causes a manager identifies as responsable for the gap, proved by the related pasted numbers from the spreadsheet; and the feasable actions the station will take to imporove the situation.
+A bridge is not a complex report, but a compact paragraph that is characterized by the same three ingredients: numbers, causes and actions.
+The causes a manager identifies as responsible for the gap are backed by the numbers pasted from the spreadsheet, and paired with the feasible actions the station will take to improve the situation.
 Those ingredients, together with the overall structure of the document, are the four axes the generated narrative is scored on in Chapter~\ref{chap:results}.
 
 
 That manual approach has three different weaknesses starting from limited reactivity: a manager had to wait for the weekly report to know how the previous week had closed exactly; any intra-week visibility, when needed, depended on pulling data manually, tile by tile.
 The second one is incomplete root-cause coverage: the choice of which causes needed to be added to the report was up to the manager, who would typically scan the spreadsheet for KPIs sitting below target and write them up as the explanation. 
-The decomposition existed in data, but nothing forces the written explanation to follow it: no guarantee that the listed causes summed back to the total gap, nor that they were ranked by impact.
+The decomposition existed in the data, but nothing forced the written explanation to follow it: no guarantee that the listed causes summed back to the total gap, nor that they were ranked by impact.
 The last one is analyst dependence: the depth and granularity of the diagnosis, and the realism of the recommended actions, varied considerably with the individual experience of the manager preparing the document.
 The three weaknesses are visible in Figure~\ref{fig:ch3_weaknesses} together with a description of how each one is answered.
 
@@ -644,13 +644,13 @@ The three weaknesses are visible in Figure~\ref{fig:ch3_weaknesses} together wit
   \node[ans, right=2cm of w1] (a1)
     {An automated view replaces the manual weekly pull and is available during the running week, not only once it has closed.};
   \node[ans, right=2cm of w2] (a2)
-    { Code ranks the full set of causes by impact, drawn from a curated knowledge tree.};
+    {The decomposition ranks all drivers by impact; causes and actions come from a curated knowledge three.};
   \node[ans, right=2cm of w3] (a3)
     {The explanation is produced by a fixed, automated generation step.};
   
-  \draw[ar] (w1.east) -- node[above, font=\footnotesize\itshape, text=black!55]{solved by} (a1.west);
-  \draw[ar] (w2.east) -- node[above, font=\footnotesize\itshape, text=black!55]{solved by} (a2.west);
-  \draw[ar] (w3.east) -- node[above, font=\footnotesize\itshape, text=black!55]{solved by} (a3.west);
+  \draw[ar] (w1.east) -- node[above, font=\footnotesize\itshape, text=black!55]{adressed by} (a1.west);
+  \draw[ar] (w2.east) -- node[above, font=\footnotesize\itshape, text=black!55]{adressed by} (a2.west);
+  \draw[ar] (w3.east) -- node[above, font=\footnotesize\itshape, text=black!55]{adressed by} (a3.west);
   \end{tikzpicture}
   }
   \caption{The three weaknesses of the manual baseline, the dimension each one
@@ -667,14 +667,16 @@ How each of these is addressed is discussed in Chapter~\ref{chap:proposed_soluti
 
 \section{Methodology}
 The study is organized around a single operation, developed following a longitudinal design: I worked on the system observing day after day the working routine.
-Every metric in this thesis is anonymized: the headline indicator is denominated as Metric\_R, its components Category\_1 to Category\_k. 
-The values are synthetic in the illustrative examples and real in the operational data behind Chapter~\ref{chap:results}.
 The system presented in Chapter~\ref{chap:proposed_solution} was developed through an iterative loop: code, observe what the output is, isolate one issue at a time, fix it, validate the solution, and repeat; this loop ran roughly several dozen times, and each pass left a record of what had gone wrong and why.
 Those traces are the base material of the analysis: I organized them into families by the kind of error they represent, and labeled them as grounding failures in Chapter~\ref{chap:results}. 
 The data behind the test sits on two layers.
 The development layer is the pilot site itself: three months of daily observation at DFV2, which is where failures came from.
-The evaluation layer, instead, is much wither being a corpus of thirty undertarget stations in a specific week; they were retrieven from the internal netowork, and paired with the explanations managers wrote for that same week.
-In Chapter~\ref{chap:results} the framework is measured against both failure modes, and how its generated narrative matches the human-written bridges.
+The evaluation layer is much wider, being a corpus of thirty under-target stations for a specific week; they were retrieved from the internal network, and paired with the explanations managers wrote for those same weeks.
+In Chapter~\ref{chap:results} the framework is measured against failure modes, and on how its generated narrative matches the human-written bridges.
+
+
+Every metric in this thesis is anonymized: the headline indicator is denominated as Metric\_R, its components Category\_1 to Category\_k. 
+The values are synthetic in the illustrative examples and real in the operational data behind Chapter~\ref{chap:results}.
 
 
 
