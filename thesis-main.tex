@@ -757,7 +757,7 @@ The last contract, the \emph{sanitizer}, is located at the end of this pipeline;
   \draw[e] ([yshift=-0.5cm]s3.west) -- ++(0.5,0) coordinate (a4) node[anchor=west,font=\footnotesize] at (a4) {\,Data flow (solid)};
   \draw[e,dashed] ([yshift=-1.1cm]s3.west) -- ++(0.6,0) coordinate (a5) node[anchor=west,font=\footnotesize] at (a5) {\,Ground-truth path for canonical resolution (dashed)};
   \end{tikzpicture}
-  \caption{The AI-BI pipeline with the three contracts in place: tile-as-soruce freezes the numbers upstream, the knowledge tree bound causes and actions inside the promot, and the sanitizer audits the final narrative against the same tiles used to generate it.}
+  \caption{The AI-BI pipeline with the three contracts in place: tile-as-source freezes the numbers upstream, the knowledge tree bounds causes and actions inside the prompt, and the sanitizer audits the final narrative against the same tiles used to generate it.}
   \label{fig:architecture}
   \end{figure}
   
@@ -840,9 +840,9 @@ It starts with the headline figure (\texttt{Metric\_R}) that represents the over
 
 The hard guarantee of this contract, as presented in Table~\ref{tab:contracts}, can be motivated since it carries most of the numeric load by directly copying the number: it avoids any recalculation (F1), invented rates (F6), confusing values for deltas (F7), and helps with any precision drift since a copied value arrives with the right decimals (F3).
 
-There are two main boundaries for this contract: it binds only numbers that exist as tiles in the dashboard, not those the model may compute itself.
+There are two main boundaries for this contract. The first binds only numbers that exist as tiles in the dashboard, not those the model may compute itself.
 The second one is deeper than the first, since it is true that it binds the number to the tile computed upstream, but there is no guarantee that the value represents the truth in the world. 
-There is no check about the intrinsic correctness of the value itself, this is faithfulness, not factuality, as stated in Chapter~\ref{chap:state_of_the_art}. 
+There is no check about the intrinsic correctness of the value itself: this is faithfulness, not factuality, as stated in Chapter~\ref{chap:state_of_the_art}. 
 
 \section{Contract 2: curated knowledge tree}
 \label{sec:knowledgetree}
@@ -881,7 +881,7 @@ What the tree buys is the causal side of the narrative, the one that the other t
 With tile-as-source in place the model can still get the meaning of a metric wrong (F2), and the sanitizer does not guarantee that all actions produced are inside the feasible set (F5).
 The tree is what bounds both, closest in spirit to the methods that feed a small slice of a graph into the prompt \cite{baek2023knowledgeaugmented}.
 Its guarantee is therefore soft: even with the admissible set injected, the result is still left to the model's judgment that can make errors. Chapter~\ref{chap:results} reports how often that judgment lands on the causes the manager chose.
-Being a hand-curated tree allows for compactness, but it is also a major downside: the quality of it runs entirely on how fresh that curation stays; the discussion Chapter~\ref{chap:discussion} returns on this point. 
+Being a hand-curated tree allows for compactness, but it is also a major downside: the quality of it runs entirely on how fresh that curation stays; the discussion Chapter~\ref{chap:discussion} returns to this point. 
 
 
 \section{Contract 3: the sanitizer}
