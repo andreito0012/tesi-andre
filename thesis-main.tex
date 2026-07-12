@@ -894,7 +894,7 @@ It works through four mechanisms. The precision lock holds a value in its canoni
 The magnitude guard corrects the number when the gap between the generated one and the dashboard one is small enough to be a precision or recalculation drift, and refuses when the gap is large.
 Label disambiguation decides which metric a number belongs to before deciding whether to replace it, so it does not swap one driver's value for another's.
 The canonical resolution runs before the three above since it checks that the value really exists in the pipeline at all, the ground-truth path drawn dashed in Figure~\ref{fig:architecture}.
-The magnitude guard acts on the first formal mode: it is what refuses a sign inversion (F4), since a flipped value lands far outside any plausible drift; a fused label (F8) instead fails canonical resolution, so it stays visibly broken.
+The magnitude guard acts on formal modes: it is what refuses a sign inversion (F4), since a flipped value lands far outside any plausible drift; a fused label (F8) instead fails canonical resolution, so it stays visibly broken.
 
 \begin{lstlisting}[language=Python, caption={Precision lock and magnitude guard.}, label={lst:sanitizer}]
   def sanitize(text, canonical):
