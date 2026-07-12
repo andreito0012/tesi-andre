@@ -968,59 +968,54 @@ The model is always the same; any difference between the levels comes only from 
 \label{sec:application}
 How the framework was derived from the iterative development of the case study, showing the concrete implementation of each contract.
 
-\begin{figure}[ht]
-  \centering
-  \begin{tikzpicture}[
-    font=\small,
-    frame/.style={draw,thick,rounded corners},
-    panel/.style={draw,rounded corners,fill=black!4},
-    bar/.style={fill=black!30},
-    btn/.style={draw,thick,rounded corners,fill=black!12,align=center,inner sep=5pt},
-    lbl/.style={font=\footnotesize\itshape,text=black!60},
-    e/.style={-{Latex[length=2mm]},thick}
-  ]
-  % ---- app window ----
-  \draw[frame] (0,0) rectangle (11.6,7.6);
-  \draw[frame,fill=black!10] (0,7.0) rectangle (11.6,7.6);
-  \node[anchor=west,font=\footnotesize\bfseries] at (0.25,7.3) {Station: DS\_x};
-  \node[anchor=west,font=\footnotesize] at (3.4,7.3) {Week: W\_n (running)};
-  \node[anchor=east,font=\footnotesize] at (11.35,7.3) {status: below plan};
-  % ---- left panel: weekly trend ----
-  \draw[panel] (0.3,3.1) rectangle (5.6,6.7);
-  \node[anchor=west,font=\footnotesize\bfseries] at (0.45,6.4) {Weekly trend (Metric\_R)};
-  \draw[-{Latex[length=1.6mm]}] (0.7,3.5) -- (5.3,3.5);
-  \draw[-{Latex[length=1.6mm]}] (0.7,3.5) -- (0.7,6.1);
-  \draw[dashed,black!55] (0.7,5.3) -- (5.2,5.3);
-  \node[font=\scriptsize,text=black!55,anchor=south east] at (5.2,5.32) {plan};
-  \draw[thick] (0.9,5.0) -- (1.6,5.5) -- (2.3,5.1) -- (3.0,5.6) -- (3.7,4.7) -- (4.4,4.4);
-  \fill (4.4,4.4) circle (1.5pt);
-  \node[font=\scriptsize,text=black!60,anchor=west] at (4.5,4.35) {today};
-  % ---- right panel: gap decomposition (ranked, signed) ----
-  \draw[panel] (5.9,3.1) rectangle (11.3,6.7);
-  \node[anchor=west,font=\footnotesize\bfseries] at (6.05,6.4) {Gap decomposition (ranked)};
-  \draw[black!45] (8.8,3.6) -- (8.8,6.15);
-  \draw[bar] (8.8,5.75) rectangle (7.2,5.95);
-  \node[font=\scriptsize,anchor=east] at (7.1,5.85) {Category\_2};
-  \draw[bar] (8.8,5.35) rectangle (7.6,5.55);
-  \node[font=\scriptsize,anchor=east] at (7.5,5.45) {Category\_3};
-  \draw[bar] (8.8,4.95) rectangle (9.7,5.15);
-  \node[font=\scriptsize,anchor=west] at (9.8,5.05) {Category\_1};
-  \draw[bar,fill=black!15] (8.8,4.55) rectangle (8.1,4.75);
-  \node[font=\scriptsize,anchor=east] at (8.0,4.65) {Residual};
-  \draw[bar] (8.8,4.15) rectangle (9.0,4.35);
-  \node[font=\scriptsize,anchor=west] at (9.1,4.25) {Category\_k};
-  \node[font=\scriptsize,text=black!60] at (8.6,3.35) {signed contributions, sum $=$ gap};
-  % ---- bottom panel: generated bridge ----
-  \draw[panel] (0.3,0.3) rectangle (11.3,2.7);
-  \node[anchor=west,font=\footnotesize\bfseries] at (0.45,2.42) {Written bridge (generated)};
-  \foreach \y in {2.05,1.75,1.45,1.15} \draw[black!35] (0.6,\y) -- (8.3,\y);
-  \draw[black!35] (0.6,0.85) -- (5.0,0.85);
-  \node[btn] at (9.9,1.6) {Generate\\bridge};
-  \node[lbl] at (9.9,0.72) {\scriptsize tiles $\to$ tree $\to$ model $\to$ sanitizer};
-  \end{tikzpicture}
-  \caption{Anonymized wireframe of the application: the weekly trend against plan with the running-week position (left), the ranked signed decomposition of the closed week's gap (right), and the generated bridge with the one-click step that runs the three contracts (bottom). Values reuse the synthetic example of Table~\ref{tab:ch3_decomposition}.}
-  \label{fig:application}
-\end{figure}
+\begin{tikzpicture}[
+  font=\small,
+  frame/.style={draw,thick,rounded corners},
+  panel/.style={draw,rounded corners,fill=black!4},
+  bar/.style={fill=black!30},
+  btn/.style={draw,thick,rounded corners,fill=black!12,align=center,inner sep=5pt},
+  lbl/.style={font=\footnotesize\itshape,text=black!60},
+  e/.style={-{Latex[length=2mm]},thick}
+]
+% ---- app window ----
+\draw[frame] (0,0) rectangle (11.6,7.6);
+\draw[frame,fill=black!10] (0,7.0) rectangle (11.6,7.6);
+\node[anchor=west,font=\footnotesize\bfseries] at (0.25,7.3) {Station: DS\_x};
+\node[anchor=west,font=\footnotesize] at (3.4,7.3) {Week: W\_n (running)};
+\node[anchor=east,font=\footnotesize] at (11.35,7.3) {status: below plan};
+% ---- left panel: weekly trend ----
+\draw[panel] (0.3,3.1) rectangle (5.6,6.7);
+\node[anchor=west,font=\footnotesize\bfseries] at (0.45,6.4) {Weekly trend (Metric\_R)};
+\draw[-{Latex[length=1.6mm]}] (0.7,3.5) -- (5.3,3.5);
+\draw[-{Latex[length=1.6mm]}] (0.7,3.5) -- (0.7,6.1);
+\draw[dashed,black!55] (0.7,5.3) -- (5.2,5.3);
+\node[font=\scriptsize,text=black!55,anchor=south east] at (5.2,5.32) {plan};
+\draw[thick] (0.9,5.0) -- (1.6,5.5) -- (2.3,5.1) -- (3.0,5.6) -- (3.7,4.7) -- (4.4,4.4);
+\fill (4.4,4.4) circle (1.5pt);
+\node[font=\scriptsize,text=black!60,anchor=west] at (4.5,4.35) {today};
+% ---- right panel: gap decomposition (label column + signed bars) ----
+\draw[panel] (5.9,3.1) rectangle (11.3,6.7);
+\node[anchor=west,font=\footnotesize\bfseries] at (6.05,6.4) {Gap decomposition (ranked)};
+\draw[black!45] (9.3,3.6) -- (9.3,6.15);
+\node[font=\scriptsize,anchor=west] at (6.05,5.85) {Category\_2};
+\draw[bar] (9.3,5.75) rectangle (7.8,5.95);
+\node[font=\scriptsize,anchor=west] at (6.05,5.45) {Category\_3};
+\draw[bar] (9.3,5.35) rectangle (8.15,5.55);
+\node[font=\scriptsize,anchor=west] at (6.05,5.05) {Category\_1};
+\draw[bar] (9.3,4.95) rectangle (10.2,5.15);
+\node[font=\scriptsize,anchor=west] at (6.05,4.65) {Residual};
+\draw[bar,fill=black!15] (9.3,4.55) rectangle (8.65,4.75);
+\node[font=\scriptsize,anchor=west] at (6.05,4.25) {Category\_k};
+\draw[bar] (9.3,4.15) rectangle (9.5,4.35);
+\node[font=\scriptsize,text=black!60] at (8.6,3.35) {signed contributions, sum $=$ gap};
+% ---- bottom panel: generated bridge ----
+\draw[panel] (0.3,0.3) rectangle (11.3,2.7);
+\node[anchor=west,font=\footnotesize\bfseries] at (0.45,2.42) {Written bridge (generated)};
+\foreach \y in {2.05,1.75,1.45,1.15} \draw[black!35] (0.6,\y) -- (8.3,\y);
+\draw[black!35] (0.6,0.85) -- (5.0,0.85);
+\node[btn] at (9.9,1.75) {Generate\\bridge};
+\node[lbl,align=center] at (9.9,0.75) {\scriptsize tiles $\to$ tree $\to$\\[-1pt]\scriptsize model $\to$ sanitizer};
+\end{tikzpicture}
 
 %----------------------------------------------------------------------------------------
 \chapter{Results and Evaluation}
