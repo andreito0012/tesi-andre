@@ -929,13 +929,13 @@ The system prompt that drives the model is not designed to ask \enquote{in gener
 Chapter~\ref{chap:state_of_the_art} already explained that a prompt is a request not a command, and better instructions raise the odds of a correct answer without making any errors impossible \cite{wei2022cot}.
 So this design does not try to overturn that verdict, it builds with it.
 The prompt is scoped to what a request can actually do: deliver the two upstream contracts (tile-as-source and curated knowledge tree) and cut the avoidable failures at the source.
-Specifically there is a directive for each failure mode observed during the development, nothing vaguer so the \ac{LLM}'s efforts can be directed where needed.
+Specifically there is a directive for each failure mode observed during the development, nothing vaguer, so the \ac{LLM}'s efforts can be directed where needed.
 
 
 The prompt has a well-defined structure composed by the directive block that sits on top, then the tiles block with the frozen values, the scoped tree block, and the skeleton of the narrative that must be followed.
 The skeleton also copies, for every action, the owner and the horizon the tree assigns it, so feasibility rides along with the action instead of being asked for.
 Listing~\ref{lst:directives} shows an excerpt of the directive block, with each directive tagged with the mode it answers.
-To be precise, in the production prompt, these base rules grow into more specific versions based on the specific domain they are referring to, but every variant traces back to one of the eight modes.
+To be precise, in the production prompt, these base rules grow into more specific versions based on the domain they are referring to, but every variant traces back to one of the eight modes.
 
 
 
@@ -952,12 +952,13 @@ To be precise, in the production prompt, these base rules grow into more specifi
   - Use every metric label exactly as written; never
     merge two labels into one name.                    # F8
 \end{lstlisting}
-Given a competent but generic prompt, a capable model it recomputes numbers, invents the meaning of an unfamiliar acronym, and computes shares of the gap that nobody gave it.
+
+Given a competent but generic prompt, a capable model recomputes numbers, invents the meaning of an unfamiliar acronym, and computes shares of the gap that nobody gave it.
 That is the naive baseline, failures at close to their full rate.
 The same model under the directive-per-failure prompt, with the tiles and tree blocks in place, stops doing all of it, down to the residue the tile contract already declared: a handful of totals the model sums on its own.
 The prompt is the connective tissue between contracts and the model.
 Chapter~\ref{chap:results} takes this wiring apart step by step: each level of the ablation adds one contract together with its directives.
-The model is always the same, any difference between the levels comes only from the design itself.
+The model is always the same; any difference between the levels comes only from the design itself.
 
 
 
@@ -967,6 +968,59 @@ The model is always the same, any difference between the levels comes only from 
 \label{sec:application}
 How the framework was derived from the iterative development of the case study, showing the concrete implementation of each contract.
 
+\begin{figure}[ht]
+  \centering
+  \begin{tikzpicture}[
+    font=\small,
+    frame/.style={draw,thick,rounded corners},
+    panel/.style={draw,rounded corners,fill=black!4},
+    bar/.style={fill=black!30},
+    btn/.style={draw,thick,rounded corners,fill=black!12,align=center,inner sep=5pt},
+    lbl/.style={font=\footnotesize\itshape,text=black!60},
+    e/.style={-{Latex[length=2mm]},thick}
+  ]
+  % ---- app window ----
+  \draw[frame] (0,0) rectangle (11.6,7.6);
+  \draw[frame,fill=black!10] (0,7.0) rectangle (11.6,7.6);
+  \node[anchor=west,font=\footnotesize\bfseries] at (0.25,7.3) {Station: DS\_x};
+  \node[anchor=west,font=\footnotesize] at (3.4,7.3) {Week: W\_n (running)};
+  \node[anchor=east,font=\footnotesize] at (11.35,7.3) {status: below plan};
+  % ---- left panel: weekly trend ----
+  \draw[panel] (0.3,3.1) rectangle (5.6,6.7);
+  \node[anchor=west,font=\footnotesize\bfseries] at (0.45,6.4) {Weekly trend (Metric\_R)};
+  \draw[-{Latex[length=1.6mm]}] (0.7,3.5) -- (5.3,3.5);
+  \draw[-{Latex[length=1.6mm]}] (0.7,3.5) -- (0.7,6.1);
+  \draw[dashed,black!55] (0.7,5.3) -- (5.2,5.3);
+  \node[font=\scriptsize,text=black!55,anchor=south east] at (5.2,5.32) {plan};
+  \draw[thick] (0.9,5.0) -- (1.6,5.5) -- (2.3,5.1) -- (3.0,5.6) -- (3.7,4.7) -- (4.4,4.4);
+  \fill (4.4,4.4) circle (1.5pt);
+  \node[font=\scriptsize,text=black!60,anchor=west] at (4.5,4.35) {today};
+  % ---- right panel: gap decomposition (ranked, signed) ----
+  \draw[panel] (5.9,3.1) rectangle (11.3,6.7);
+  \node[anchor=west,font=\footnotesize\bfseries] at (6.05,6.4) {Gap decomposition (ranked)};
+  \draw[black!45] (8.8,3.6) -- (8.8,6.15);
+  \draw[bar] (8.8,5.75) rectangle (7.2,5.95);
+  \node[font=\scriptsize,anchor=east] at (7.1,5.85) {Category\_2};
+  \draw[bar] (8.8,5.35) rectangle (7.6,5.55);
+  \node[font=\scriptsize,anchor=east] at (7.5,5.45) {Category\_3};
+  \draw[bar] (8.8,4.95) rectangle (9.7,5.15);
+  \node[font=\scriptsize,anchor=west] at (9.8,5.05) {Category\_1};
+  \draw[bar,fill=black!15] (8.8,4.55) rectangle (8.1,4.75);
+  \node[font=\scriptsize,anchor=east] at (8.0,4.65) {Residual};
+  \draw[bar] (8.8,4.15) rectangle (9.0,4.35);
+  \node[font=\scriptsize,anchor=west] at (9.1,4.25) {Category\_k};
+  \node[font=\scriptsize,text=black!60] at (8.6,3.35) {signed contributions, sum $=$ gap};
+  % ---- bottom panel: generated bridge ----
+  \draw[panel] (0.3,0.3) rectangle (11.3,2.7);
+  \node[anchor=west,font=\footnotesize\bfseries] at (0.45,2.42) {Written bridge (generated)};
+  \foreach \y in {2.05,1.75,1.45,1.15} \draw[black!35] (0.6,\y) -- (8.3,\y);
+  \draw[black!35] (0.6,0.85) -- (5.0,0.85);
+  \node[btn] at (9.9,1.6) {Generate\\bridge};
+  \node[lbl] at (9.9,0.72) {\scriptsize tiles $\to$ tree $\to$ model $\to$ sanitizer};
+  \end{tikzpicture}
+  \caption{Anonymized wireframe of the application: the weekly trend against plan with the running-week position (left), the ranked signed decomposition of the closed week's gap (right), and the generated bridge with the one-click step that runs the three contracts (bottom). Values reuse the synthetic example of Table~\ref{tab:ch3_decomposition}.}
+  \label{fig:application}
+\end{figure}
 
 %----------------------------------------------------------------------------------------
 \chapter{Results and Evaluation}
