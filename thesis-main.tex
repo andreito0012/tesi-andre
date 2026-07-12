@@ -850,12 +850,13 @@ There is no check about the intrinsic correctness of the value itself: this is f
 The tree used in the framework is a compact map, compiled from existing operational documentation, containing the causes each single driver admits together with feasible actions to improve the situation.
 Given that the aim of the tree is producing a single specific narrative, and not open question answering, the tree is small enough to maintain and be read in full.
 It is injected into the prompt as a list the model has to stay inside, and it is paired with the numeric rule so the narrative is held both on the numerical and causal side.
-In contract terms: the \emph{precondition} is having a tree that carries the admitted causes and actions for the drivers; the \emph{postcondition} is that every cause and action named in the narrative belongs to that set but, unlike the sanitizer, this cannot be deterministically guaranteed.
+In contract terms: the \emph{precondition} is having a tree that carries the admitted causes and actions for the drivers; the \emph{postcondition} is that every cause and action named in the narrative belongs to that set but, unlike the sanitizer, this cannot be deterministically guaranteed: a cause has no tile to be cecked against.
 
 During the generation time the pipeline does not hand the whole tree to the model. 
 Based on the drivers that caused the gap on the day, only a subset of the full causes together with the paired actions is selected and passed to the prompt.
-The main idea behind this design choice is to turn an open question, \emph{why did the metric move}, into a closed one, \emph{which of these admitted causes fits the movement}; this makes any response far more reliable. 
-Listing~\ref{lst:tree} shows this concept well, and  the complete set presented to the \ac{LLM}.
+The main idea behind this design choice is to turn an open question, \emph{why did the metric move}, into a closed one, \emph{which of these admitted causes fits the movement}; this makes any response far more reliable.
+This is also the reason behind a language model in the loop: choosing which admitted causes best fit the week's gap is a judgment a fixed template cannot make.
+Listing~\ref{lst:tree} shows this concept well, and the complete set presented to the \ac{LLM}.
 The decomposition those drivers come from reconciles to the total gap, so every material contribution is present and ranked by impact.
 This last point is the coverage weakness highlighted in Chapter~\ref{chap:case_study}, solved by design instead of manual checks.
 
@@ -865,7 +866,7 @@ This last point is the coverage weakness highlighted in Chapter~\ref{chap:case_s
       L = ["=== CURATED KNOWLEDGE TREE (use ONLY these causes/actions) ==="]
       for k, v in material(c):
           e = TREE[k]                              # curated entry for this driver
-          L.append(f"\nCategory_{k} (defectStage: {e['defectStage']}):")
+          L.append(f"\nCategory_{k} (Stage: {e['Stage']}):")
           L.append("  Allowed root causes:")
           for rc in e["primary_root_causes"]:
               L.append(f"    - {rc}")
@@ -879,7 +880,7 @@ This last point is the coverage weakness highlighted in Chapter~\ref{chap:case_s
 What the tree buys is the causal side of the narrative, the one that the other two contracts do not touch.
 With tile-as-source in place the model can still get the meaning of a metric wrong (F2), and the sanitizer does not guarantee that all actions produced are inside the feasible set (F5).
 The tree is what bounds both, closest in spirit to the methods that feed a small slice of a graph into the prompt \cite{baek2023knowledgeaugmented}.
-Its guarantee is therefore soft: even with the admissible set injected, the result is still left to the model's judgment that can make errors. Chapter~\ref{chap:results} reports how often that judgment lands on both the causes the manager chose and the predefined set.
+Its guarantee is therefore soft: even with the admissible set injected, the result is still left to the model's judgment that can make errors. Chapter~\ref{chap:results} reports both how often that judgment stays inside the predefined set and how often it lands on the causes the manager chose.
 Being a hand-curated tree allows for compactness, but it is also a major downside: the quality of it runs entirely on how fresh that curation stays; the discussion Chapter~\ref{chap:discussion} returns to this point. 
 
 
@@ -892,8 +893,8 @@ In contract terms: the \emph{precondition} is that for every metric in the narra
 It works through four mechanisms. The precision lock holds a value in its canonical shape, so a figure that should read one way does not appear in another.
 The magnitude guard corrects the number when the gap between the generated one and the dashboard one is small enough to be a precision or recalculation drift, and refuses when the gap is large.
 Label disambiguation decides which metric a number belongs to before deciding whether to replace it, so it does not swap one driver's value for another's.
-The canonical resolution is the precondition for all the three above since it checks that the value really exists in the pipeline at all, the ground-truth path drawn dashed in Figure~\ref{fig:architecture}.
-The magnitude guard acts on formal modes: it is what refuses a sign inversion (F4), since a flipped value land far outside any plausible drift, and is what keeps a fused label (F8), that failes a canonical resolution, visibly broken.
+The canonical resolution runs before the three above since it checks that the value really exists in the pipeline at all, the ground-truth path drawn dashed in Figure~\ref{fig:architecture}.
+The magnitude guard acts on formal modes: it is what refuses a sign inversion (F4), since a flipped value lands far outside any plausible drift; a fused label (F8) instead fails canonical resolution, so it stays visibly broken.
 
 \begin{lstlisting}[language=Python, caption={Precision lock and magnitude guard.}, label={lst:sanitizer}]
   def sanitize(text, canonical):
@@ -914,7 +915,7 @@ The magnitude guard acts on formal modes: it is what refuses a sign inversion (F
 
   The sanitizer is a corrector rather than a preventer. 
   It acts like a smoke detector that will probably stay off, as demonstrated in Chapter~\ref{chap:results}, because tile-as-source has already frozen every number upstream.
-  It is needed anyway: it is what confirms the hard bound on the numerical side of grounding.
+  It is needed anyway: it is what enforces the numeric bound on every figure it can trace back to a tile.
   This last contract is not free of risks.
   Label disambiguation can collide if two drivers share the same number: in that case the value could end up matched with the wrong label; or the cleanup of orphaned formatting around rate values can, if written too broadly, strip a figure that should have stayed.
   The risk is real but small. It is the price of having a downstream check that runs without judgment.
