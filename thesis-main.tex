@@ -811,7 +811,7 @@ For the last one, instead, we cannot talk about hard guarantees because the tree
 
 The first contract is founded on the idea that the safest number is the number that the model never computes.
 It is one single rule that might seem boring and almost too plain to matter: every number that might appear in the narrative is only computed once; the \ac{LLM} is never asked to calculate a percentage, a difference or anything that has not been deterministically precalculated.
-In contract terms: the \emph{precondition} is that every number needed by the model exists as a frozen tile in the prompt; the \emph{postcondition} is that every number in the narrative is a verbatim copy of a tile; the two boundaries at the enf of this section state where this promise stops.
+In contract terms: the \emph{precondition} is that every number needed by the model exists as a frozen tile in the prompt; the \emph{postcondition} is that every number in the narrative is a verbatim copy of a tile; the two boundaries at the end of this section state where this promise stops.
 
 The idea is consistent with the one introduced in Chapter~\ref{chap:state_of_the_art} for what regards semantic layers: a metric is defined in one and only one governed place, so two reports cannot disagree by building their own version of the figure \cite{dbt2024semantic}.
 What is specific here is the target. 
