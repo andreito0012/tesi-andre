@@ -924,9 +924,34 @@ The magnitude guard acts on formal modes: it is what refuses a sign inversion (F
   \section{Prompt engineering}
   \label{promptengineering}
 
-  The three contract above are not isolated concepts with respect to the prompt, but they are wired to it.
+The contracts in the previous sections are not abstract ideas: the first two reach the model directly trought the prompt while the last one stands after it on the finished text.
+The system prompt that drives the model is not designed to ask "in general term" to be accurate.
+Chapter~\ref{chap:state_of_the_art} already explained that a prompt is a request not a command, and better instructions raise the odds of a correct answer without making any errors impossible \cite{wei2022cot}.
+So this design is never asked to be a guarantee to overturn that verdict, it builds with it.
+The prompt is scoped to what a request can actually do: deliver the two upstream contracts (tile-as-source and curated knowledge tree) and cut the avoidable failures at the source.
+Specifically there is a directive for each failure mode observed during the development, nothing vaguer so the \ac{LLM} efforts can be directed where needed.
 
-  
+
+The prompt has a weel-defined structure composed by the directive block that sits on top, then the tiles block with the frozen values, the scoped tree block, and the scheleton of the narrative that must be followed.
+The scheleton also copies, from every action, the owner and the horizon the tree assigns it, so feasability rides alog with the action istead of being asked for.
+Listing~\ref{lst:directives} shows an excerpt of the directive book, with each directive tagged with the mode it answers.
+To be precise, in the production prompt, these base rules grow into more specific versions based on the specific domain they are referring to, but every variant traces back to the one of the eight modes.
+
+
+
+\begin{lstlisting}[caption={Excerpt of the directive block: one rule per observed failure mode.}, label={lst:directives}]
+  RULES (one per failure mode):
+  - Copy every value from the TILES block verbatim; never
+    compute, round, or derive a number yourself.       # F1, F3
+  - Never state a rate or a share that is not given in
+    the TILES block.                                   # F6, F7
+  - Name causes and actions ONLY from the KNOWLEDGE
+    TREE block.                                        # F2, F5
+  - When comparing two values, state the direction
+    explicitly and check it against the signs given.   # F4
+  - Use every metric label exactly as written; never
+    merge two labels into one name.                    # F8
+\end{lstlisting}
 \section{Application}
 \label{sec:application}
 How the framework was derived from the iterative development of the case study, showing the concrete implementation of each contract.
