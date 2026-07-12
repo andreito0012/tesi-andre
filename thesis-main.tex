@@ -850,7 +850,7 @@ There is no check about the intrinsic correctness of the value itself: this is f
 The tree used in the framework is a compact map, compiled from existing operational documentation, containing the causes each single driver admits together with feasible actions to improve the situation.
 Given that the aim of the tree is producing a single specific narrative, and not open question answering, the tree is small enough to maintain and be read in full.
 It is injected into the prompt as a list the model has to stay inside, and it is paired with the numeric rule so the narrative is held both on the numerical and causal side.
-In contract terms: the \emph{precondition} is having a tree that carries the admitted causes and actions for the drivers; the \emph{postcondition} is that every cause and action named in the narrative belongs to that set but, unlike the sanitizer, this cannot be deterministically guaranteed: a cause has no tile to be cecked against.
+In contract terms: the \emph{precondition} is having a tree that carries the admitted causes and actions for the drivers; the \emph{postcondition} is that every cause and action named in the narrative belongs to that set but, unlike the sanitizer, this cannot be deterministically guaranteed: a cause has no tile to be checked against.
 
 During the generation time the pipeline does not hand the whole tree to the model. 
 Based on the drivers that caused the gap on the day, only a subset of the full causes together with the paired actions is selected and passed to the prompt.
