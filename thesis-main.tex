@@ -935,7 +935,7 @@ Specifically there is a directive for each failure mode observed during the deve
 The prompt has a well-defined structure composed by the directive block that sits on top, then the tiles block with the frozen values, the scoped tree block, and the skeleton of the narrative that must be followed.
 The skeleton also copies, for every action, the owner and the horizon the tree assigns it, so feasibility rides along with the action instead of being asked for.
 Listing~\ref{lst:directives} shows an excerpt of the directive block, with each directive tagged with the mode it answers.
-To be precise, in the production prompt, these base rules grow into more specific versions based on the specific domain they are referring to, but every variant traces back to the one of eight modes.
+To be precise, in the production prompt, these base rules grow into more specific versions based on the specific domain they are referring to, but every variant traces back to the one of the eight modes.
 
 
 
@@ -952,11 +952,19 @@ To be precise, in the production prompt, these base rules grow into more specifi
   - Use every metric label exactly as written; never
     merge two labels into one name.                    # F8
 \end{lstlisting}
+Given a competent but generic prompt to a capable model it recomputes numbers, invents the meaning of unfamiliar acronym, and computes shares of the ap that nobody gave it.
+That is the naive baseline, failures at close to their full rate.
+The same model under the directive-per-falure prompt, with the tiles and three block in place, stops doing all of it, down to the residue the tile contract already declared: a handful of totals the model sums on its own.
+The prompt is the connective tissue between contracts and the model.
+
+
+
+
+
 \section{Application}
 \label{sec:application}
 How the framework was derived from the iterative development of the case study, showing the concrete implementation of each contract.
 
-The approach that has been developed does not ask the model symply to be accurate; Chapter~\ref{chap:state_of_the_art} already explained that being the prompt a request and not a command it simply raise the odds of a correct answer, without making any specific error impossible
 
 %----------------------------------------------------------------------------------------
 \chapter{Results and Evaluation}
