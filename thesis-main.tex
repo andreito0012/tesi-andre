@@ -1046,34 +1046,38 @@ Chapter~\ref{chap:proposed_solution} presented the three-contracts framework and
 This chapter will measure how that claim holds against thirty station-weeks of real data, each below target, each paired with the bridge a human manager wrote by hand for the same period.
 It starts with the failure catalog, collected over three months of observations, then shows what ablation does to those faliures, the report how close the final output sits to the expert's bridge, and close on the limits of all of it.
 
-\section{Failure Analysis}
+\section{Failure Catalog}
 A catalog of the main grounding failure modes observed and an explanation of how the proposed framework mitigates them.
 
 
 \begin{table}[ht]
   \centering
   \small
-  \begin{tabular}{p{1.8cm} p{3.8cm} l l l}
+  \begin{tabular}{@{}l l p{7.6cm}@{}}
   \toprule
-  \textbf{Mode} & \textbf{Description} & \textbf{Class} & \textbf{Contract} & \textbf{Severity} \\
+  \textbf{Mode} & \textbf{Name} & \textbf{What happens} \\
   \midrule
-  F1 & Recalculation: model computes a value instead of copying the tile & Numeric & Tile-as-source & High \\
-  F6 & Rate-value hallucination: a rate that was never given is invented & Numeric & Tile-as-source & High \\
-  F7 & Value-as-gap: a contribution stated as if it were the gap itself & Numeric & Tile-as-source & High \\
-  \midrule
-  F2 & Metric conflation: a domain term given a wrong or invented meaning & Causal & Knowledge tree & High \\
-  F5 & Non-actionable recommendation: actions outside the feasible set & Causal & Knowledge tree & Medium \\
-  \midrule
-  F3 & Precision drift: canonical form altered (e.g.\ 49.0 shown as 49) & Formal & Sanitizer & Medium \\
-  F4 & Sign inversion: a comparative asserts the wrong direction & Formal & Sanitizer & Very high \\
-  F8 & Token concatenation: two metric labels fused into a non-existent one & Formal & Sanitizer & Low \\
+  \multicolumn{3}{@{}l}{\emph{Numeric class, closed upstream by tile-as-source}} \\
+  F1 & Recalculation & The model computes a value instead of copying the tile. \\
+  F6 & Rate-value hallucination & A rate that was never given is invented. \\
+  F7 & Value-as-gap & A contribution is stated as if it were the gap itself. \\
+  \addlinespace
+  \multicolumn{3}{@{}l}{\emph{Causal class, bounded mid-pipeline by the knowledge tree}} \\
+  F2 & Metric conflation & A domain term is given a wrong or invented meaning. \\
+  F5 & Non-actionable recommendation & A proposed action falls outside the feasible set of the site. \\
+  \addlinespace
+  \multicolumn{3}{@{}l}{\emph{Formal class, checked downstream by the sanitizer}} \\
+  F3 & Precision drift & The canonical form is altered (49.0 shown as 49). \\
+  F4 & Sign inversion & A comparative asserts the wrong direction. \\
+  F8 & Token concatenation & Two metric labels are fused into a non-existent one. \\
   \bottomrule
   \end{tabular}
-  \caption{The eight grounding failure modes observed during development, grouped by class. Each class maps to the contract designed to close it: numeric modes to tile-as-source (upstream), causal modes to the knowledge tree (mid), formal modes to the sanitizer (downstream). Severity reflects how much a single undetected instance would mislead an operational reader acting on the narrative the next morning.}
+  \caption{The eight grounding failure modes observed during development, grouped by class. Each group header names the class and the contract designed to close it, in pipeline order: numeric upstream, causal mid, formal downstream.}
   \label{tab:catalogue}
   \end{table}
-
   
+
+
 \section{Quantitative Assessment}
 A controlled evaluation using mock data to compare different system configurations.
 
