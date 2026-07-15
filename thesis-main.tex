@@ -1097,14 +1097,27 @@ The tool that caught them, day after day, was a rudimentary deterministic check 
 Then upstream contracts changed the picture: freezing every number before generation removed the opportunity for drifts or inversions, so the formal modes stopped showing up on their own.
 The measurement therefore splits in two sections. 
 The first covers numeric and causal modes (F1, F2, F5, F6, F7) that are visible on the natural output, and the ablation ladder reveals how much each contract reduces them.
-The second section involves the formal modes that corrupt the value (F3, F4) reading as a false zero on the natural output, so I measure them the way one tests a smoke detector, by controlled injection, in Section X.
+The second section involves the formal modes that corrupt the value (F3, F4) reading as a false zero on the natural output, so I measure them by controlled injection, in Section X.
 Token concatenation (F8) corrupts the label rather than a value, so it offers no injection site: canonical resolution rejects the fused label before it reaches the reader, handled by construction rather than measured.
 
 
 
 
 \section{Design of the evaluation}
-A controlled evaluation using data to compare different system configurations.
+
+The test implemented uses real data from thirty different delivery stations, each of those was undertarget during a precise week and therefore a bridge was produced by each manager and i have included it.
+All the stations belongs to the same country network, span two building types, and cover gap magnitude from small to large.
+The production model is a frontier language model, the same the apps runs, and the prompt is the full app prompt, not a reduced version.
+
+
+The ablation ladder has four runs, each adding a contract:
+\begin{itemize}
+  \item \textbf{L0} (naive): a competent but generic prompt plus the raw decomposition. No contract active.
+  \item \textbf{L1} (+tile-as-source): the frozen tiles block, with an instruction to copy and never compute.
+  \item \textbf{L2} (+knowledge tree): L1 plus the scoped tree of admitted causes and actions. This is the full app prompt.
+  \item \textbf{L3} (+sanitizer): the deterministic post-generation check on L2 output. This is the configuration the app ships, the one a manager reads.
+  \end{itemize}
+
 
 \section{Qualitative Assessment}
 Two to three real-world qualitative episodes drawn from the case study to provide practical, operational evidence of success.
