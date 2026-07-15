@@ -1105,8 +1105,8 @@ Token concatenation (F8) corrupts the label rather than a value, so it offers no
 
 \section{Design of the evaluation}
 
-The test implemented uses real data from thirty different delivery stations, all of them were undertarget during a precise week. 
-For each of these periods I collected the human bridge produced, and used them as reference for the generated bridge that is measure against.
+The test implemented uses real data from thirty different delivery stations, all of them were undertarget during a specific week. 
+For each of these periods I collected the human bridge that was produced, and used it as the reference the generated bridge is measure against.
 All the stations belong to the same country network, span two building types, and cover gap magnitudes from small to large.
 The production model is a frontier language model, the same one the app runs, and the prompt is the full app prompt, not a reduced version.
 
@@ -1118,6 +1118,15 @@ The ablation ladder has four rungs, each adding one contract:
   \item \textbf{L2} (+knowledge tree): L1 plus the scoped tree of admitted causes and actions. This is the full app prompt.
   \item \textbf{L3} (+sanitizer): the deterministic post-generation check on L2 output. This is the configuration the app ships, the one a manager reads.
   \end{itemize}
+
+The naive level is not a swarm.
+It hands the model the full decomposition with the correct values, plan, actual, and variance included.
+L0 explicitly asks the model to deliver the name of the drivers, quantify the contribution, give root causes, and recommend concrete actions.
+What lacsk are the contracts, nothing else.
+
+Each generation is isolated and stateless: one conversation per station per level, three concurrent workers, and no contamination across stations.
+Considering the thirty stations and four different levels the number of output produced is pretty big: exactly onehundred and twenty different narratives generated.
+Then a separate smarter model receivs
 
 
 \section{Qualitative Assessment}
