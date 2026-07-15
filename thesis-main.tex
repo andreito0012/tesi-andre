@@ -1047,39 +1047,61 @@ This chapter will measure how that claim holds against thirty station-weeks of r
 It starts with the failure catalog, collected over three months of observations, then shows what ablation does to those faliures, the report how close the final output sits to the expert's bridge, and close on the limits of all of it.
 
 \section{Failure Catalog}
-A catalog of the main grounding failure modes observed and an explanation of how the proposed framework mitigates them.
+
+Over the three months I spent building and watching the system, eight failures piled up into a small set of recurring families.
+They accounted for every grounding falire observed, and they are sort into three classes based on what they break and wheere in the chain they can be caught.
+This distinction can be observed in Table~\ref{tab:catalogue}, where the modes are listed with a short description of what happens when they occur.
+Those failures are the main reason behind the framework implemented because it is born to solve as best as possbile those problems.
 
 
 \begin{table}[ht]
   \centering
   \small
-  \begin{tabular}{@{}l l p{7.6cm}@{}}
+  \begin{tabular}{@{}l c p{8.5cm}@{}}
   \toprule
-  \textbf{Mode} & \textbf{Name} & \textbf{What happens} \\
+  \textbf{Class} & \textbf{Mode} & \textbf{What happens} \\
   \midrule
-  \multicolumn{3}{@{}l}{\emph{Numeric class, closed upstream by tile-as-source}} \\
-  F1 & Recalculation & The model computes a value instead of copying the tile. \\
-  F6 & Rate-value hallucination & A rate that was never given is invented. \\
-  F7 & Value-as-gap & A contribution is stated as if it were the gap itself. \\
-  \addlinespace
-  \multicolumn{3}{@{}l}{\emph{Causal class, bounded mid-pipeline by the knowledge tree}} \\
-  F2 & Metric conflation & A domain term is given a wrong or invented meaning. \\
-  F5 & Non-actionable recommendation & A proposed action falls outside the feasible set of the site. \\
-  \addlinespace
-  \multicolumn{3}{@{}l}{\emph{Formal class, checked downstream by the sanitizer}} \\
-  F3 & Precision drift & The canonical form is altered (49.0 shown as 49). \\
-  F4 & Sign inversion & A comparative asserts the wrong direction. \\
-  F8 & Token concatenation & Two metric labels are fused into a non-existent one. \\
+  \multirow{3}{*}{\textbf{Numeric}} & F1 & The model computes a value instead of copying the tile. \\
+   & F6 & A rate that was never given is invented. \\
+   & F7 & A contribution is stated as if it were the gap itself. \\
+  \midrule
+  \multirow{2}{*}{\textbf{Causal}} & F2 &  A domain term is given a wrong or invented meaning. \\
+   & F5 & An action outside the feasible set of the site. \\
+  \midrule
+  \multirow{3}{*}{\textbf{Formal}} & F3 & The canonical form is altered (49.0 shown as 49). \\
+   & F4 & A comparative asserts the wrong direction. \\
+   & F8 & Two metric labels fused into a non-existent one. \\
   \bottomrule
   \end{tabular}
-  \caption{The eight grounding failure modes observed during development, grouped by class. Each group header names the class and the contract designed to close it, in pipeline order: numeric upstream, causal mid, formal downstream.}
+
+  \vspace{0.3cm}
+
+  \caption{The eight grounding failure modes observed during development, grouped by class.}
   \label{tab:catalogue}
-  \end{table}
+\end{table}
   
+
+The three classes of faliures are not interchangeable, and no contract covers more than one.
+Tile-as-source focus on the numerical class to define what the model may report, but it cannot prevent the model from framing the correct value under a wrong cause.
+The three works on the causal side by bounding the admissable causes ad actions, and it does not check if the model uses the right numbers.
+Finally, The sanitizer cover the formal failures by working on the form of the values, but don't know if a cause belongs to the domain or .....
+This is the composition argument: each contract plugs a class, and all threee together are what it takes.
+
+
+One practical consequence follows for measurement, and it comes straight from the hystory of the project.
+The formal modes are the ones this work met first: early builds of the pipeline carried no upstream contract, so numbers drifted, precision slipped, and the occasional comparative came out with the wrong sign, on real narratives.
+The tool that caught them, day after day, was a rudimentally deterministic check on the finished tect, the seed of what Chapter~\ref{chap:proposed_solution} formalized as the sanitizer.
+Then upstream contracts changed the picture by freezing every number before the generation, and therefore the opportunity of causal drift or inversion was reduced naturally.
+The measurment therefore splits in two. 
+For what regards numeric and causal (F1, F2, F5, F6, F7) are visible on the natural output , and the ladders reaveals how much each contract reduces them.
+The second part, the two formal modes that corrupt the value (F3, F4) would read as a false zero on the natural poutput, so I measure them the way one tests a smoke detector, by controlled injection, in Section X.
+Token concatenation (F8) has no value of its own output to corrupt, so it offers no injection site: a fused label fails canonical resolution and stays visibly broken, handled by construction rather than measured
+
+
 
 
 \section{Quantitative Assessment}
-A controlled evaluation using mock data to compare different system configurations.
+A controlled evaluation using data to compare different system configurations.
 
 \section{Qualitative Assessment}
 Two to three real-world qualitative episodes drawn from the case study to provide practical, operational evidence of success.
