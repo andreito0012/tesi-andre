@@ -1050,6 +1050,7 @@ It starts with the failure catalog, collected over three months of observations,
 
 Over the three months I spent building and watching the system, failures piled up into a small set of recurring modes.
 They account for every grounding failure observed, and they sort into three classes based on what they break and where in the chain they can be caught.
+The classes refine the two requirments of Chapter~\ref{chap:introduction}: numeric and formal are the two halves of the numerical side, one about which value is reported and one about the form it arrives in, while the causal class matches the causal side.
 This distinction can be observed in Table~\ref{tab:catalogue}, where the modes are listed with a short description of what happens when they occur.
 Those failures are the main reason behind the framework itself: it was born to solve exactly these problems.
 
@@ -1061,16 +1062,16 @@ Those failures are the main reason behind the framework itself: it was born to s
   \toprule
   \textbf{Class} & \textbf{Mode} & \textbf{What happens} \\
   \midrule
-  \multirow{3}{*}{\textbf{Numeric}} & F1 & The model computes a value instead of copying the tile. \\
-   & F6 & A rate that was never given is invented. \\
-   & F7 & A contribution is stated as if it were the gap itself. \\
+  \multirow{3}{*}{\textbf{Numeric}} & F1 & \emph{Recalculation}: the model computes a value instead of copying the tile. \\
+   & F6 & \emph{Rate-value hallucination} A rate that was never given is invented. \\
+   & F7 & \emph{Value-as-gap}: a contribution is stated as if it were the gap itself. \\
   \midrule
-  \multirow{2}{*}{\textbf{Causal}} & F2 &  A domain term is given a wrong or invented meaning. \\
-   & F5 & An action outside the feasible set of the site is proposed. \\
+  \multirow{2}{*}{\textbf{Causal}} & F2 &  \emph{Metric conflation}: a domain term is given a wrong or invented meaning. \\
+   & F5 & \emph{Non-actionable recommendation}: an action outside the feasible set of the site is proposed. \\
   \midrule
-  \multirow{3}{*}{\textbf{Formal}} & F3 & The canonical form is altered (49.0 shown as 49). \\
-   & F4 & A comparative asserts the wrong direction. \\
-   & F8 & Two metric labels fused into a non-existent one. \\
+  \multirow{3}{*}{\textbf{Formal}} & F3 & \emph{Precision drift}: the canonical form is altered (49.0 shown as 49). \\
+   & F4 & \emph{Sign inversion}: a value flips its sign, or a comparative asserts the wrong direction. \\
+   & F8 & \emph{Token concatenation}: two metric labels fused into a non-existent one. \\
   \bottomrule
   \end{tabular}
 
@@ -1081,10 +1082,10 @@ Those failures are the main reason behind the framework itself: it was born to s
 \end{table}
   
 
-Chapter~\ref{chap:proposed_solution} states that none of the contracts alone does the full job; the catalog now underlines this: the three classes of failures are not interchangeable.
+It confirms what Chapter~\ref{chap:proposed_solution} states: none of the three contracts alone does the full job.
 Tile-as-source focuses on the numerical class to define what the model may report, but it cannot prevent the model from framing the correct value under a wrong cause.
 The tree works on the causal side by bounding the admissible causes and actions, and it does not check if the model uses the right numbers.
-Finally, the sanitizer covers the formal failures by working on the form of values, but it cannot tell whether a cause belongs to the domain or whether an action is feasible.
+The formal failures are covered by the sanitizer that works on the form of values, but it cannot tell whether a cause belongs to the domain or whether an action is feasible.
 This is the composition argument: each contract plugs a class, and all three together are what it takes.
 
 
