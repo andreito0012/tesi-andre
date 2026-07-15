@@ -1081,7 +1081,7 @@ Those failures are the main reason behind the framework itself: it was born to s
 \end{table}
   
 
-Chapter~\ref{chap:proposed_solution} states that none of the contract alone does the full job; the catalog now confirms this: the three classes of failures are not interchangeable.
+Chapter~\ref{chap:proposed_solution} states that none of the contracts alone does the full job; the catalog now underline this: the three classes of failures are not interchangeable.
 Tile-as-source focuses on the numerical class to define what the model may report, but it cannot prevent the model from framing the correct value under a wrong cause.
 The tree works on the causal side by bounding the admissible causes and actions, and it does not check if the model uses the right numbers.
 Finally, the sanitizer covers the formal failures by working on the form of values, but it cannot tell whether a cause belongs to the domain or whether an action is feasible.
@@ -1091,11 +1091,11 @@ This is the composition argument: each contract plugs a class, and all three tog
 One practical consequence follows for measurement, and it comes straight from the history of the project.
 The formal modes are the ones this work met first: early builds of the pipeline carried no upstream contract, so numbers drifted, precision slipped, and the occasional comparative came out with the wrong sign, on real narratives.
 The tool that caught them, day after day, was a rudimentary deterministic check on the finished text, the seed of what Chapter~\ref{chap:proposed_solution} formalizes as the sanitizer.
-Then upstream contracts changed the picture: freezing every number before generation removed the opportunity of drifts or inversions, so the formal modes stopped showing up on their own.
+Then upstream contracts changed the picture: freezing every number before generation removed the opportunity for drifts or inversions, so the formal modes stopped showing up on their own.
 The measurement therefore splits in two. 
 For what regards the numeric and causal modes (F1, F2, F5, F6, F7), they are visible on the natural output, and the ablation ladder reveals how much each contract reduces them.
 The second part, the two formal modes that corrupt the value (F3, F4), would read as a false zero on the natural output, so I measure them the way one tests a smoke detector, by controlled injection, in Section X.
-Token concatenation (F8) corrupts the label rather than a value, so it offers no injection site: canonical resolution rejects the fused label before it reaches the reader, so it is handled by construction rather than measured.
+Token concatenation (F8) corrupts the label rather than a value, so it offers no injection site: canonical resolution rejects the fused label before it reaches the reader, it is handled by construction rather than measured.
 
 
 
