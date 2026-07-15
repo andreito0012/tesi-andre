@@ -1042,16 +1042,16 @@ What Chapter~\ref{chap:results} measures, therefore, is not its adoption rate bu
 \label{chap:results}
 %----------------------------------------------------------------------------------------
 
-Chapter~\ref{chap:proposed_solution} presented the three-contracts framework and how it acts to ground the narrative.
-This chapter will measure how that claim holds against thirty station-weeks of real data, each below target, each paired with the bridge a human manager wrote by hand for the same period.
-It starts with the failure catalog, collected over three months of observations, then shows what ablation does to those faliures, the report how close the final output sits to the expert's bridge, and close on the limits of all of it.
+Chapter~\ref{chap:proposed_solution} presented the three-contract framework and how it acts to ground the narrative.
+This chapter measures how that claim holds against thirty station-weeks of real data, each below target, each paired with the bridge a human manager wrote by hand for the same period.
+It starts with the failure catalog, collected over three months of observations, then shows what ablation does to those failures, reports how close the final output sits to the expert's bridge, and closes on the limits of all of it.
 
 \section{Failure Catalog}
 
-Over the three months I spent building and watching the system, eight failures piled up into a small set of recurring families.
-They accounted for every grounding falire observed, and they are sort into three classes based on what they break and wheere in the chain they can be caught.
+Over the three months I spent building and watching the system, failures piled up into a small set of recurring families.
+They account for every grounding falire observed, and they sort into three classes based on what they break and where in the chain they can be caught.
 This distinction can be observed in Table~\ref{tab:catalogue}, where the modes are listed with a short description of what happens when they occur.
-Those failures are the main reason behind the framework implemented because it is born to solve as best as possbile those problems.
+Those failures are the main reason behind the framework itself: it was born to solve exactly these problems.
 
 
 \begin{table}[ht]
@@ -1066,7 +1066,7 @@ Those failures are the main reason behind the framework implemented because it i
    & F7 & A contribution is stated as if it were the gap itself. \\
   \midrule
   \multirow{2}{*}{\textbf{Causal}} & F2 &  A domain term is given a wrong or invented meaning. \\
-   & F5 & An action outside the feasible set of the site. \\
+   & F5 & An action outside the feasible set of the site is proposed. \\
   \midrule
   \multirow{3}{*}{\textbf{Formal}} & F3 & The canonical form is altered (49.0 shown as 49). \\
    & F4 & A comparative asserts the wrong direction. \\
@@ -1081,21 +1081,21 @@ Those failures are the main reason behind the framework implemented because it i
 \end{table}
   
 
-The three classes of faliures are not interchangeable, and no contract covers more than one.
-Tile-as-source focus on the numerical class to define what the model may report, but it cannot prevent the model from framing the correct value under a wrong cause.
-The three works on the causal side by bounding the admissable causes ad actions, and it does not check if the model uses the right numbers.
-Finally, The sanitizer cover the formal failures by working on the form of the values, but don't know if a cause belongs to the domain or .....
-This is the composition argument: each contract plugs a class, and all threee together are what it takes.
+The three classes of faliures are not interchangeable, and no contract fully covers more than one.
+Tile-as-source focuses on the numerical class to define what the model may report, but it cannot prevent the model from framing the correct value under a wrong cause.
+The tree works on the causal side by bounding the admissable causes and actions, and it does not check if the model uses the right numbers.
+Finally, the sanitizer covers the formal failures by working on the form of values, but it cannot tell whether a cause belongs to the domain or the feasibility of an action.
+This is the composition argument: each contract plugs a class, and all three together are what it takes.
 
 
-One practical consequence follows for measurement, and it comes straight from the hystory of the project.
+One practical consequence follows for measurement, and it comes straight from the history of the project.
 The formal modes are the ones this work met first: early builds of the pipeline carried no upstream contract, so numbers drifted, precision slipped, and the occasional comparative came out with the wrong sign, on real narratives.
-The tool that caught them, day after day, was a rudimentally deterministic check on the finished tect, the seed of what Chapter~\ref{chap:proposed_solution} formalized as the sanitizer.
-Then upstream contracts changed the picture by freezing every number before the generation, and therefore the opportunity of causal drift or inversion was reduced naturally.
-The measurment therefore splits in two. 
-For what regards numeric and causal (F1, F2, F5, F6, F7) are visible on the natural output , and the ladders reaveals how much each contract reduces them.
-The second part, the two formal modes that corrupt the value (F3, F4) would read as a false zero on the natural poutput, so I measure them the way one tests a smoke detector, by controlled injection, in Section X.
-Token concatenation (F8) has no value of its own output to corrupt, so it offers no injection site: a fused label fails canonical resolution and stays visibly broken, handled by construction rather than measured
+The tool that caught them, day after day, was a rudimentary deterministic check on the finished tect, the seed of what Chapter~\ref{chap:proposed_solution} formalizes as the sanitizer.
+Then upstream contracts changed the picture by freezing every number before generation removed the opportunity of drifts or inversions, so the formal modes stopped showing up on their own.
+The measurement therefore splits in two. 
+For what regards the numeric and causal modes (F1, F2, F5, F6, F7), they are visible on the natural output, and the ablation ladders reveals how much each contract reduces them.
+The second part, the two formal modes that corrupt the value (F3, F4), would read as a false zero on the natural output, so I measure them the way one tests a smoke detector, by controlled injection, in Section X.
+Token concatenation (F8) corrupts the label rather than a value, so it offers no injection site: a fused label fails canonical resolution and stays visibly broken, handled by construction rather than measured
 
 
 
