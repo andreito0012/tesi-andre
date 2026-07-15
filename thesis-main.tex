@@ -1105,10 +1105,16 @@ Token concatenation (F8) corrupts the label rather than a value, so it offers no
 
 \section{Design of the evaluation}
 
-The test implemented uses real data from thirty different delivery stations, all of them were undertarget during a specific week. 
-For each of these periods I collected the human bridge that was produced, and used it as the reference the generated bridge is measure against.
+The evaluation answers two separate questions: whether the framework avoids the failure modes, and how close the generated narrative lands to the bridge a manager wrote.
+Each front is measured in its own way, and a language model takes part in only one of them.
+
+The test implemented uses real data from thirty different delivery stations, all of them under target during a specific week. 
+For each of these periods I collected the human bridge that was produced, and used it as the reference the generated bridge is measured against.
 All the stations belong to the same country network, span two building types, and cover gap magnitudes from small to large.
 The production model is a frontier language model, the same one the app runs, and the prompt is the full app prompt, not a reduced version.
+Each generation is isolated and stateless: one conversation per station per level, three concurrent workers, and no contamination across stations.
+Considering the thirty stations and four different levels the number of output produced is big: exactly one hundred and twenty narratives generated.
+
 
 
 The ablation ladder has four rungs, each adding one contract:
@@ -1119,14 +1125,15 @@ The ablation ladder has four rungs, each adding one contract:
   \item \textbf{L3} (+sanitizer): the deterministic post-generation check on L2 output. This is the configuration the app ships, the one a manager reads.
   \end{itemize}
 
-The naive level is not a swarm.
+To be precize, the naive level is not a strawman.
 It hands the model the full decomposition with the correct values, plan, actual, and variance included.
-L0 explicitly asks the model to deliver the name of the drivers, quantify the contribution, give root causes, and recommend concrete actions.
-What lacsk are the contracts, nothing else.
+L0 explicitly asks the model to name the drivers, quantify the contribution, give root causes, and recommend concrete actions.
+What it lacsk is the contracts, nothing else.
 
-Each generation is isolated and stateless: one conversation per station per level, three concurrent workers, and no contamination across stations.
-Considering the thirty stations and four different levels the number of output produced is pretty big: exactly onehundred and twenty different narratives generated.
-Then a separate smarter model receivs
+The rest of the chapter takes the two fronts one at a time.
+The first one follows the failure modes class by class along the ladder: the deterministic modes are accounted by a deterministic traciablity check, every figure in the narrative must trace back to the value the model was given.
+The causal modes are judged against declared rules: does the named cause eist in the domain, and is the nominated action fesiable.
+The formal modes are 
 
 
 \section{Qualitative Assessment}
