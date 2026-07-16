@@ -214,7 +214,7 @@ The remainder of this document is organized as follows:
     
     \item \textbf{Chapter 4} presents the proposed solution, opening with the catalog of grounding failures observed in the field and detailing the conceptual innovation of the three-contract framework (tile-as-source, curated knowledge tree, and sanitizer) and the system architecture.
     
-    \item \textbf{Chapter 5} focuses on the results and evaluation, meaduring the framework against failure modes and comparing the generated narratives with the bridges managers wrote by hand.
+    \item \textbf{Chapter 5} focuses on the results and evaluation, measuring the framework against failure modes and comparing the generated narratives with the bridges managers wrote by hand.
     
     \item \textbf{Chapter 6} discusses the findings, highlighting the thesis contributions and generalizability, acknowledging limitations, and outlining future research directions.
 \end{itemize}
@@ -1104,7 +1104,7 @@ For each of these periods I collected the human bridge that was produced, and us
 All the stations belong to the same country network, span two building types, and cover gap magnitudes from small to large.
 The production model is a frontier language model, the same one the app runs, and the prompt is the full app prompt, not a reduced version.
 Each generation is isolated and stateless: one conversation per station per level, three concurrent workers, and no contamination across stations.
-Considering the thirty stations and four different levels the number of output produced is big: exactly one hundred and twenty narratives generated.
+Considering the thirty stations and four different levels the number of output produced is large: exactly one hundred and twenty narratives generated.
 
 
 
@@ -1119,12 +1119,13 @@ The ablation ladder has four rungs, each adding one contract:
 To be precize, the naive level is not a strawman.
 It hands the model the full decomposition with the correct values, plan, actual, and variance included.
 L0 explicitly asks the model to name the drivers, quantify the contribution, give root causes, and recommend concrete actions.
-What it lacsk is the contracts, nothing else.
+What it lacks is the contracts, nothing else.
 
 The rest of the chapter takes the two fronts one at a time.
-The first one follows the failure modes class by class along the ladder: the deterministic modes are accounted by a deterministic traciablity check, every figure in the narrative must trace back to the value the model was given.
+The first one follows the failure modes class by class along the ladder: the numeric modes are counted by a deterministic traciablity check, every figure in the narrative must trace back to the value the model was given.
 The causal modes are judged against declared rules: does the named cause eist in the domain, and is the nominated action fesiable.
-The formal modes are 
+ formal modes that corrupt the value would read as zero  on natural output
+
 
 
 \section{Qualitative Assessment}
