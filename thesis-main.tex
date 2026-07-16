@@ -1106,11 +1106,6 @@ The production model is a frontier language model, the same one the app runs, an
 Each generation is isolated and stateless: one conversation per station per level, three concurrent workers, and no contamination across stations.
 Considering the thirty stations and four different levels the number of output produced is large: exactly one hundred and twenty narratives generated.
 
-
-andrea <andregiova01@gmail.com>
-18:53 (0 minuti fa)
-a me
-
 \begin{figure}[htbp]
 \centering
 \begin{tikzpicture}[font=\small,
@@ -1126,9 +1121,9 @@ a me
 \node[tag, below=2pt of l2] {full app prompt};
 \node[tag, below=2pt of l3] {what the app ships};
 
-\draw[step] (l0.east) -- (l1.west);
-\draw[step] (l1.east) -- (l2.west);
-\draw[step] (l2.east) -- (l3.west);
+\draw[-{Stealth[length=2.5mm]}, semithick] (l0.east) -- (l1.west);
+\draw[-{Stealth[length=2.5mm]}, semithick] (l1.east) -- (l2.west);
+\draw[-{Stealth[length=2.5mm]}, semithick] (l2.east) -- (l3.west);
 
 \node[draw, dashed, align=flush left, text width=6.4cm, font=\footnotesize, inner sep=6pt, below=0.8cm of l0.south east] (base)
   {\textbf{Already at L0:} the full decomposition with correct values (plan, actual, variance); the brief asks for drivers, quantified contributions, root causes, concrete actions.\\[2pt]
