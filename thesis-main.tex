@@ -212,7 +212,7 @@ The remainder of this document is organized as follows:
     
     \item \textbf{Chapter 3} introduces the case study, detailing the operational setting, the core metric, the pre-AI baseline, and the single-case methodology adopted during the internship.
     
-    \item \textbf{Chapter 4} presents the proposed solution, detailing the conceptual innovation of the three-contract framework (tile-as-source, curated knowledge tree, and sanitizer) and the system architecture.
+    \item \textbf{Chapter 4} presents the proposed solution, opening with the catalog of grounding faliures observed in the field and detailing the conceptual innovation of the three-contract framework (tile-as-source, curated knowledge tree, and sanitizer) and the system architecture.
     
     \item \textbf{Chapter 5} focuses on the results and evaluation, analyzing the catalog of grounding failures and providing both a quantitative evaluation on real operational data and real-world qualitative evidence.
     
@@ -655,7 +655,7 @@ How each of these is addressed is discussed in Chapter~\ref{chap:proposed_soluti
 \section{Methodology}
 The study is organized around a single operation, developed following a longitudinal design: I worked on the system observing day after day the working routine.
 The system presented in Chapter~\ref{chap:proposed_solution} was developed through an iterative loop: code, observe what the output is, isolate one issue at a time, fix it, validate the solution, and repeat; this loop ran roughly several dozen times, and each pass left a record of what had gone wrong and why.
-Those traces are the base material of the analysis: I organized them into families by the kind of error they represent, and labeled them as grounding failures in Chapter~\ref{chap:results}. 
+Those traces are the base material of the analysis: I organized them into families by the kind of error they represent, and labeled them as grounding failures in Chapter~\ref{chap:proposed_solution}. 
 The data behind the test sits on two layers.
 The development layer is the pilot site itself: three months of daily observation at DFV2, which is where failures came from.
 The evaluation layer is much wider, being a corpus of thirty under-target stations, each for a specific week; they were retrieved from the internal network, and paired with the explanations managers wrote for those same weeks.
@@ -684,8 +684,51 @@ Grounding has two dimensions, as introduced in Chapter~\ref{chap:introduction}: 
 The narrative produced on this basis must hold on both sides.
 Literature on hallucinations verifies the claim against the source \cite{min2023factscore}; it does not enforce both simultaneously.
 The framework, instead, holds both at the three points of the pipeline where a guarantee can attach.
-Throughout the chapter I refer to individual failure modes by the codes F1 to F8; the catalog behind those codes is defined in Chapter~\ref{chap:results}, and here the codes serve only to locate each contract against the problem.
+
 %----------------------------------------------------------------------------------------
+\section{The failure catalog}
+\label{sec:catalogue}
+
+Over the three months I spent building and watching the system, failures piled up into a small set of recurring modes.
+They account for every grounding failure observed, and they sort into three classes based on what they break and where in the chain they can be caught.
+The classes refine the two requirements of Chapter~\ref{chap:introduction}: numeric and formal are the two halves of the numerical side, one about which value is reported and one about the form it arrives in, while the causal class matches the causal side.
+This distinction can be observed in Table~\ref{tab:catalogue}, where the modes are listed with a short description of what happens when they occur.
+Those failures are the main reason behind the framework itself: it was born to solve exactly these problems.
+
+\begin{table}[ht]
+  \centering
+  \small
+  \begin{tabular}{@{}l c p{8.5cm}@{}}
+  \toprule
+  \textbf{Class} & \textbf{Mode} & \textbf{What happens} \\
+  \midrule
+  \multirow{3}{*}{\textbf{Numeric}} & F1 & \emph{Recalculation}: the model computes a value instead of copying the tile. \\
+   & F6 & \emph{Rate-value hallucination}: a rate that was never given is invented. \\
+   & F7 & \emph{Value-as-gap}: a contribution is stated as if it were the gap itself. \\
+  \midrule
+  \multirow{2}{*}{\textbf{Causal}} & F2 &  \emph{Metric conflation}: a domain term is given a wrong or invented meaning. \\
+   & F5 & \emph{Non-actionable recommendation}: an action outside the feasible set of the site is proposed. \\
+  \midrule
+  \multirow{3}{*}{\textbf{Formal}} & F3 & \emph{Precision drift}: the canonical form is altered (49.0 shown as 49). \\
+   & F4 & \emph{Sign inversion}: a value flips its sign, or a comparative asserts the wrong direction. \\
+   & F8 & \emph{Token concatenation}: two metric labels fused into a non-existent one. \\
+  \bottomrule
+  \end{tabular}
+
+  \vspace{0.3cm}
+
+  \caption{The eight grounding failure modes observed during development, grouped by class.}
+  \label{tab:catalogue}
+\end{table}
+
+Each class points at one of the three contracts this chapter presents.
+Tile-as-source (Section~\ref{sec:tileasource}) defines what the model may report, and targets the numeric class; the knowledge tree (Section~\ref{sec:knowledgetree}) bounds the admissible causes and actions, working on the causal side; the sanitizer (Section~\ref{sec:sanitizer}) checks the form of every value on the finished text, covering the formal class.
+Why one contract per class is a necessity and not a redundancy is the argument of Section~\ref{sec:coreconcept}, while how often each mode occurs, and how far the contracts push those counts down, is measured in Chapter~\ref{chap:results}.
+
+The formal modes came first.
+Early builds of the pipeline carried no upstream contract, so numbers drifted, precision slipped, and the occasional comparative came out with the wrong sign, on real narratives.
+The tool that caught them, day after day, was a rudimentary deterministic check on the finished text, the seed of what Section~\ref{sec:sanitizer} formalizes as the sanitizer.
+Then upstream contracts changed the picture: freezing every number before generation removed the opportunity for drifts or inversions, so the formal modes stopped showing up on their own.
 
 \section{Core Concept}
 \label{sec:coreconcept}
@@ -1046,59 +1089,7 @@ What Chapter~\ref{chap:results} measures, therefore, is not its adoption rate bu
 
 Chapter~\ref{chap:proposed_solution} presented the three-contract framework and how it acts to ground the narrative.
 This chapter measures how that claim holds against thirty station-weeks of real data, each below target, each paired with the bridge a human manager wrote by hand for the same period.
-It starts with the failure catalog, collected over three months of observations, then shows what ablation does to those failures, reports how close the final output sits to the expert's bridge, and closes on the limits of all of it.
-
-\section{Failure catalog}
-
-Over the three months I spent building and watching the system, failures piled up into a small set of recurring modes.
-They account for every grounding failure observed, and they sort into three classes based on what they break and where in the chain they can be caught.
-The classes refine the two requirements of Chapter~\ref{chap:introduction}: numeric and formal are the two halves of the numerical side, one about which value is reported and one about the form it arrives in, while the causal class matches the causal side.
-This distinction can be observed in Table~\ref{tab:catalogue}, where the modes are listed with a short description of what happens when they occur.
-Those failures are the main reason behind the framework itself: it was born to solve exactly these problems.
-
-
-\begin{table}[ht]
-  \centering
-  \small
-  \begin{tabular}{@{}l c p{8.5cm}@{}}
-  \toprule
-  \textbf{Class} & \textbf{Mode} & \textbf{What happens} \\
-  \midrule
-  \multirow{3}{*}{\textbf{Numeric}} & F1 & \emph{Recalculation}: the model computes a value instead of copying the tile. \\
-   & F6 & \emph{Rate-value hallucination}: a rate that was never given is invented. \\
-   & F7 & \emph{Value-as-gap}: a contribution is stated as if it were the gap itself. \\
-  \midrule
-  \multirow{2}{*}{\textbf{Causal}} & F2 &  \emph{Metric conflation}: a domain term is given a wrong or invented meaning. \\
-   & F5 & \emph{Non-actionable recommendation}: an action outside the feasible set of the site is proposed. \\
-  \midrule
-  \multirow{3}{*}{\textbf{Formal}} & F3 & \emph{Precision drift}: the canonical form is altered (49.0 shown as 49). \\
-   & F4 & \emph{Sign inversion}: a value flips its sign, or a comparative asserts the wrong direction. \\
-   & F8 & \emph{Token concatenation}: two metric labels fused into a non-existent one. \\
-  \bottomrule
-  \end{tabular}
-
-  \vspace{0.3cm}
-
-  \caption{The eight grounding failure modes observed during development, grouped by class.}
-  \label{tab:catalogue}
-\end{table}
-  
-
-The catalog supports what Chapter~\ref{chap:proposed_solution} states: none of the three contracts alone does the full job.
-Tile-as-source focuses on the numerical class to define what the model may report, but it cannot prevent the model from framing the correct value under a wrong cause.
-The tree works on the causal side by bounding the admissible causes and actions, and it does not check if the model uses the right numbers.
-The formal failures are covered by the sanitizer that works on the form of values, but it cannot tell whether a cause belongs to the domain or whether an action is feasible.
-This is the composition argument: each contract plugs a class, and all three together are what it takes.
-
-
-One practical consequence follows for measurement, and it comes straight from the history of the project.
-The formal modes are the ones this work met first: early builds of the pipeline carried no upstream contract, so numbers drifted, precision slipped, and the occasional comparative came out with the wrong sign, on real narratives.
-The tool that caught them, day after day, was a rudimentary deterministic check on the finished text, the seed of what Chapter~\ref{chap:proposed_solution} formalizes as the sanitizer.
-Then upstream contracts changed the picture: freezing every number before generation removed the opportunity for drifts or inversions, so the formal modes stopped showing up on their own.
-The measurement therefore splits in two sections. 
-The first covers numeric and causal modes (F1, F2, F5, F6, F7) that are visible on the natural output, and the ablation ladder reveals how much each contract reduces them.
-The second section involves the formal modes that corrupt the value (F3, F4), which would read as a false zero on the natural output, so I measure them by controlled injection, in Section X.
-Token concatenation (F8) corrupts the label rather than a value, so it offers no injection site: canonical resolution rejects the fused label before it reaches the reader, handled by construction rather than measured.
+It takes the catalog of Section~\ref{sec:catalogue}, collected over three months of observations, shows what ablation does to those failures, reports how close the final output sits to the expert's bridge, and closes on the limits of all of it.
 
 
 
