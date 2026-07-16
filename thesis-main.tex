@@ -1107,24 +1107,39 @@ Each generation is isolated and stateless: one conversation per station per leve
 Considering the thirty stations and four different levels the number of output produced is large: exactly one hundred and twenty narratives generated.
 
 
+andrea <andregiova01@gmail.com>
+18:53 (0 minuti fa)
+a me
 
-The ablation ladder has four rungs, each adding one contract:
-\begin{itemize}
-  \item \textbf{L0} (naive): a competent but generic prompt plus the raw decomposition. No contract active.
-  \item \textbf{L1} (+tile-as-source): the frozen tiles block, with an instruction to copy and never compute.
-  \item \textbf{L2} (+knowledge tree): L1 plus the scoped tree of admitted causes and actions. This is the full app prompt.
-  \item \textbf{L3} (+sanitizer): the deterministic post-generation check on L2 output. This is the configuration the app ships, the one a manager reads.
-  \end{itemize}
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[font=\small,
+  rung/.style={draw, fill=black!6, text width=2.9cm, align=center, minimum height=1.2cm, inner sep=4pt},
+  tag/.style={font=\footnotesize\itshape},
+  step/.style={-{Stealth[length=2.5mm]}, semithick}]
 
-To be precize, the naive level is not a strawman.
-It hands the model the full decomposition with the correct values, plan, actual, and variance included.
-L0 explicitly asks the model to name the drivers, quantify the contribution, give root causes, and recommend concrete actions.
-What it lacks is the contracts, nothing else.
+\node[rung] (l0) at (0,0)     {\textbf{L0} (naive)\\ \footnotesize generic prompt, raw decomposition};
+\node[rung] (l1) at (3.6,1.2) {\textbf{L1} +tile-as-source\\ \footnotesize frozen tiles: copy, never compute};
+\node[rung] (l2) at (7.2,2.4) {\textbf{L2} +knowledge tree\\ \footnotesize admitted causes and actions};
+\node[rung] (l3) at (10.8,3.6){\textbf{L3} +sanitizer\\ \footnotesize deterministic check on the output};
 
-The rest of the chapter takes the two fronts one at a time.
-The first one follows the failure modes class by class along the ladder: the numeric modes are counted by a deterministic traciablity check, every figure in the narrative must trace back to the value the model was given.
-The causal modes are judged against declared rules: does the named cause eist in the domain, and is the nominated action fesiable.
- formal modes that corrupt the value would read as zero  on natural output
+\node[tag, below=2pt of l2] {full app prompt};
+\node[tag, below=2pt of l3] {what the app ships};
+
+\draw[step] (l0.east) -- (l1.west);
+\draw[step] (l1.east) -- (l2.west);
+\draw[step] (l2.east) -- (l3.west);
+
+\node[draw, dashed, align=flush left, text width=6.4cm, font=\footnotesize, inner sep=6pt, below=0.8cm of l0.south east] (base)
+  {\textbf{Already at L0:} the full decomposition with correct values (plan, actual, variance); the brief asks for drivers, quantified contributions, root causes, concrete actions.\\[2pt]
+   \textbf{Missing:} the contracts, nothing else.};
+\draw[dashed] (base.north -| l0.south) -- (l0.south);
+\end{tikzpicture}
+\caption{The ablation ladder used in the evaluation. Each rung adds one contract on top of the previous level: L2 is the full app prompt, L3 the configuration the app ships. The dashed box lists what the naive baseline already receives; the contracts are the only difference along the ladder.}
+\label{fig:ladder}
+\end{figure} 
+
+The rest of the chapter takes the two fronts one at a time, and each class of the catalog is measured by the instrument that fits it. For the numeric modes (F1, F6, F7) I use a deterministic traceability check: every figure in the narrative has to trace back to a value the model was given. The causal modes (F2, F5) are judged against rules I declare before counting, whether the named cause exists in the admitted domain and whether the proposed action stays within the site's mandate. The formal modes (F3, F4, F8) cannot be counted this way. The final pipeline no longer produces them, and a zero on natural output would prove nothing, so Section~\ref{sec:formal_injection} tests them by controlled fault injection instead. No language model grades any of this. The second front is where the language model takes part, and Section~\ref{sec:front_expert} opens by declaring exactly what it does and does not do.
 
 
 
