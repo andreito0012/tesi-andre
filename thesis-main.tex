@@ -249,7 +249,7 @@ Controlled table-to-text work, the ToTTo dataset for instance \cite{parikh2020to
 
 The causal half has no real equivalent in the standard taxonomy. 
 A phrase can have all the right numbers, but still name a cause that does not exist or propose an impossible solution.
-The standard question when talking about hallucinations is the following: is the claim supported?, and not: does this cause belong to the domain-defined set?
+The standard question when talking about hallucinations is the following: \enquote{is the claim supported?}, and not: \enquote{does this cause belong to the domain-defined set?}
 The second question is the dividing line between \ac{BI} and open-domain generation, and in fact it is the reason why a single definition of grounding is not enough.
 
 \section{Retrieval-Augmented Generation (RAG)}
@@ -318,7 +318,7 @@ However, that approach is limited because the semantic layer stops before the na
 
 The second idea regards the causal side. Grounding an \ac{LLM} in a knowledge graph is one of the most effective ways to keep what the model says inside a fixed domain.
 How the two can be joined is, by now, well mapped \cite{pan2024llmkg}: a graph defines what the domain treats as true and guides the model's reasoning, preventing it from relying on whatever has been absorbed during training.
-What matters most for my case is the \ac{RoG}. It is an approach that \enquote{bounds} every step in the generation process to a specific path in the graph, such that a response can be traced back to a chain of specific relations rather than to a plausible-sounding guess \cite{luo2024rog}.
+What matters most for my case is the \ac{RoG}. It \enquote{bounds} every step in the generation process to a specific path in the graph, such that a response can be traced back to a chain of specific relations rather than to a plausible-sounding guess \cite{luo2024rog}.
 Other strategies directly feed a smaller portion of the graph into the prompt itself \cite{baek2023knowledgeaugmented}, but independently of the methodology that is chosen, the key idea is to give the model a structure and let that structure decide what counts as admissible to say.
 
 Neither family does the whole job alone.
@@ -334,20 +334,20 @@ Two different outputs originate from the same idea: a table or a picture, nothin
 
 It has been shown that letting a model handle the numbers is risky \cite{wu2024statisticians}.
 \acp{LLM} are unreliable even on simple quantitative reasoning, because of their nature, as stated in Section~\ref{sec:prompt_engineering}.
-A study about text-to-\ac{SQL} reveals that, in a production environment, the \ac{BI} reports present semantic hallucinations with no domain-specific way to track them down \cite{choi2025factconsistency}.
+A study about text-to-\ac{SQL} on real enterprise data shows semantic hallucinations with no domain-specific way to track them down \cite{choi2025factconsistency}.
 This is the empirical reason behind the strict rule implemented in Chapter~\ref{chap:proposed_solution}: the safest number is the one the model never computes.
 
 Over time, commercial tools have moved closer to the narrative side.
-Tableau Pulse \cite{tableau2024pulse} and Copilot in Power BI \cite{microsoft2024copilot} are capable of writing short insights over tiles, and they are the industry baseline for this work.
+Tableau Pulse \cite{tableau2024pulse} and Copilot in Power BI \cite{microsoft2024copilot} write short insights over tiles, and they are the industry baseline for this work.
 The most advanced of them documents an approach close to the one that I adopt: Tableau Pulse computes its metric findings with a statistical engine and uses the \ac{LLM} only to phrase them \cite{tableau2024insights,salesforce2024pulsesummary}.
 Templates and in-context examples reduce the risk, but there is no deterministic check on the printed value, and none of those tools publishes a reproducible measurement of how that grounding holds up practically.
 
 The academic field has grown fast on this topic during the last year.
-Some systems are capable of detecting the domain on their own without any human direction and elaborating multi-perspective narratives without any predefined schema or concepts \cite{zhang2025datadash}.
+Some systems detect the domain on their own without any human direction and elaborating multi-perspective narratives without any predefined schema or concepts \cite{zhang2025datadash}.
 Others, especially in finance, join causal-discovery statistical algorithms with budgetary variance to automate root cause diagnosis \cite{chen2026causalvariance}. This is the case closest to mine in terms of goal, since it also tries to explain a gap.
 
 Another approach works on the same structure of data as I do. 
-Paradigms like Conversational and \ac{LLM}-assisted \ac{OLAP} are capable of bringing natural language to the multidimensional cube.
+Paradigms like Conversational and \ac{LLM}-assisted \ac{OLAP} bring natural language to the multidimensional cube.
 Normally a query is used to retrieve the information. Now the system is not limited to the conversion of text to a query, but also describes what comes back.
 One such system is \ac{VOOL}: a modular insight-based framework that extracts selected quantitative insights and turns them into a description \cite{francia2025vool}. 
 It does not use every insight: VOOL picks only the relevant ones and only those become part of the narrative.
@@ -365,7 +365,7 @@ they implement numerical fidelity by keeping the numbers away from the model, no
 The way faithfulness is measured decides what is counted as solved. A critical part, in fact, is choosing the right approach to the scoring, one that avoids marking something as \enquote{addressed} that is not.
 FActScore is the most fine-grained approach: it works by breaking a long text into smaller fragments called \enquote{atomic facts} which are single elementary claims, and by calculating the percentage of those that are supported by the source \cite{min2023factscore}.
 HaluEval \cite{li2023halueval} and TruthfulQA \cite{lin2022truthfulqa}, instead, build benchmarks of hallucinated or misleading content. A benchmark is a fixed and shared dataset of test cases that lets different systems be compared on the same ground.
-SelfCheckGPT goes for a different approach:  with no need for any external source, it exploits the model itself by running the same request several times. 
+SelfCheckGPT goes for a different approach: with no need for any external source, it exploits the model itself by running the same request several times. 
 The fundamental idea behind this sampling-based check is: the model is asked for the same thing repeatedly, if the answer is fabricated, it drifts since the \ac{LLM} will invent slightly different versions each time; if the multiple answers agree with each other it is considered a real fact  \cite{manakul2023selfcheckgpt}.
 
 
