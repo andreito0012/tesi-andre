@@ -1097,14 +1097,17 @@ It takes the catalog of Section~\ref{sec:catalogue}, collected over three months
 \section{Design of the evaluation}
 
 The evaluation answers two separate questions: whether the framework avoids the failure modes, and how close the generated narrative lands to the bridge a manager wrote.
-Each front is measured in its own way, and a language model takes part in only one of them.
+Each front is measured in its own way, but both utilize the same structure represented in Figure~\ref{fig:ladder}.
 
-The test implemented uses real data from thirty different delivery stations, all of them under target during a specific week. 
+The first test to determine if the framework effectively reduces the failure modes does not use any \ac{LLM} judgement, but intead realies on deterministic code for both numeric modes (F1, F6, F7) and causal modes (F2, F5), and on injection for formal modes (F3, F4, F8), since the final pipeline no longer produces them.
+
+The second one, for the narratives produced, uses real data from thirty different delivery stations, all of them under target during a specific week producing one hundred and twenty narratives. 
 For each of these periods I collected the human bridge that was produced, and used it as the reference the generated bridge is measured against.
 All the stations belong to the same country network, span two building types, and cover gap magnitudes from small to large.
 The production model is a frontier language model, the same one the app runs, and the prompt is the full app prompt, not a reduced version.
 Each generation is isolated and stateless: one conversation per station per level, three concurrent workers, and no contamination across stations.
-Considering the thirty stations and four different levels the number of output produced is large: exactly one hundred and twenty narratives generated.
+
+
 
 \begin{figure}[htbp]
   \centering
@@ -1116,7 +1119,7 @@ Considering the thirty stations and four different levels the number of output p
     flow/.style={-{Stealth[length=2.5mm]}, semithick}]
   
   % shared input, identical for all four levels
-  \node[draw, fill=black!8, text width=12.6cm, align=center, inner sep=6pt, font=\footnotesize] (base) at (5.55,0)
+  \node[draw, fill=black!8, text width=12.6cm, align=center, inner sep=6pt, font=\footnotesize] (base) at (5.55,-0.5)
     {\textbf{Shared input at every level:} the full decomposition with correct values (plan, actual, variance); the brief asks for drivers, quantified contributions, root causes, concrete actions.};
   
   % L0: nothing on top of the shared input
@@ -1151,7 +1154,6 @@ Considering the thirty stations and four different levels the number of output p
   \label{fig:ladder}
   \end{figure}
 
-The rest of the chapter takes the two fronts one at a time, and each class of the catalog is measured by the instrument that fits it. For the numeric modes (F1, F6, F7) I use a deterministic traceability check: every figure in the narrative has to trace back to a value the model was given. The causal modes (F2, F5) are judged against rules I declare before counting, whether the named cause exists in the admitted domain and whether the proposed action stays within the site's mandate. The formal modes (F3, F4, F8) cannot be counted this way. The final pipeline no longer produces them, and a zero on natural output would prove nothing, so Section~\ref{sec:formal_injection} tests them by controlled fault injection instead. No language model grades any of this. The second front is where the language model takes part, and Section~\ref{sec:front_expert} opens by declaring exactly what it does and does not do.
 
 
 
