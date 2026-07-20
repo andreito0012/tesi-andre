@@ -1105,7 +1105,7 @@ For the numeric modes (F1, F6, F7) it relies on a deterministic check: every fig
 The causal modes (F2, F5) are counted by hand against precise rules: the named causes and actions have to exist in the admitted domain.
 Finally, the formal modes (F3, F4, F8) are tested by injection, since the final pipeline no longer produces them.
 
-The second one compares each generated narrative with the corrisponding human bridge. 
+The second one compares each generated narrative with the corresponding human bridge. 
 It uses real data from thirty different delivery stations, all of them under target during a specific week producing one hundred and twenty narratives. 
 All the stations belong to the same country network, span two building types, and cover gap magnitudes from small to large.
 The production model is a frontier language model, the same one the app runs, and the prompt is the full app prompt, not a reduced version.
@@ -1158,7 +1158,9 @@ Each generation is isolated and stateless: one conversation per station per leve
   \label{fig:ladder}
   \end{figure}
 
-
+Figure~\ref{fig:ladder} shows that the ladder itsel has four rungs, each adding a contract.
+The bottom bar is the reason why the naive level is not a strawman: L0 already hand the model the full decomposition with the correct values, plan, actual, and variance included, and already asks the model to name drivers, quantify the contibution, and give causes and actions.
+This fist level shows what a capable model does when nothing contrains it.
 
 
 \section{Qualitative Assessment}
