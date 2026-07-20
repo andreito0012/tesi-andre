@@ -1161,6 +1161,8 @@ Each generation is isolated and stateless: one conversation per station per leve
 Figure~\ref{fig:ladder} shows that the ladder itsel has four rungs, each adding a contract.
 The bottom bar is the reason why the naive level is not a strawman: L0 already hand the model the full decomposition with the correct values, plan, actual, and variance included, and already asks the model to name drivers, quantify the contibution, and give causes and actions.
 This fist level shows what a capable model does when nothing contrains it.
+A contract is then added by each of the rungs above: L1 frozen the tiles, L2 (the full app prompt) bound causes and actions, and L3 (the configuration the app ships) places the deterministic check downstream of the generation.
+
 
 
 \section{Qualitative Assessment}
