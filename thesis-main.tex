@@ -1167,9 +1167,104 @@ This first level shows what a capable model does when nothing constrains it.
 A contract is then added by each of the rungs above: L1 freezes the values into tiles, L2 (the full app prompt) bounds causes and actions, and L3 (the configuration the app ships) places the sanitizer downstream of the generation.
 
 
+\section{First front: the failure modes}
+\label{sec:front_modes}
 
-\section{The first front: the failure modes}
-Two to three real-world qualitative episodes drawn from the case study to provide practical, operational evidence of success.
+This section organises the faliure modes in the order the contracts enter the pipeline: first the numeric ones, then the causal modes, and formal last.
+The first two are counted on the natural output of the runs, the last fromal class with the injection test as anticipated in Section~\ref{sec:eval_design}.
+
+\begin{lstlisting}[language=Python, caption={The traceability check used for the numeric counts, as in the evaluation code. The truth set is the canonical tile values plus every figure already present in the prompt; a cited token is traceable when it matches one of them exactly or within rounding.}, label={lst:truthset}]
+  def truth_set(case):
+      S = {round(abs(v), 3) for v in canonical_values(case)}  # verified tiles
+      S |= {round(abs(float(m)), 3)                           # figures the prompt
+            for m in NUMBER_RE.findall(prompt_text(case))}    # already contains
+      return S
+  
+  def traceable(v, S):
+      a = abs(v)
+      return any(abs(a - x) < 0.011 or
+                 any(round(a, k) == round(x, k) for k in (1, 2, 3))
+                 for x in S)
+  \end{lstlisting}
+
+
+
+  \begin{figure}[ht]
+    \centering
+    % F1 44/1/5/5 | F5 31/na/0/na | F7 22/0/0/0 | F6 21/0/0/0 | F2 11/0/0/0. Needs tikz + positioning.
+    \begin{tikzpicture}[
+      cell/.style={draw=black!20, minimum width=1.55cm, minimum height=0.82cm, font=\small, anchor=center},
+      rowlab/.style={anchor=east, font=\footnotesize, inner sep=3pt},
+      colhead/.style={anchor=south, font=\footnotesize\bfseries},
+      colsub/.style={anchor=north, font=\scriptsize\itshape, text=black!55},
+    ]
+    \def\cA{0}\def\cB{1.6}\def\cC{3.2}\def\cD{4.8}
+    \def\rF{0}\def\rE{-0.86}\def\rD{-1.72}\def\rC{-2.58}\def\rB{-3.44}
+    \node[colhead] at (\cA,1.02) {L0};   \node[colsub] at (\cA,0.97) {baseline};
+    \node[colhead] at (\cB,1.02) {L1};   \node[colsub] at (\cB,0.97) {tile-as-source};
+    \node[colhead] at (\cC,1.02) {L2};   \node[colsub] at (\cC,0.97) {tree};
+    \node[colhead] at (\cD,1.02) {L3};   \node[colsub] at (\cD,0.97) {sanitizer};
+    \node[rowlab] at (-0.95,\rF) {F1 numeric fabrication};
+    \node[rowlab] at (-0.95,\rE) {F5 out-of-mandate action};
+    \node[rowlab] at (-0.95,\rD) {F7 value-as-gap};
+    \node[rowlab] at (-0.95,\rC) {F6 invented rate};
+    \node[rowlab] at (-0.95,\rB) {F2 invented definition};
+    \node[cell, fill=black!65, text=white] at (\cA,\rF) {44};
+    \node[cell, fill=black!2]              at (\cB,\rF) {1};
+    \node[cell, fill=black!7]              at (\cC,\rF) {5};
+    \node[cell, fill=black!7]              at (\cD,\rF) {5};
+    \node[cell, fill=black!46, text=white] at (\cA,\rE) {31};
+    \node[cell, fill=black!2]              at (\cB,\rE) {26};
+    \node[cell, fill=black!0]              at (\cC,\rE) {0};
+    \node[cell, fill=black!2]              at (\cD,\rE) {0};
+    \node[cell, fill=black!33] at (\cA,\rD) {22};
+    \node[cell, fill=black!0]  at (\cB,\rD) {0};
+    \node[cell, fill=black!0]  at (\cC,\rD) {0};
+    \node[cell, fill=black!0]  at (\cD,\rD) {0};
+    \node[cell, fill=black!31] at (\cA,\rC) {21};
+    \node[cell, fill=black!0]  at (\cB,\rC) {0};
+    \node[cell, fill=black!0]  at (\cC,\rC) {0};
+    \node[cell, fill=black!0]  at (\cD,\rC) {0};
+    \node[cell, fill=black!16] at (\cA,\rB) {11};
+    \node[cell, fill=black!0]  at (\cB,\rB) {0};
+    \node[cell, fill=black!0]  at (\cC,\rB) {0};
+    \node[cell, fill=black!0]  at (\cD,\rB) {0};
+    \end{tikzpicture}
+    \caption{Failure-mode counts across the ablation ladder, as total instances over the 30 station-weeks. Each row is one generative mode; each column is one rung, with the contract that enters at that rung named beneath. Cell shading tracks the count, dark at the unconstrained baseline and white at zero. The L0 column carries every mode; from L1 on, when the tile contract enters, F1, F7, F6 and F2 fall, and F1 keeps a floor of five model-summed aggregates, the declared boundary of that contract. F5, the out-of-mandate action, is scored only at L0 and L2, where its 31 items reach zero once the tree enters; its unscored cells are marked n/a. From L2 to L3 nothing moves, since the sanitizer finds nothing to fix on natural output.}
+    \label{fig:descent}
+    \end{figure}
+
+    \begin{figure}[ht]
+      \centering
+      % Outcomes verified against the evaluation archive: 264 injections + 66 fused-label sweeps, zero false repairs.
+      \begin{tikzpicture}[font=\small,
+        lab/.style={anchor=east, font=\small},
+        grp/.style={anchor=west, font=\footnotesize\itshape, text=black!55},
+        res/.style={anchor=west, font=\footnotesize}]
+      \def\barw{6.6}
+      \node[grp] at (0.15,0.55) {inside the 0.5 guard band: must be repaired};
+      \node[lab] at (0,0)     {precision drop (F3)};
+      \draw[fill=black!55] (0.15,-0.19) rectangle (0.15+\barw,0.19);
+      \node[res] at (0.3+\barw,0)     {repaired, 66 of 66};
+      \node[lab] at (0,-0.65) {$+22\%$ drift};
+      \draw[fill=black!55] (0.15,-0.84) rectangle (0.15+\barw,-0.46);
+      \node[res] at (0.3+\barw,-0.65) {repaired, 66 of 66};
+      \node[grp] at (0.15,-1.35) {outside the band: must be refused};
+      \node[lab] at (0,-1.9)  {sign flip (F4)};
+      \draw[fill=black!10] (0.15,-2.09) rectangle (0.15+\barw,-1.71);
+      \node[res] at (0.3+\barw,-1.9)  {refused, 66 of 66};
+      \node[lab] at (0,-2.55) {gross corruption $\times 3$};
+      \draw[fill=black!10] (0.15,-2.74) rectangle (0.15+\barw,-2.36);
+      \node[res] at (0.3+\barw,-2.55) {refused, 66 of 66};
+      \node[grp] at (0.15,-3.25) {no canonical resolution: must stay broken};
+      \node[lab] at (0,-3.8)  {fused label (F8)};
+      \draw[fill=black!10] (0.15,-3.99) rectangle (0.15+\barw,-3.61);
+      \node[res] at (0.3+\barw,-3.8)  {left broken, 66 of 66};
+      \end{tikzpicture}
+      \caption{The sanitizer stress test: 264 numeric injections (four faults on each of the 66 candidate sites) plus the 66-site fused-label sweep. Dark bars are faults the guard band reads as plausible drifts, repaired to the canonical value; light bars are faults it reads as implausible or unresolvable, refused and left visibly broken. Every bar is full: the outcome is the same on every site, with zero false repairs. The fault types are the same classes the early builds produced naturally.}
+      \label{fig:injection}
+      \end{figure}
+      
 
 %----------------------------------------------------------------------------------------
 \chapter{Discussion and Future Directions}
