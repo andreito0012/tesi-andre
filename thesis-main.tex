@@ -1171,60 +1171,69 @@ A contract is then added by each of the rungs above: L1 freezes the values into 
 \label{sec:front_modes}
 
 This section organises the failure modes in the order the contracts enter the pipeline.
-Starting with L0 the model fabricates numbers freely: across the thirty station-weeks it produces 44 fabricated numbers (F1), twenty-two values-as-gap (F7), and twenty-one invented rates (F6).
+Figure \ref{fig:descent} collects the count.
+Each different mode is counted with the procedure that fits its nature, as set out in Section~\ref{sec:eval_design}, and the total is reported across the thirty station-weeks.
+
+
+
+\begin{figure}[ht]
+  \centering
+  \begin{tikzpicture}[
+    cell/.style={draw=black!20, minimum width=1.55cm, minimum height=0.82cm, font=\small, anchor=center},
+    rowlab/.style={anchor=east, font=\footnotesize, inner sep=3pt},
+    colhead/.style={anchor=south, font=\footnotesize\bfseries},
+    colsub/.style={anchor=north, font=\scriptsize\itshape, text=black!55},
+  ]
+  \def\cA{0}\def\cB{1.6}\def\cC{3.2}\def\cD{4.8}
+  \def\rF{0}\def\rE{-0.86}\def\rD{-1.72}\def\rC{-2.58}\def\rB{-3.44}
+  \node[colhead] at (\cA,1.02) {L0};   \node[colsub] at (\cA,0.97) {baseline};
+  \node[colhead] at (\cB,1.02) {L1};   \node[colsub] at (\cB,0.97) {tile-as-source};
+  \node[colhead] at (\cC,1.02) {L2};   \node[colsub] at (\cC,0.97) {tree};
+  \node[colhead] at (\cD,1.02) {L3};   \node[colsub] at (\cD,0.97) {sanitizer};
+  \node[rowlab] at (-0.95,\rF) {F1 recalculation};
+  \node[rowlab] at (-0.95,\rE) {F5 out-of-mandate action};
+  \node[rowlab] at (-0.95,\rD) {F7 value-as-gap};
+  \node[rowlab] at (-0.95,\rC) {F6 invented rate};
+  \node[rowlab] at (-0.95,\rB) {F2 invented definition};
+  \node[cell, fill=black!65, text=white] at (\cA,\rF) {44};
+  \node[cell, fill=black!2]              at (\cB,\rF) {1};
+  \node[cell, fill=black!7]              at (\cC,\rF) {5};
+  \node[cell, fill=black!7]              at (\cD,\rF) {5};
+  \node[cell, fill=black!46, text=white] at (\cA,\rE) {31};
+  \node[cell, fill=black!2]              at (\cB,\rE) {26};
+  \node[cell, fill=black!0]              at (\cC,\rE) {0};
+  \node[cell, fill=black!2]              at (\cD,\rE) {0};
+  \node[cell, fill=black!33] at (\cA,\rD) {22};
+  \node[cell, fill=black!0]  at (\cB,\rD) {0};
+  \node[cell, fill=black!0]  at (\cC,\rD) {0};
+  \node[cell, fill=black!0]  at (\cD,\rD) {0};
+  \node[cell, fill=black!31] at (\cA,\rC) {21};
+  \node[cell, fill=black!0]  at (\cB,\rC) {0};
+  \node[cell, fill=black!0]  at (\cC,\rC) {0};
+  \node[cell, fill=black!0]  at (\cD,\rC) {0};
+  \node[cell, fill=black!16] at (\cA,\rB) {11};
+  \node[cell, fill=black!0]  at (\cB,\rB) {6};
+  \node[cell, fill=black!0]  at (\cC,\rB) {0};
+  \node[cell, fill=black!0]  at (\cD,\rB) {0};
+  \end{tikzpicture}
+  \caption{Failure-mode counts across the ablation ladder, as total instances over the 30 station-weeks.}
+  \label{fig:descent}
+  \end{figure}
+
+Starting with the numeric modes (F1, F6, F7), at L0 the model fabricates numbers freely: it produces 44 fabricated numbers (F1), twenty-two values-as-gap (F7), and twenty-one invented rates (F6).
 One rung of the ladder is enough to remove nearly all of it.
 In particular an increase observed for F1 at levels L2 and L3 is not a regession of the tile contract: the tree makes the narrative richer, more buckets get discussed together, and the model finds more occasions to state their total.
 
+The causal modes (F2, F5) starts to disappear only when the tree enters at level L2.
+At the previous two levels the model invents definitions for the different buckets, reading operational meaning into labels it was never given, and giving out-of-mandate actions; something that disappears with this new level.
+
+
+For what regards the formal modes (F3, F4, F8), they cannot be read off the natural output: by the time the sanitizer runs, the upstream contracts have already removed almost everything it is build to catch, and counting occurrences would report a zero that says nothing about the guard itself.
+So the sanitizer is measured by injection: a set of twohundred-sixstyfour injections in totals, plus a separate sweep that fused the label of one metric with the value of another on the same sixstysix sites.
+Figure~\ref{fig:injection} shows the outcome of that stress test, which the sanitizer fully passed.
 
 
 
-
-
-
-
-  \begin{figure}[ht]
-    \centering
-    \begin{tikzpicture}[
-      cell/.style={draw=black!20, minimum width=1.55cm, minimum height=0.82cm, font=\small, anchor=center},
-      rowlab/.style={anchor=east, font=\footnotesize, inner sep=3pt},
-      colhead/.style={anchor=south, font=\footnotesize\bfseries},
-      colsub/.style={anchor=north, font=\scriptsize\itshape, text=black!55},
-    ]
-    \def\cA{0}\def\cB{1.6}\def\cC{3.2}\def\cD{4.8}
-    \def\rF{0}\def\rE{-0.86}\def\rD{-1.72}\def\rC{-2.58}\def\rB{-3.44}
-    \node[colhead] at (\cA,1.02) {L0};   \node[colsub] at (\cA,0.97) {baseline};
-    \node[colhead] at (\cB,1.02) {L1};   \node[colsub] at (\cB,0.97) {tile-as-source};
-    \node[colhead] at (\cC,1.02) {L2};   \node[colsub] at (\cC,0.97) {tree};
-    \node[colhead] at (\cD,1.02) {L3};   \node[colsub] at (\cD,0.97) {sanitizer};
-    \node[rowlab] at (-0.95,\rF) {F1 numeric fabrication};
-    \node[rowlab] at (-0.95,\rE) {F5 out-of-mandate action};
-    \node[rowlab] at (-0.95,\rD) {F7 value-as-gap};
-    \node[rowlab] at (-0.95,\rC) {F6 invented rate};
-    \node[rowlab] at (-0.95,\rB) {F2 invented definition};
-    \node[cell, fill=black!65, text=white] at (\cA,\rF) {44};
-    \node[cell, fill=black!2]              at (\cB,\rF) {1};
-    \node[cell, fill=black!7]              at (\cC,\rF) {5};
-    \node[cell, fill=black!7]              at (\cD,\rF) {5};
-    \node[cell, fill=black!46, text=white] at (\cA,\rE) {31};
-    \node[cell, fill=black!2]              at (\cB,\rE) {26};
-    \node[cell, fill=black!0]              at (\cC,\rE) {0};
-    \node[cell, fill=black!2]              at (\cD,\rE) {0};
-    \node[cell, fill=black!33] at (\cA,\rD) {22};
-    \node[cell, fill=black!0]  at (\cB,\rD) {0};
-    \node[cell, fill=black!0]  at (\cC,\rD) {0};
-    \node[cell, fill=black!0]  at (\cD,\rD) {0};
-    \node[cell, fill=black!31] at (\cA,\rC) {21};
-    \node[cell, fill=black!0]  at (\cB,\rC) {0};
-    \node[cell, fill=black!0]  at (\cC,\rC) {0};
-    \node[cell, fill=black!0]  at (\cD,\rC) {0};
-    \node[cell, fill=black!16] at (\cA,\rB) {11};
-    \node[cell, fill=black!0]  at (\cB,\rB) {6};
-    \node[cell, fill=black!0]  at (\cC,\rB) {0};
-    \node[cell, fill=black!0]  at (\cD,\rB) {0};
-    \end{tikzpicture}
-    \caption{Failure-mode counts across the ablation ladder, as total instances over the 30 station-weeks.}
-    \label{fig:descent}
-    \end{figure}
 
     \begin{figure}[ht]
       \centering
@@ -1253,7 +1262,7 @@ In particular an increase observed for F1 at levels L2 and L3 is not a regession
       \draw[fill=black!10] (0.15,-3.99) rectangle (0.15+\barw,-3.61);
       \node[res] at (0.3+\barw,-3.8)  {left broken, 66 of 66};
       \end{tikzpicture}
-      \caption{The sanitizer stress test: 264 numeric injections (four faults on each of the 66 candidate sites) plus the 66-site fused-label sweep. Dark bars are faults the guard band reads as plausible drifts, repaired to the canonical value; light bars are faults it reads as implausible or unresolvable, refused and left visibly broken. Every bar is full: the outcome is the same on every site, with zero false repairs. The fault types are the same classes the early builds produced naturally.}
+      \caption{The sanitizer stress test.}
       \label{fig:injection}
       \end{figure}
       
