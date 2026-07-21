@@ -212,7 +212,7 @@ The remainder of this document is organized as follows:
     
     \item \textbf{Chapter 3} introduces the case study, detailing the operational setting, the core metric, the pre-AI baseline, and the single-case methodology adopted during the internship.
     
-    \item \textbf{Chapter 4} presents the proposed solution, opening with the catalog of grounding failures observed in the field and detailing the conceptual innovation of the three-contract framework (tile-as-source, curated knowledge tree, and sanitizer) and the system architecture.
+    \item \textbf{Chapter 4} presents the proposed solution, opening with the conceptual innovation of the three-contract framework (tile-as-source, curated knowledge tree, and sanitizer), the system architecture, and the catalog of grounding faliures.
     
     \item \textbf{Chapter 5} focuses on the results and evaluation, measuring the framework against failure modes and comparing the generated narratives with the bridges managers wrote by hand.
     
@@ -686,50 +686,6 @@ Literature on hallucinations verifies the claim against the source \cite{min2023
 The framework, instead, holds both at the three points of the pipeline where a guarantee can attach.
 
 %----------------------------------------------------------------------------------------
-\section{The failure catalog}
-\label{sec:catalogue}
-
-Over the three months I spent building and watching the system, failures piled up into a small set of recurring modes.
-They account for every grounding failure observed, and they sort into three classes based on what they break and where in the chain they can be caught.
-The classes refine the two requirements of Chapter~\ref{chap:introduction}: numeric and formal are the two halves of the numerical side, one about which value is reported and one about the form it arrives in, while the causal class matches the causal side.
-This distinction can be observed in Table~\ref{tab:catalogue}, where the modes are listed with a short description of what happens when they occur.
-Those failures are the main reason behind the framework itself: it was born to solve exactly these problems.
-
-\begin{table}[ht]
-  \centering
-  \small
-  \begin{tabular}{@{}l c p{8.5cm}@{}}
-  \toprule
-  \textbf{Class} & \textbf{Mode} & \textbf{What happens} \\
-  \midrule
-  \multirow{3}{*}{\textbf{Numeric}} & F1 & \emph{Recalculation}: the model computes a value instead of copying the tile. \\
-   & F6 & \emph{Rate-value hallucination}: a rate that was never given is invented. \\
-   & F7 & \emph{Value-as-gap}: a contribution is stated as if it were the gap itself. \\
-  \midrule
-  \multirow{2}{*}{\textbf{Causal}} & F2 &  \emph{Metric conflation}: a domain term is given a wrong or invented meaning. \\
-   & F5 & \emph{Non-actionable recommendation}: an action outside the feasible set of the site is proposed. \\
-  \midrule
-  \multirow{3}{*}{\textbf{Formal}} & F3 & \emph{Precision drift}: the canonical form is altered (49.0 shown as 49). \\
-   & F4 & \emph{Sign inversion}: a value flips its sign, or a comparative asserts the wrong direction. \\
-   & F8 & \emph{Token concatenation}: two metric labels fused into a non-existent one. \\
-  \bottomrule
-  \end{tabular}
-
-  \vspace{0.3cm}
-
-  \caption{The eight grounding failure modes observed during development, grouped by class.}
-  \label{tab:catalogue}
-\end{table}
-
-Each class points at one of the three contracts this chapter presents.
-Tile-as-source (Section~\ref{sec:tileasource}) defines what the model may report, and targets the numeric class; the knowledge tree (Section~\ref{sec:knowledgetree}) bounds the admissible causes and actions, working on the causal side; the sanitizer (Section~\ref{sec:sanitizer}) checks the form of every value on the finished text, covering the formal class.
-Why one contract per class is a necessity and not a redundancy is the argument of Section~\ref{sec:coreconcept}, while how often each mode occurs, and how far the contracts push those counts down, is measured in Chapter~\ref{chap:results}.
-
-The formal modes came first.
-Early builds of the pipeline carried no upstream contract, so numbers drifted, precision slipped, and the occasional comparative came out with the wrong sign, on real narratives.
-The tool that caught them, day after day, was a rudimentary deterministic check on the finished text, the seed of what Section~\ref{sec:sanitizer} formalizes as the sanitizer.
-Then upstream contracts changed the picture: freezing every number before generation removed the opportunity for drifts or inversions, so the formal modes stopped showing up on their own.
-
 \section{Core Concept}
 \label{sec:coreconcept}
 
@@ -831,10 +787,56 @@ For the last one, instead, we cannot talk about hard guarantees because the tree
   
   \vspace{0.3cm} % Aggiunge uno spazio verticale tra la tabella e la didascalia
   
-  \caption{The three contracts: where each acts on the pipeline, the failure modes it targets, and the kind of guarantee it gives.}
+  \caption{The three contracts: where each acts on the pipeline, the failure modes it targets (detailed in Section~\ref{sec:catalogue}), and the kind of guarantee it gives.}
   \label{tab:contracts}
 \end{table}
     
+
+
+\section{The failure catalog}
+\label{sec:catalogue}
+
+Over the three months I spent building and watching the system, failures piled up into a small set of recurring modes.
+They account for every grounding failure observed, and they sort into three classes based on what they break and where in the chain they can be caught.
+The classes refine the two requirements of Chapter~\ref{chap:introduction}: numeric and formal are the two halves of the numerical side, one about which value is reported and one about the form it arrives in, while the causal class matches the causal side.
+This distinction can be observed in Table~\ref{tab:catalogue}, where the modes are listed with a short description of what happens when they occur.
+Those failures are the main reason behind the framework itself: it was born to solve exactly these problems.
+
+\begin{table}[ht]
+  \centering
+  \small
+  \begin{tabular}{@{}l c p{8.5cm}@{}}
+  \toprule
+  \textbf{Class} & \textbf{Mode} & \textbf{What happens} \\
+  \midrule
+  \multirow{3}{*}{\textbf{Numeric}} & F1 & \emph{Recalculation}: the model computes a value instead of copying the tile. \\
+   & F6 & \emph{Rate-value hallucination}: a rate that was never given is invented. \\
+   & F7 & \emph{Value-as-gap}: a contribution is stated as if it were the gap itself. \\
+  \midrule
+  \multirow{2}{*}{\textbf{Causal}} & F2 &  \emph{Metric conflation}: a domain term is given a wrong or invented meaning. \\
+   & F5 & \emph{Non-actionable recommendation}: an action outside the feasible set of the site is proposed. \\
+  \midrule
+  \multirow{3}{*}{\textbf{Formal}} & F3 & \emph{Precision drift}: the canonical form is altered (49.0 shown as 49). \\
+   & F4 & \emph{Sign inversion}: a value flips its sign, or a comparative asserts the wrong direction. \\
+   & F8 & \emph{Token concatenation}: two metric labels fused into a non-existent one. \\
+  \bottomrule
+  \end{tabular}
+
+  \vspace{0.3cm}
+
+  \caption{The eight grounding failure modes observed during development, grouped by class.}
+  \label{tab:catalogue}
+\end{table}
+
+Each class points at one of the three contracts this chapter presents.
+Tile-as-source (Section~\ref{sec:tileasource}) defines what the model may report, and targets the numeric class; the knowledge tree (Section~\ref{sec:knowledgetree}) bounds the admissible causes and actions, working on the causal side; the sanitizer (Section~\ref{sec:sanitizer}) checks the form of every value on the finished text, covering the formal class.
+Why one contract per class is a necessity and not a redundancy is the argument of Section~\ref{sec:coreconcept}, while how often each mode occurs, and how far the contracts push those counts down, is measured in Chapter~\ref{chap:results}.
+
+The formal modes came first.
+Early builds of the pipeline carried no upstream contract, so numbers drifted, precision slipped, and the occasional comparative came out with the wrong sign, on real narratives.
+The tool that caught them, day after day, was a rudimentary deterministic check on the finished text, the seed of what Section~\ref{sec:sanitizer} formalizes as the sanitizer.
+Then upstream contracts changed the picture: freezing every number before generation removed the opportunity for drifts or inversions, so the formal modes stopped showing up on their own.
+
 \section{Contract 1: tile-as-source}
 \label{sec:tileasource}
 
