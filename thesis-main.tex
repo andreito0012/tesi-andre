@@ -1013,77 +1013,137 @@ This tool is in the prototyping stage, so it is not used in daily production; in
 What Chapter~\ref{chap:results} measures, therefore, is not its adoption rate but the quality of what this application produces.
 
 
-\begin{figure}[ht]
+\begin{figure}[p]
   \centering
   \resizebox{0.95\textwidth}{!}{%
   \begin{tikzpicture}[
     font=\small,
     frame/.style={draw=black!70,thick,rounded corners=6pt},
     panel/.style={draw=black!35,rounded corners=4pt,fill=black!3},
+    kpi/.style={draw=black!35,rounded corners=4pt,fill=white},
     ptitle/.style={anchor=west,font=\footnotesize\bfseries,text=black!75},
+    psub/.style={anchor=east,font=\scriptsize,text=black!55},
     negbar/.style={fill=black!45,draw=black!60,line width=0.3pt},
     posbar/.style={fill=black!10,draw=black!60,line width=0.3pt},
+    subneg/.style={fill=black!30,draw=black!55,line width=0.3pt},
+    val/.style={font=\scriptsize,text=black!60},
     btn/.style={draw=black!70,thick,rounded corners=3pt,fill=black!12,align=center,inner sep=6pt},
     e/.style={-{Latex[length=2mm]},thick}
   ]
   % ---- drop shadow + app window ----
-  \fill[black!12,rounded corners=6pt] (0.10,-0.10) rectangle (12.50,8.30);
-  \fill[white,rounded corners=6pt] (0,0) rectangle (12.4,8.4);
-  \draw[frame] (0,0) rectangle (12.4,8.4);
-  \fill[black!8,rounded corners=6pt] (0,7.8) rectangle (12.4,8.4);
-  \draw[frame] (0,7.8) -- (0,8.4) -- (12.4,8.4) -- (12.4,7.8);
-  \draw[black!70,thick] (0,7.8) -- (12.4,7.8);
-  \foreach \i in {0,1,2} \fill[black!35] (0.38+\i*0.26,8.1) circle (0.055);
-  \node[anchor=west,font=\footnotesize\bfseries] at (1.25,8.1) {Station: DS\_x};
-  \node[anchor=west,font=\footnotesize,text=black!70] at (4.6,8.1) {Week: W\_n (running)};
-  \node[anchor=east,rounded corners=5pt,fill=black!70,text=white,font=\scriptsize\bfseries,inner sep=4pt] at (12.1,8.1) {below plan};
+  \fill[black!12,rounded corners=6pt] (0.10,-0.10) rectangle (12.50,11.30);
+  \fill[white,rounded corners=6pt] (0,0) rectangle (12.4,11.4);
+  \draw[frame] (0,0) rectangle (12.4,11.4);
+  % ---- title bar ----
+  \fill[black!8,rounded corners=6pt] (0,10.8) rectangle (12.4,11.4);
+  \draw[frame] (0,10.8) -- (0,11.4) -- (12.4,11.4) -- (12.4,10.8);
+  \draw[black!70,thick] (0,10.8) -- (12.4,10.8);
+  \foreach \i in {0,1,2} \fill[black!35] (0.38+\i*0.26,11.1) circle (0.055);
+  \node[anchor=west,font=\footnotesize\bfseries] at (1.25,11.1) {Station: DS\_x};
+  \node[anchor=west,font=\footnotesize,text=black!70] at (4.6,11.1) {Week: W\_n (running)};
+  \node[anchor=east,rounded corners=5pt,fill=black!70,text=white,font=\scriptsize\bfseries,inner sep=4pt] at (12.1,11.1) {below plan};
+  % ---- tab bar ----
+  \node[anchor=west,font=\footnotesize\bfseries,text=black!80] at (1.0,10.52) {Overview};
+  \draw[black!70,line width=1.2pt] (0.98,10.30) -- (2.42,10.30);
+  \node[anchor=west,font=\footnotesize,text=black!45] at (2.95,10.52) {Weekly bridge};
+  \node[anchor=west,font=\footnotesize,text=black!45] at (5.25,10.52) {Trends};
+  \node[anchor=west,font=\footnotesize,text=black!45] at (6.65,10.52) {Settings};
+  \draw[black!25] (0,10.25) -- (12.4,10.25);
+  % ---- KPI recap cards (closed week) ----
+  \node[anchor=west,font=\footnotesize\itshape,text=black!55] at (0.5,10.02) {Closed week W\_n-1 (one-click recap):};
+  \draw[kpi] (0.3,8.85) rectangle (4.15,9.80);
+  \node[anchor=west,font=\scriptsize,text=black!55] at (0.5,9.55) {Plan (Metric\_R)};
+  \node[anchor=west,font=\large\bfseries] at (0.5,9.15) {10.00};
+  \draw[kpi] (4.4,8.85) rectangle (8.25,9.80);
+  \node[anchor=west,font=\scriptsize,text=black!55] at (4.6,9.55) {Actual};
+  \node[anchor=west,font=\large\bfseries] at (4.6,9.15) {8.80};
+  \fill[black!70,rounded corners=4pt] (8.5,8.85) rectangle (12.1,9.80);
+  \node[anchor=west,font=\scriptsize,text=black!15] at (8.7,9.55) {Variance (Actual $-$ Plan)};
+  \node[anchor=west,font=\large\bfseries,text=white] at (8.7,9.15) {$-1.20$};
   % ---- left panel: weekly trend ----
-  \draw[panel] (0.3,3.4) rectangle (6.0,7.4);
-  \node[ptitle] at (0.5,7.08) {Weekly trend (Metric\_R)};
-  \foreach \y in {4.5,5.1,5.7,6.3} \draw[black!12] (0.8,\y) -- (5.7,\y);
-  \draw[black!55,-{Latex[length=1.6mm]}] (0.8,3.9) -- (5.75,3.9);
-  \draw[black!55,-{Latex[length=1.6mm]}] (0.8,3.9) -- (0.8,6.85);
-  \fill[black!8] (1.0,5.55) -- (1.8,6.1) -- (2.6,5.7) -- (3.4,6.25) -- (4.2,5.2) -- (4.95,4.9)
-        -- (4.95,3.9) -- (1.0,3.9) -- cycle;
-  \draw[dashed,black!60] (0.8,5.95) -- (5.65,5.95);
-  \node[font=\scriptsize,text=black!55,anchor=south east] at (5.65,5.97) {plan};
-  \draw[very thick] (1.0,5.55) -- (1.8,6.1) -- (2.6,5.7) -- (3.4,6.25) -- (4.2,5.2) -- (4.95,4.9);
-  \foreach \x/\y in {1.0/5.55,1.8/6.1,2.6/5.7,3.4/6.25,4.2/5.2} \fill[black] (\x,\y) circle (1.2pt);
-  \draw[black!70,fill=white,thick] (4.95,4.9) circle (2.0pt);
-  \node[font=\scriptsize,text=black!60,anchor=west] at (5.05,4.72) {today};
+  \draw[panel] (0.3,4.7) rectangle (6.0,8.55);
+  \node[ptitle] at (0.5,8.25) {Weekly trend (Metric\_R)};
+  \node[psub] at (5.8,8.25) {W\_n};
+  \foreach \y in {5.9,6.4,6.9,7.4} \draw[black!12] (0.9,\y) -- (5.7,\y);
+  \draw[black!55,-{Latex[length=1.6mm]}] (0.9,5.35) -- (5.75,5.35);
+  \draw[black!55,-{Latex[length=1.6mm]}] (0.9,5.35) -- (0.9,7.95);
+  \fill[black!8] (1.1,6.70) -- (1.85,7.25) -- (2.6,6.85) -- (3.35,7.40) -- (4.1,6.20) -- (4.85,5.95)
+        -- (4.85,5.35) -- (1.1,5.35) -- cycle;
+  \draw[dashed,black!60] (0.9,7.05) -- (5.65,7.05);
+  \node[font=\scriptsize,text=black!55,anchor=south east] at (5.65,7.07) {plan};
+  \draw[very thick] (1.1,6.70) -- (1.85,7.25) -- (2.6,6.85) -- (3.35,7.40) -- (4.1,6.20) -- (4.85,5.95);
+  \foreach \x/\y in {1.1/6.70,1.85/7.25,2.6/6.85,3.35/7.40,4.1/6.20} \fill[black] (\x,\y) circle (1.2pt);
+  \draw[black!70,fill=white,thick] (4.85,5.95) circle (2.0pt);
+  \node[font=\scriptsize,text=black!60,anchor=west] at (5.0,5.95) {today};
+  \draw[black!50,dashed,{Latex[length=1.2mm]}-{Latex[length=1.2mm]}] (4.85,6.00) -- (4.85,7.00);
+  \node[font=\scriptsize,text=black!55,anchor=east] at (4.78,6.5) {gap};
+  \foreach \x/\d in {1.1/1,1.85/2,2.6/3,3.35/4,4.1/5,4.85/6} {
+    \draw[black!40] (\x,5.35) -- (\x,5.28);
+    \node[font=\scriptsize,text=black!45] at (\x,5.12) {d\_\d};
+  }
   % ---- right panel: gap decomposition ----
-  \draw[panel] (6.3,3.4) rectangle (12.1,7.4);
-  \node[ptitle] at (6.5,7.08) {Gap decomposition (ranked)};
-  \draw[black!40] (9.9,4.45) -- (9.9,6.8);
-  \node[font=\scriptsize,anchor=west] at (6.5,6.55) {Category\_2};
-  \draw[negbar] (9.9,6.43) rectangle (8.3,6.67);
-  \node[font=\scriptsize,anchor=west] at (6.5,6.13) {Category\_3};
-  \draw[negbar] (9.9,6.01) rectangle (8.7,6.25);
-  \node[font=\scriptsize,anchor=west] at (6.5,5.71) {Category\_1};
-  \draw[posbar] (9.9,5.59) rectangle (10.8,5.83);
-  \node[font=\scriptsize,anchor=west] at (6.5,5.29) {Residual};
-  \draw[negbar] (9.9,5.17) rectangle (9.2,5.41);
-  \node[font=\scriptsize,anchor=west] at (6.5,4.87) {Category\_k};
-  \draw[posbar] (9.9,4.75) rectangle (10.1,4.99);
-  \draw[black!25] (6.5,4.35) -- (11.9,4.35);
-  \draw[posbar] (6.55,3.72) rectangle (6.87,3.92);
-  \node[font=\scriptsize,text=black!65,anchor=west] at (6.93,3.82) {positive};
-  \draw[negbar] (8.35,3.72) rectangle (8.67,3.92);
-  \node[font=\scriptsize,text=black!65,anchor=west] at (8.73,3.82) {negative};
-  \node[font=\scriptsize,text=black!55,anchor=east] at (11.9,3.82) {sum $=$ gap};
+  \draw[panel] (6.3,4.7) rectangle (12.1,8.55);
+  \node[ptitle] at (6.5,8.25) {Gap decomposition};
+  \node[psub] at (11.9,8.25) {W\_n-1};
+  \draw[black!40] (9.7,5.25) -- (9.7,8.08);
+  \node[font=\scriptsize,anchor=west] at (6.5,7.90) {Category\_2};
+  \draw[negbar] (9.7,7.79) rectangle (8.26,8.01);
+  \node[val,anchor=west] at (9.78,7.90) {$-0.80$};
+  \node[font=\scriptsize\itshape,text=black!60,anchor=west] at (6.85,7.50) {Sub\_2a};
+  \draw[subneg] (9.7,7.425) rectangle (8.71,7.575);
+  \node[val,anchor=west] at (9.78,7.50) {$-0.55$};
+  \node[font=\scriptsize\itshape,text=black!60,anchor=west] at (6.85,7.15) {Sub\_2b};
+  \draw[subneg] (9.7,7.075) rectangle (9.25,7.225);
+  \node[val,anchor=west] at (9.78,7.15) {$-0.25$};
+  \draw[black!25] (6.72,7.78) -- (6.72,7.15);
+  \node[font=\scriptsize,anchor=west] at (6.5,6.72) {Category\_3};
+  \draw[negbar] (9.7,6.61) rectangle (8.62,6.83);
+  \node[val,anchor=west] at (9.78,6.72) {$-0.60$};
+  \node[font=\scriptsize,anchor=west] at (6.5,6.29) {Category\_1};
+  \draw[posbar] (9.7,6.18) rectangle (10.51,6.40);
+  \node[val,anchor=east] at (9.62,6.29) {$+0.45$};
+  \node[font=\scriptsize,anchor=west] at (6.5,5.86) {Residual};
+  \draw[negbar] (9.7,5.75) rectangle (9.07,5.97);
+  \node[val,anchor=west] at (9.78,5.86) {$-0.35$};
+  \node[font=\scriptsize,anchor=west] at (6.5,5.43) {Category\_k};
+  \draw[posbar] (9.7,5.32) rectangle (9.88,5.54);
+  \node[val,anchor=east] at (9.62,5.43) {$+0.10$};
+  \draw[black!25] (6.5,5.18) -- (11.9,5.18);
+  \draw[posbar] (6.55,4.87) rectangle (6.87,5.05);
+  \node[font=\scriptsize,text=black!65,anchor=west] at (6.93,4.96) {positive};
+  \draw[negbar] (8.35,4.87) rectangle (8.67,5.05);
+  \node[font=\scriptsize,text=black!65,anchor=west] at (8.73,4.96) {negative};
+  \node[font=\scriptsize,text=black!55,anchor=east] at (11.9,4.96) {gap $= -1.20$};
   % ---- bottom panel: generated bridge ----
-  \draw[panel] (0.3,0.3) rectangle (12.1,3.0);
-  \node[ptitle] at (0.5,2.68) {Written bridge (generated)};
-  \foreach \y/\len in {2.30/8.9,2.00/8.5,1.70/8.9,1.40/8.2,1.10/8.9} \draw[black!30,line width=0.8pt] (0.6,\y) -- (\len,\y);
-  \draw[black!30,line width=0.8pt] (0.6,0.80) -- (5.2,0.80);
-  \node[btn] at (10.6,2.0) {Generate\\bridge};
-  \node[draw=black!30,rounded corners=3pt,fill=white,font=\scriptsize\itshape,text=black!55,align=center,inner sep=4pt] at (10.6,0.95) {tiles $\to$ tree $\to$\\[-1pt] model $\to$ sanitizer};
+  \draw[panel] (0.3,0.3) rectangle (12.1,4.4);
+  \node[ptitle] at (0.5,4.10) {Written bridge (generated)};
+    \draw[black!50,line width=1.2pt] (0.6,3.70) -- (4.6,3.70);
+  \draw[black!30,line width=0.8pt] (0.6,3.30) -- (8.4,3.30);
+  \draw[black!60,line width=1.6pt] (2.0,3.30) -- (2.55,3.30);
+  \draw[black!30,line width=0.8pt] (0.6,3.00) -- (8.1,3.00);
+  \draw[black!30,line width=0.8pt] (0.6,2.70) -- (8.4,2.70);
+  \draw[black!60,line width=1.6pt] (5.3,2.70) -- (5.85,2.70);
+  \draw[black!30,line width=0.8pt] (0.6,2.20) -- (8.4,2.20);
+  \draw[black!30,line width=0.8pt] (0.6,1.90) -- (7.9,1.90);
+  \draw[black!60,line width=1.6pt] (3.1,1.90) -- (3.65,1.90);
+  \draw[black!30,line width=0.8pt] (0.6,1.60) -- (8.4,1.60);
+  \draw[black!30,line width=0.8pt] (0.6,1.30) -- (5.0,1.30);
+  \node[btn] at (10.45,3.60) {Generate\\bridge};
+  \node[draw=black!30,rounded corners=3pt,fill=white,font=\scriptsize\itshape,text=black!55,align=center,inner sep=4pt] at (10.45,2.70) {tiles $\to$ tree $\to$\\[-1pt] model $\to$ sanitizer};
+  \draw[kpi] (8.7,0.55) rectangle (12.0,2.15);
+  \node[anchor=west,font=\scriptsize\bfseries,text=black!70] at (8.85,1.92) {Contract checks};
+  \fill[black!60] (8.90,1.51) rectangle +(0.09,0.09);
+  \node[anchor=west,font=\scriptsize,text=black!60] at (9.08,1.56) {figures traced: all};
+  \fill[black!60] (8.90,1.16) rectangle +(0.09,0.09);
+  \node[anchor=west,font=\scriptsize,text=black!60] at (9.08,1.21) {causes in tree: yes};
+  \fill[black!60] (8.90,0.81) rectangle +(0.09,0.09);
+  \node[anchor=west,font=\scriptsize,text=black!60] at (9.08,0.86) {sanitizer repairs: 0};
+  \draw[black!45,dashed,-{Latex[length=1.5mm]}] (8.7,1.35) to[out=180,in=270] (5.575,2.62);
   \end{tikzpicture}%
   }
-  \caption{Anonymized wireframe of the application: the weekly trend against plan with the running-week position (left), the ranked signed decomposition of the closed week's gap (right, light bars positive and dark bars negative), and the generated bridge with the one-click step that runs the three contracts (bottom). Bar lengths are proportional to the synthetic values of Table~\ref{tab:ch3_decomposition}.}
+  \caption{Anonymized wireframe of the application, expanded view. The header carries the selected station, the running week and a plan-status badge; the recap cards give plan, actual and variance for the last closed week in one click. The left panel tracks the daily trend of the metric against plan and marks the current gap; the right panel shows the ranked signed decomposition of the closed week, with Category\_2 opened into its two sub-factors (light bars positive, dark bars negative). The bottom panel holds the generated written bridge: the darker segments mark the figures cited in the text, and the contract checks card reports the outcome of the three contracts on this narrative. All values are the synthetic ones of Table~\ref{tab:ch3_decomposition}; bar lengths are proportional.}
   \label{fig:application}
 \end{figure}
-
 
 %----------------------------------------------------------------------------------------
 \chapter{Results and Evaluation}
