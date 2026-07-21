@@ -1170,8 +1170,12 @@ A contract is then added by each of the rungs above: L1 freezes the values into 
 \section{First front: the failure modes}
 \label{sec:front_modes}
 
-This section organises the faliure modes in the order the contracts enter the pipeline: first the numeric ones, then the causal modes, and formal last.
-The first two are counted on the natural output of the runs, the last fromal class with the injection test as anticipated in Section~\ref{sec:eval_design}.
+This section organises the faliure modes in the order the contracts enter the pipeline.
+Starting with L0 the model fabricates numbers freely: across the thirty station-weeks it produces 44 fabricated numbers (F1), twenty-two values-as-gap (F7), and twenty-one invented rates (F6).
+One rung of the scale is enough to remove nearly all of it.
+In particular an increase observed for F1 in levels L2 and L3, it is not a regession of the tile contract: the tree makes the narrative recher, more bucket get discussed together, and the model finds more occasions to state their total.
+
+
 
 \begin{lstlisting}[language=Python, caption={The traceability check used for the numeric counts, as in the evaluation code. The truth set is the canonical tile values plus every figure already present in the prompt; a cited token is traceable when it matches one of them exactly or within rounding.}, label={lst:truthset}]
   def truth_set(case):
