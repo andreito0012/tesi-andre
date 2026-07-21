@@ -1170,32 +1170,20 @@ A contract is then added by each of the rungs above: L1 freezes the values into 
 \section{First front: the failure modes}
 \label{sec:front_modes}
 
-This section organises the faliure modes in the order the contracts enter the pipeline.
+This section organises the failure modes in the order the contracts enter the pipeline.
 Starting with L0 the model fabricates numbers freely: across the thirty station-weeks it produces 44 fabricated numbers (F1), twenty-two values-as-gap (F7), and twenty-one invented rates (F6).
-One rung of the scale is enough to remove nearly all of it.
-In particular an increase observed for F1 in levels L2 and L3, it is not a regession of the tile contract: the tree makes the narrative recher, more bucket get discussed together, and the model finds more occasions to state their total.
+One rung of the ladder is enough to remove nearly all of it.
+In particular an increase observed for F1 at levels L2 and L3 is not a regession of the tile contract: the tree makes the narrative richer, more buckets get discussed together, and the model finds more occasions to state their total.
 
 
 
-\begin{lstlisting}[language=Python, caption={The traceability check used for the numeric counts, as in the evaluation code. The truth set is the canonical tile values plus every figure already present in the prompt; a cited token is traceable when it matches one of them exactly or within rounding.}, label={lst:truthset}]
-  def truth_set(case):
-      S = {round(abs(v), 3) for v in canonical_values(case)}  # verified tiles
-      S |= {round(abs(float(m)), 3)                           # figures the prompt
-            for m in NUMBER_RE.findall(prompt_text(case))}    # already contains
-      return S
-  
-  def traceable(v, S):
-      a = abs(v)
-      return any(abs(a - x) < 0.011 or
-                 any(round(a, k) == round(x, k) for k in (1, 2, 3))
-                 for x in S)
-  \end{lstlisting}
+
+
 
 
 
   \begin{figure}[ht]
     \centering
-    % F1 44/1/5/5 | F5 31/na/0/na | F7 22/0/0/0 | F6 21/0/0/0 | F2 11/0/0/0. Needs tikz + positioning.
     \begin{tikzpicture}[
       cell/.style={draw=black!20, minimum width=1.55cm, minimum height=0.82cm, font=\small, anchor=center},
       rowlab/.style={anchor=east, font=\footnotesize, inner sep=3pt},
