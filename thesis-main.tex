@@ -1105,11 +1105,11 @@ Each front is measured in its own way, and a language model takes part in only o
 
 The first front, which asks whether the framework reduces the failure modes, does not use any \ac{LLM} judgement. 
 For the numeric modes (F1, F6, F7) it relies on a deterministic check: every figure in the narrative has to trace back to a value the model was given.
-The causal modes (F2, F5) are counted by hand against predefined rules: the named causes and actions have to exist in the admitted domain.
+The causal modes (F2, F5) are counted by hand, by a single rater, against predefined rules: the named causes and actions have to exist in the admitted domain.
 Finally, the formal modes (F3, F4, F8) are tested by injection, since the final pipeline no longer produces them.
 
 The second front compares each generated narrative with the corresponding human bridge. 
-It uses real data from thirty different delivery stations, all of them under target during a specific week; each station is run through the four levels of the ladder, which gives one hundred and twenty narratives. 
+It uses real data from thirty different delivery stations, each under target during a specific week; each station is run through the four levels of the ladder, which gives one hundred and twenty narratives. 
 All the stations belong to the same country network, span two building types, and cover gap magnitudes from small to large.
 The production model is a frontier language model, the same one the app runs, and the prompt is the full app prompt, not a reduced version.
 Each generation is isolated and stateless: one conversation per station per level, three concurrent workers, and no contamination across stations.
@@ -1171,7 +1171,7 @@ A contract is then added by each of the rungs above: L1 freezes the values into 
 \label{sec:front_modes}
 
 This section organizes the failure modes in the order the contracts enter the pipeline.
-Figure~\ref{fig:descent} collects the count.
+Figure~\ref{fig:descent} collects the counts.
 Each different mode is counted with the procedure that fits its nature, as set out in Section~\ref{sec:eval_design}, and the totals are reported across the thirty station-weeks.
 
 
@@ -1191,10 +1191,10 @@ Each different mode is counted with the procedure that fits its nature, as set o
   \node[colhead] at (\cC,1.02) {L2};   \node[colsub] at (\cC,0.97) {tree};
   \node[colhead] at (\cD,1.02) {L3};   \node[colsub] at (\cD,0.97) {sanitizer};
   \node[rowlab] at (-0.95,\rF) {F1 recalculation};
-  \node[rowlab] at (-0.95,\rE) {F5 out-of-mandate action};
+  \node[rowlab] at (-0.95,\rE) {F5 non-actionable recommendation};
   \node[rowlab] at (-0.95,\rD) {F7 value-as-gap};
-  \node[rowlab] at (-0.95,\rC) {F6 invented rate};
-  \node[rowlab] at (-0.95,\rB) {F2 invented definition};
+  \node[rowlab] at (-0.95,\rC) {F6 rate-value hallucination};
+  \node[rowlab] at (-0.95,\rB) {F2 metric conflation};
   \node[cell, fill=black!65, text=white] at (\cA,\rF) {44};
   \node[cell, fill=black!2]              at (\cB,\rF) {1};
   \node[cell, fill=black!7]              at (\cC,\rF) {5};
@@ -1220,16 +1220,17 @@ Each different mode is counted with the procedure that fits its nature, as set o
   \label{fig:descent}
   \end{figure}
 
-Starting with the numeric modes, at L0 the model fabricates numbers freely: it recalculates forty-four fabricated numbers (F1), states twenty-two values-as-gap (F7), and invents twenty-one invented rates (F6).
+Starting with the numeric modes, at L0 the model fabricates numbers freely: it recalculates forty-four numbers (F1), states twenty-two values-as-gap (F7), and invents twenty-one rates (F6).
 One rung of the ladder is enough to remove nearly all of it.
-In particular, the increase observed for F1 at levels L2 and L3 is not a regession of the tile contract: the tree makes the narrative richer, more buckets get discussed together, and the model finds more occasions to state their total.
+In particular, the increase observed for F1 at levels L2 and L3 is not a regression of the tile contract: the tree makes the narrative richer, more buckets get discussed together, and the model finds more occasions to state their total.
 
-The causal modes (F2, F5) starts to disappear completely only when the tree enters at level L2.
-At the previous two levels the model invents definitions for the different buckets, reading operational meaning into labels it was never given, and giving out-of-mandate actions; something that disappears with this new level.
+The causal modes (F2, F5) shrink at L1 and disappear completely only when the tree enters at level L2.
+At the previous two levels the model invents definitions for the different buckets, reading operational meaning into labels it was never given, and proposes out-of-mandate actions; both disapper at L2.
 
 
 For what regards the formal modes (F3, F4, F8), they cannot be read off the natural output: by the time the sanitizer runs, the upstream contracts have already removed almost everything it is built to catch, and counting occurrences would report a zero that says nothing about the guard itself.
-So the sanitizer is measured by injection: the four numeric faults of Figure~\ref{fig:injection} are each planted on all sixty-six sites of the shipped narratives, twohundred-sixstyfour injections in totals, plus a separate sweep that fuses the label of one metric with the value of another on the same sixsty-six sites.
+On the natural runs it indeed stayed idle: zero corrections across the thirty shipped narratives.
+So the sanitizer is measured by injection: the four numeric faults are each planted on all sixty-six sites of the shipped narratives, two hundred and sixsty-four injections in total, plus a separate sweep that fuses the label of one metric with the value of another on the same sixty-six sites.
 Figure~\ref{fig:injection} shows the outcome of that stress test, which the sanitizer fully passed, with zero false repairs.
 
 
@@ -1243,15 +1244,15 @@ Figure~\ref{fig:injection} shows the outcome of that stress test, which the sani
         grp/.style={anchor=west, font=\footnotesize\itshape, text=black!55},
         res/.style={anchor=west, font=\footnotesize}]
       \def\barw{6.6}
-      \node[grp] at (0.15,0.55) {inside the 0.5 guard band: must be repaired};
-      \node[lab] at (0,0)     {precision drop (F3)};
+      \node[grp] at (0.15,0.55) {inside the guard band: must be repaired};
+      \node[lab] at (0,0)     {precision drift (F3)};
       \draw[fill=black!55] (0.15,-0.19) rectangle (0.15+\barw,0.19);
       \node[res] at (0.3+\barw,0)     {repaired, 66 of 66};
       \node[lab] at (0,-0.65) {$+22\%$ drift};
       \draw[fill=black!55] (0.15,-0.84) rectangle (0.15+\barw,-0.46);
       \node[res] at (0.3+\barw,-0.65) {repaired, 66 of 66};
       \node[grp] at (0.15,-1.35) {outside the band: must be refused};
-      \node[lab] at (0,-1.9)  {sign flip (F4)};
+      \node[lab] at (0,-1.9)  {sign inversion (F4)};
       \draw[fill=black!10] (0.15,-2.09) rectangle (0.15+\barw,-1.71);
       \node[res] at (0.3+\barw,-1.9)  {refused, 66 of 66};
       \node[lab] at (0,-2.55) {gross corruption $\times 3$};
