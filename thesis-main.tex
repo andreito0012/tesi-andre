@@ -683,7 +683,7 @@ The answer takes its shape from the problem.
 Grounding has two dimensions, as introduced in Chapter~\ref{chap:introduction}: the numeric one, where a hard guarantee is possible, and the causal one, where the most that can be enforced is a bound.
 The narrative produced on this basis must hold on both sides.
 Literature on hallucinations verifies the claim against the source \cite{min2023factscore}; it does not enforce both simultaneously.
-The framework, instead, holds both at the three points of the pipeline where a guarantee can attach.
+The framework, instead, wa buil for exactly that.
 
 %----------------------------------------------------------------------------------------
 \section{Core Concept}
@@ -692,7 +692,8 @@ The framework, instead, holds both at the three points of the pipeline where a g
 In software engineering, a contract is the deal between a component and its caller: meet the precondition and the component guarantees its postcondition \cite{meyer1992}.
 The core concept applies the same idea to a generation pipeline that, through three contracts, transforms a broad set of indicators into a complete narrative.
 None of them alone does the full job, because each one acts where the others cannot reach; that is why a complete framework is needed. 
-A pipeline of this shape offers exactly three points where a guarantee can attach: before the model, on what is received; inside the prompt, on what it might say; after the model, on what it produced.
+A pipeline of this shape offers exactly three points where a guarantee can attach: upstream where the numbers are computed; inside the prompt, on what the model is told; after the model, on what is produced.
+A fourth point would sit inside the generation itself, at the token level, where a constrained decoding operates (Chapter~\ref{chap:state_of_the_art}); a frontier model served through an API gives no access to its decoder, so that point is out of reach here.
 
 As presented in Figure~\ref{fig:architecture}, the first contract, \emph{tile-as-source}, sits at the top of the pipeline.
 It is positioned at the beginning because it freezes the numbers before the model sees them, to avoid any \ac{LLM} recomputation.
@@ -747,10 +748,10 @@ The last contract, the \emph{sanitizer}, is located at the end of this pipeline;
   \end{figure}
   
 
-Table~\ref{tab:contracts} holds the key conceptual difference.
+Table~\ref{tab:contracts} captures the key conceptual difference.
 Two of the three contracts bring a hard guarantee, the third a soft one instead. 
 The two sides differ in what they constrain: a number either matches its source or it does not, and a deterministic check settles that with no judgment, so the numeric side admits a hard guarantee.
-For the last one, instead, we cannot talk about hard guarantees because the tree bounds the set the model may pick from, but which cause represents the best fit to explain the movement is left to the \ac{LLM}, so there is no deterministic wall to enforce it.
+For the causal side, instead, we cannot talk about hard guarantees because the tree bounds the set the model may pick from, but which cause represents the best fit to explain the movement is left to the \ac{LLM}, so there is no deterministic wall to enforce it.
 
 
 \begin{table}[ht]
@@ -797,10 +798,9 @@ For the last one, instead, we cannot talk about hard guarantees because the tree
 \label{sec:catalogue}
 
 Over the three months I spent building and watching the system, failures piled up into a small set of recurring modes.
-They account for every grounding failure observed, and they sort into three classes based on what they break and where in the chain they can be caught.
+Every  grounding failure observed falls into one of eight modes, and they sort into three classes based on what they break and where in the chain they can be caught.
 The classes refine the two requirements of Chapter~\ref{chap:introduction}: numeric and formal are the two halves of the numerical side, one about which value is reported and one about the form it arrives in, while the causal class matches the causal side.
 This distinction can be observed in Table~\ref{tab:catalogue}, where the modes are listed with a short description of what happens when they occur.
-Those failures are the main reason behind the framework itself: it was born to solve exactly these problems.
 
 \begin{table}[ht]
   \centering
@@ -845,13 +845,13 @@ The first contract is founded on the idea that the safest number is the number t
 It is one single rule that might seem boring and almost too plain to matter: every number that might appear in the narrative is only computed once; the \ac{LLM} is never asked to calculate a percentage, a difference or anything that has not been deterministically precalculated.
 In contract terms: the \emph{precondition} is that every number needed by the model exists as a frozen tile in the prompt; the \emph{postcondition} is that every number in the narrative is a verbatim copy of a tile; the two boundaries at the end of this section state where this promise stops.
 
-The idea is consistent with the one introduced in Chapter~\ref{chap:state_of_the_art} for what regards semantic layers: a metric is defined in one and only one governed place, so two reports cannot disagree by building their own version of the figure \cite{dbt2024semantic}.
+The idea is consistent with the one introduced in Chapter~\ref{chap:state_of_the_art} for what regards semantic layers \cite{dbt2024semantic}.
 What is specific here is the target. 
 A semantic layer manages the value inside a dashboard and stops there; instead I decided to push the same concept further onto the generated text, so what a manager reads is only the upstream computed tile, carried through unchanged.
 
 Listing~\ref{lst:tiles} shows how this rule is applied in the pipeline, through a frozen block of tiles that is directly injected into the model's prompt with a specific instruction to copy it verbatim.
 Each tile is a signed, pre-computed contribution, organized in a hierarchical order.
-It starts with the headline figure (\texttt{Metric\_R}) that represents the overall metric, followed by the others (\texttt{Category\_k}) that are decomposition tiles ranked by absolute movement, each already carrying its share of the absolute movement, so the model has no reason to compute one.
+It starts with the headline figure (\texttt{Metric\_R}) that represents the overall metric, followed by the others (\texttt{Category\_k}) that are decomposition tiles ranked by absolute movement, each already carrying its share of it, so the model has no reason to compute one.
 
 
 \begin{lstlisting}[language=Python, caption={Building the frozen-tiles block.}, label={lst:tiles}]
@@ -870,7 +870,7 @@ It starts with the headline figure (\texttt{Metric\_R}) that represents the over
   \end{lstlisting}
 
 
-The hard guarantee of this contract, as presented in Table~\ref{tab:contracts}, can be motivated since it carries most of the numeric load by directly copying the number: it takes away the need for any recalculation (F1), the room for invented rates (F6), the occasion to confuse values for deltas (F7), and helps with any precision drift since a copied value arrives with the right decimals (F3).
+Table~\ref{tab:contracts} assigns this contract a hard guarantee, and the reason is that copying carrries most of the numeric load on its own: it takes away the need for any recalculation (F1), the room for invented rates (F6), the occasion to confuse values for deltas (F7), and helps with any precision drift since a copied value arrives with the right decimals (F3).
 
 There are two main boundaries for this contract. The first is that the rule binds only numbers that exist as tiles in the dashboard, not those the model may compute itself.
 The second one is deeper than the first, since it is true that it binds the number to the tile computed upstream, but there is no guarantee that the value represents the truth in the world. 
@@ -880,15 +880,14 @@ There is no check about the intrinsic correctness of the value itself: this is f
 \label{sec:knowledgetree}
 
 The tree used in the framework is a compact map, compiled from existing operational documentation, containing the causes each single driver admits together with feasible actions to improve the situation.
-Given that the aim of the tree is producing a single specific narrative, and not open question answering, the tree is small enough to maintain and be read in full.
+Given that the aim of the tree is producing a single specific narrative, and not open question answering, the tree is small enough to maintain and be read in full: one entry per driver, a handful of admitted causes for each, ancd the actions paired with them.
 It is injected into the prompt as a list the model has to stay inside, and it is paired with the numeric rule so the narrative is held both on the numerical and causal side.
 In contract terms: the \emph{precondition} is having a tree that carries the admitted causes and actions for the drivers; the \emph{postcondition} is that every cause and action named in the narrative belongs to that set but, unlike the sanitizer, this cannot be deterministically guaranteed: a cause has no tile to be checked against.
 
 During the generation time the pipeline does not hand the whole tree to the model. 
 Based on the drivers that caused the gap on the day, only a subset of the full causes together with the paired actions is selected and passed to the prompt.
-The main idea behind this design choice is to turn an open question, \emph{why did the metric move}, into a closed one, \emph{which of these admitted causes fits the movement}; this makes any response far more reliable.
-Listing~\ref{lst:tree} shows this concept well, and the complete set presented to the \ac{LLM}.
 This is also the reason behind a language model in the loop: choosing which admitted causes best fit the week's gap is a judgment a fixed template cannot make.
+Listing~\ref{lst:tree} shows how the scoped block as the \ac{LLM} receives it: the complete set of admitted causes and actions for the drivers that moved.
 The decomposition those drivers come from reconciles to the total gap, so every material contribution is present and ranked by impact.
 This last point is the coverage weakness highlighted in Chapter~\ref{chap:case_study}, solved by design instead of manual checks.
 
@@ -912,7 +911,7 @@ This last point is the coverage weakness highlighted in Chapter~\ref{chap:case_s
 What the tree buys is the causal side of the narrative, the one that the other two contracts do not touch.
 With tile-as-source in place the model can still get the meaning of a metric wrong (F2), and the sanitizer does not guarantee that all actions produced are inside the feasible set (F5).
 The tree is what bounds both, closest in spirit to the methods that feed a small slice of a graph into the prompt \cite{baek2023knowledgeaugmented}.
-Its guarantee is therefore soft: even with the admissible set injected, the result is still left to the model's judgment that can make errors. Chapter~\ref{chap:results} reports both how often that judgment stays inside the predefined set and how often it lands on the causes the manager chose.
+Even with the admissable set injected, the result is still left to the model's judgment
 Being a hand-curated tree allows for compactness, but it is also a major downside: the quality of it runs entirely on how fresh that curation stays; Chapter~\ref{chap:discussion} returns to this point. 
 
 
@@ -922,10 +921,12 @@ Being a hand-curated tree allows for compactness, but it is also a major downsid
 This last deterministic contract runs directly on the finished text after the model.
 The first two shape what the \ac{LLM} sees, while the sanitizer audits what the model produced, comparing every cited figure against its canonical value, when one exists, and repairs a small set of specific errors.
 In contract terms: the \emph{precondition} is that for every metric in the narrative, a known-correct value of it exists; the \emph{postcondition} is that every cited figure either matches the known value or is left visibly broken.
-It works through four mechanisms. The precision lock holds a value in its canonical shape, so a figure that should read one way does not appear in another.
-The magnitude guard corrects the number when the gap between the generated one and the dashboard one is small enough to be a precision or recalculation drift, and refuses when the gap is large.
-Label disambiguation decides which metric a number belongs to before deciding whether to replace it, so it does not swap one driver's value for another's.
-The canonical resolution runs before the three above since it checks that the value really exists in the pipeline at all, the ground-truth path drawn dashed in Figure~\ref{fig:architecture}.
+It works through four mechanisms that run one after the other. 
+The first is label disambiguation: before touching a figure, the sanitizer works out which metric that number belongs to, so it does not swap one driver's value for another's. 
+Then canonical resolution checks that the value exists in the pipeline at all, the ground-truth path drawn dashed in Figure~\ref{fig:architecture}. 
+The magnitude guard comes third. 
+It corrects a figure when the gap between the generated number and the dashboard one is small enough to look like a precision or recalculation drift, and refuses when that gap is too large to be one; the threshold is deliberately generous, half of the canonical value in Listing~\ref{lst:sanitizer}, because with every number frozen upstream a cited figure is almost always the right value in a slightly wrong form, so the guard only has to tell a drifted copy from a genuinely different one. 
+Last comes the precision lock, that holds a value in its canonical shape, so a figure that should read one way does not appear in another.
 The magnitude guard acts on formal modes: it is what refuses a sign inversion (F4), since a flipped value lands far outside any plausible drift; a fused label (F8) instead fails canonical resolution, so it stays visibly broken.
 
 \begin{lstlisting}[language=Python, caption={Precision lock and magnitude guard.}, label={lst:sanitizer}]
@@ -954,7 +955,7 @@ The magnitude guard acts on formal modes: it is what refuses a sign inversion (F
 
   
   \section{Prompt engineering}
-  \label{promptengineering}
+  \label{sec:promptengineering}
 
 The contracts in the previous sections are not abstract ideas: the first two reach the model directly through the prompt while the last one stands after it on the finished text.
 The system prompt that drives the model is not designed to ask \enquote{in general terms} to be accurate.
@@ -968,7 +969,6 @@ The prompt has a well-defined structure composed by the directive block that sit
 The skeleton also copies, for every action, the owner and the horizon the tree assigns it, so feasibility rides along with the action instead of being asked for.
 Listing~\ref{lst:directives} shows an excerpt of the directive block, with each directive tagged with the mode it answers.
 To be precise, in the production prompt, these base rules grow into more specific versions based on the domain they are referring to, but every variant traces back to one of the eight modes.
-
 
 
 \begin{lstlisting}[caption={Excerpt of the directive block: one rule per observed failure mode.}, label={lst:directives}]
@@ -985,7 +985,7 @@ To be precise, in the production prompt, these base rules grow into more specifi
     merge two labels into one name.                    # F8
 \end{lstlisting}
 
-Given a competent but generic prompt, a capable model recomputes numbers, invents the meaning of an unfamiliar acronym, and computes shares of the gap that nobody gave it.
+Given a competent but generic prompt, the one Chapter~\ref{chap:state_of_the_art} warned about, a capable model recomputes numbers, invents the meaning of an unfamiliar acronym, and computes shares of the gap that nobody gave it.
 That is the naive baseline, failures at close to their full rate.
 The same model under the directive-per-failure prompt, with the tiles and tree blocks in place, stops doing all of it, down to the residue the tile contract already declared: a handful of totals the model sums on its own.
 The prompt is the connective tissue between contracts and the model.
@@ -1004,7 +1004,7 @@ It is the tool that answers the first weakness of Chapter~\ref{chap:case_study}:
 
 The application works by rebuilding the old spreadsheet weekly report with all its categories and subcategories, in a modern way by implementing charts and visual aids that guide the reader.
 One of the key parts, as anticipated, is the possibility to have an intra-week view: the tool shows, on any day of the running period, whether the station sits above or below its plan, so the picture no longer has to wait for the week to close.
-When a flagged week closes, one click pulls back automatically the full view of it, all the data plus some extra context to help the manager understand and control the metrics of his workplace.
+When a flagged week closes, one click automatically pulls back the full view of it, all the data plus some extra context to help the manager understand and control the metrics of their workplace.
 Having context is a necessary condition because a manager reading the narrative must be capable of checking in real time what is being said without the need to search for the information by hand across different dashboards, the requirement Chapter~\ref{chap:introduction} tied to trust.
 The bridge itself is produced by the engine of the previous sections, and because this generation step is fixed and identical for every station, the depth of the output no longer depends on who runs it, and that settles the writing side of the third weakness of Chapter~\ref{chap:case_study}; the judgement itself does not disappear, it moves upstream into the curation of the tree.
 
@@ -1223,14 +1223,15 @@ Each different mode is counted with the procedure that fits its nature, as set o
 Starting with the numeric modes, at L0 the model fabricates numbers freely: it recalculates forty-four numbers (F1), states twenty-two values-as-gap (F7), and invents twenty-one rates (F6).
 One rung of the ladder is enough to remove nearly all of it.
 In particular, the increase observed for F1 at levels L2 and L3 is not a regression of the tile contract: the tree makes the narrative richer, more buckets get discussed together, and the model finds more occasions to state their total.
+The residual five are all such self-summed totals, the boundary declared in Section~\ref{sec:tileasource}.
 
 The causal modes (F2, F5) shrink at L1 and disappear completely only when the tree enters at level L2.
-At the previous two levels the model invents definitions for the different buckets, reading operational meaning into labels it was never given, and proposes out-of-mandate actions; both disapper at L2.
+At the previous two levels the model invents definitions for the different buckets, reading operational meaning into labels it was never given, and proposes out-of-mandate actions; both disappear at L2.
 
 
 For what regards the formal modes (F3, F4, F8), they cannot be read off the natural output: by the time the sanitizer runs, the upstream contracts have already removed almost everything it is built to catch, and counting occurrences would report a zero that says nothing about the guard itself.
 On the natural runs it indeed stayed idle: zero corrections across the thirty shipped narratives.
-So the sanitizer is measured by injection: the four numeric faults are each planted on all sixty-six sites of the shipped narratives, two hundred and sixsty-four injections in total, plus a separate sweep that fuses the label of one metric with the value of another on the same sixty-six sites.
+So the sanitizer is measured by injection: the four numeric faults are each planted on all sixty-six sites of the shipped narratives, two hundred and sixty-four injections in total, plus a separate sweep that fuses the label of one metric with the value of another on the same sixty-six sites.
 Figure~\ref{fig:injection} shows the outcome of that stress test, which the sanitizer fully passed, with zero false repairs.
 
 
@@ -1248,7 +1249,7 @@ Figure~\ref{fig:injection} shows the outcome of that stress test, which the sani
       \node[lab] at (0,0)     {precision drift (F3)};
       \draw[fill=black!55] (0.15,-0.19) rectangle (0.15+\barw,0.19);
       \node[res] at (0.3+\barw,0)     {repaired, 66 of 66};
-      \node[lab] at (0,-0.65) {$+22\%$ drift};
+      \node[lab] at (0,-0.65) {$+22\%$ value drift};
       \draw[fill=black!55] (0.15,-0.84) rectangle (0.15+\barw,-0.46);
       \node[res] at (0.3+\barw,-0.65) {repaired, 66 of 66};
       \node[grp] at (0.15,-1.35) {outside the band: must be refused};
