@@ -1105,7 +1105,7 @@ Each front is measured in its own way, and a language model takes part in only o
 
 The first front, which asks whether the framework reduces the failure modes, does not use any \ac{LLM} judgement. 
 For the numeric modes (F1, F6, F7) it relies on a deterministic check: every figure in the narrative has to trace back to a value the model was given.
-The causal modes (F2, F5) are counted by hand against precise rules: the named causes and actions have to exist in the admitted domain.
+The causal modes (F2, F5) are counted by hand against predefined rules: the named causes and actions have to exist in the admitted domain.
 Finally, the formal modes (F3, F4, F8) are tested by injection, since the final pipeline no longer produces them.
 
 The second front compares each generated narrative with the corresponding human bridge. 
@@ -1170,9 +1170,9 @@ A contract is then added by each of the rungs above: L1 freezes the values into 
 \section{First front: the failure modes}
 \label{sec:front_modes}
 
-This section organises the failure modes in the order the contracts enter the pipeline.
-Figure \ref{fig:descent} collects the count.
-Each different mode is counted with the procedure that fits its nature, as set out in Section~\ref{sec:eval_design}, and the total is reported across the thirty station-weeks.
+This section organizes the failure modes in the order the contracts enter the pipeline.
+Figure~\ref{fig:descent} collects the count.
+Each different mode is counted with the procedure that fits its nature, as set out in Section~\ref{sec:eval_design}, and the totals are reported across the thirty station-weeks.
 
 
 
@@ -1220,17 +1220,17 @@ Each different mode is counted with the procedure that fits its nature, as set o
   \label{fig:descent}
   \end{figure}
 
-Starting with the numeric modes (F1, F6, F7), at L0 the model fabricates numbers freely: it produces 44 fabricated numbers (F1), twenty-two values-as-gap (F7), and twenty-one invented rates (F6).
+Starting with the numeric modes, at L0 the model fabricates numbers freely: it recalculates forty-four fabricated numbers (F1), states twenty-two values-as-gap (F7), and invents twenty-one invented rates (F6).
 One rung of the ladder is enough to remove nearly all of it.
-In particular an increase observed for F1 at levels L2 and L3 is not a regession of the tile contract: the tree makes the narrative richer, more buckets get discussed together, and the model finds more occasions to state their total.
+In particular, the increase observed for F1 at levels L2 and L3 is not a regession of the tile contract: the tree makes the narrative richer, more buckets get discussed together, and the model finds more occasions to state their total.
 
-The causal modes (F2, F5) starts to disappear only when the tree enters at level L2.
+The causal modes (F2, F5) starts to disappear completely only when the tree enters at level L2.
 At the previous two levels the model invents definitions for the different buckets, reading operational meaning into labels it was never given, and giving out-of-mandate actions; something that disappears with this new level.
 
 
-For what regards the formal modes (F3, F4, F8), they cannot be read off the natural output: by the time the sanitizer runs, the upstream contracts have already removed almost everything it is build to catch, and counting occurrences would report a zero that says nothing about the guard itself.
-So the sanitizer is measured by injection: a set of twohundred-sixstyfour injections in totals, plus a separate sweep that fused the label of one metric with the value of another on the same sixstysix sites.
-Figure~\ref{fig:injection} shows the outcome of that stress test, which the sanitizer fully passed.
+For what regards the formal modes (F3, F4, F8), they cannot be read off the natural output: by the time the sanitizer runs, the upstream contracts have already removed almost everything it is built to catch, and counting occurrences would report a zero that says nothing about the guard itself.
+So the sanitizer is measured by injection: the four numeric faults of Figure~\ref{fig:injection} are each planted on all sixty-six sites of the shipped narratives, twohundred-sixstyfour injections in totals, plus a separate sweep that fuses the label of one metric with the value of another on the same sixsty-six sites.
+Figure~\ref{fig:injection} shows the outcome of that stress test, which the sanitizer fully passed, with zero false repairs.
 
 
 
