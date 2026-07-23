@@ -1183,42 +1183,42 @@ Each different mode is counted with the procedure that fits its nature, as set o
     colsub/.style={anchor=north, font=\scriptsize\itshape, text=black!55},
   ]
   \def\cA{0}\def\cB{1.6}\def\cC{3.2}\def\cD{4.8}
-  \def\rF{0}\def\rE{-0.86}\def\rD{-1.72}\def\rC{-2.58}\def\rB{-3.44}
+  \def\rA{0}\def\rB{-0.86}\def\rC{-1.72}\def\rD{-2.58}\def\rE{-3.44}
   \node[colhead] at (\cA,1.02) {L0};   \node[colsub] at (\cA,0.97) {baseline};
   \node[colhead] at (\cB,1.02) {L1};   \node[colsub] at (\cB,0.97) {tile-as-source};
   \node[colhead] at (\cC,1.02) {L2};   \node[colsub] at (\cC,0.97) {tree};
   \node[colhead] at (\cD,1.02) {L3};   \node[colsub] at (\cD,0.97) {sanitizer};
-  \node[rowlab] at (-0.95,\rF) {F1 recalculation};
+  \node[rowlab] at (-0.95,\rA) {F1 recalculation};
+  \node[rowlab] at (-0.95,\rB) {F2 rate-value hallucination};
+  \node[rowlab] at (-0.95,\rC) {F3 value-as-gap};
+  \node[rowlab] at (-0.95,\rD) {F4 metric conflation};
   \node[rowlab] at (-0.95,\rE) {F5 non-actionable recommendation};
-  \node[rowlab] at (-0.95,\rD) {F3 value-as-gap};
-  \node[rowlab] at (-0.95,\rC) {F2 rate-value hallucination};
-  \node[rowlab] at (-0.95,\rB) {F4 metric conflation};
-  \node[cell, fill=black!65, text=white] at (\cA,\rF) {44};
-  \node[cell, fill=black!2]              at (\cB,\rF) {1};
-  \node[cell, fill=black!7]              at (\cC,\rF) {5};
-  \node[cell, fill=black!7]              at (\cD,\rF) {5};
-  \node[cell, fill=black!46, text=white] at (\cA,\rE) {31};
-  \node[cell, fill=black!2]              at (\cB,\rE) {26};
-  \node[cell, fill=black!0]              at (\cC,\rE) {0};
-  \node[cell, fill=black!2]              at (\cD,\rE) {0};
-  \node[cell, fill=black!33] at (\cA,\rD) {22};
-  \node[cell, fill=black!0]  at (\cB,\rD) {0};
-  \node[cell, fill=black!0]  at (\cC,\rD) {0};
-  \node[cell, fill=black!0]  at (\cD,\rD) {0};
-  \node[cell, fill=black!31] at (\cA,\rC) {21};
+  \node[cell, fill=black!65, text=white] at (\cA,\rA) {44};
+  \node[cell, fill=black!2]              at (\cB,\rA) {1};
+  \node[cell, fill=black!7]              at (\cC,\rA) {5};
+  \node[cell, fill=black!7]              at (\cD,\rA) {5};
+  \node[cell, fill=black!31] at (\cA,\rB) {21};
+  \node[cell, fill=black!0]  at (\cB,\rB) {0};
+  \node[cell, fill=black!0]  at (\cC,\rB) {0};
+  \node[cell, fill=black!0]  at (\cD,\rB) {0};
+  \node[cell, fill=black!33] at (\cA,\rC) {22};
   \node[cell, fill=black!0]  at (\cB,\rC) {0};
   \node[cell, fill=black!0]  at (\cC,\rC) {0};
   \node[cell, fill=black!0]  at (\cD,\rC) {0};
-  \node[cell, fill=black!16] at (\cA,\rB) {11};
-  \node[cell, fill=black!0]  at (\cB,\rB) {6};
-  \node[cell, fill=black!0]  at (\cC,\rB) {0};
-  \node[cell, fill=black!0]  at (\cD,\rB) {0};
+  \node[cell, fill=black!16] at (\cA,\rD) {11};
+  \node[cell, fill=black!9]  at (\cB,\rD) {6};
+  \node[cell, fill=black!0]  at (\cC,\rD) {0};
+  \node[cell, fill=black!0]  at (\cD,\rD) {0};
+  \node[cell, fill=black!46, text=white] at (\cA,\rE) {31};
+  \node[cell, fill=black!38]             at (\cB,\rE) {26};
+  \node[cell, fill=black!0]              at (\cC,\rE) {0};
+  \node[cell, fill=black!0]              at (\cD,\rE) {0};
   \end{tikzpicture}
   \caption{Failure-mode counts across the ablation ladder, as total instances over the 30 station-weeks.}
   \label{fig:descent}
   \end{figure}
 
-Starting with the numeric modes, at L0 the model fabricates numbers freely: it recalculates forty-four numbers (F1), states twenty-two values-as-gap (F3), and invents twenty-one rates (F2).
+Starting with the numeric modes, at L0 the model fabricates numbers freely: it recalculates forty-four numbers (F1), invents twenty-one rates (F2), and states twenty-two values-as-gap (F3).
 One rung of the ladder is enough to remove nearly all of it.
 In particular, the increase observed for F1 at levels L2 and L3 is not a regression of the tile contract: the tree makes the narrative richer, more buckets get discussed together, and the model finds more occasions to state their total.
 The residual five are all such self-summed totals, the boundary declared in Section~\ref{sec:tileasource}.
@@ -1234,39 +1234,42 @@ Figure~\ref{fig:injection} shows the outcome of that stress test, which the sani
 
 
 
-
-    \begin{figure}[ht]
-      \centering
-      % Outcomes verified against the evaluation archive: 264 injections + 66 fused-label sweeps, zero false repairs.
-      \begin{tikzpicture}[font=\small,
-        lab/.style={anchor=east, font=\small},
-        grp/.style={anchor=west, font=\footnotesize\itshape, text=black!55},
-        res/.style={anchor=west, font=\footnotesize}]
-      \def\barw{6.6}
-      \node[grp] at (0.15,0.55) {inside the guard band: must be repaired};
-      \node[lab] at (0,0)     {precision drift (F6)};
-      \draw[fill=black!55] (0.15,-0.19) rectangle (0.15+\barw,0.19);
-      \node[res] at (0.3+\barw,0)     {repaired, 66 of 66};
-      \node[lab] at (0,-0.65) {$+22\%$ value drift};
-      \draw[fill=black!55] (0.15,-0.84) rectangle (0.15+\barw,-0.46);
-      \node[res] at (0.3+\barw,-0.65) {repaired, 66 of 66};
-      \node[grp] at (0.15,-1.35) {outside the band: must be refused};
-      \node[lab] at (0,-1.9)  {sign inversion (F7)};
-      \draw[fill=black!10] (0.15,-2.09) rectangle (0.15+\barw,-1.71);
-      \node[res] at (0.3+\barw,-1.9)  {refused, 66 of 66};
-      \node[lab] at (0,-2.55) {gross corruption $\times 3$};
-      \draw[fill=black!10] (0.15,-2.74) rectangle (0.15+\barw,-2.36);
-      \node[res] at (0.3+\barw,-2.55) {refused, 66 of 66};
-      \node[grp] at (0.15,-3.25) {no canonical resolution: must stay broken};
-      \node[lab] at (0,-3.8)  {fused label (F8)};
-      \draw[fill=black!10] (0.15,-3.99) rectangle (0.15+\barw,-3.61);
-      \node[res] at (0.3+\barw,-3.8)  {left broken, 66 of 66};
-      \end{tikzpicture}
-      \caption{The sanitizer stress test.}
-      \label{fig:injection}
-      \end{figure}
-      
-
+\begin{figure}[ht]
+  \centering
+  \begin{tikzpicture}[font=\small,
+    fault/.style={draw, rounded corners=2pt, minimum width=4.3cm, minimum height=0.6cm, align=center, font=\footnotesize},
+    chip/.style={draw, rounded corners=6pt, minimum width=2.9cm, minimum height=0.6cm, align=center, font=\footnotesize\bfseries},
+    rep/.style={chip, fill=black!55, text=white},
+    refch/.style={chip, fill=black!12},
+    brok/.style={chip, fill=white, densely dashed},
+    grp/.style={anchor=west, font=\footnotesize\itshape, text=black!55},
+    n/.style={anchor=west, font=\footnotesize},
+    a/.style={-{Latex[length=2mm]}, semithick, black!60}]
+  \node[grp] at (0,0.8) {inside the guard band: read as a plausible drift};
+  \node[fault] (g1a) at (2.15,0)     {precision drift (F6)};
+  \node[fault] (g1b) at (2.15,-0.8)  {$+22\%$ value drift};
+  \node[rep]   (o1a) at (6.6,0)      {repaired};
+  \node[rep]   (o1b) at (6.6,-0.8)   {repaired};
+  \draw[a] (g1a) -- (o1a); \draw[a] (g1b) -- (o1b);
+  \node[n] at (8.15,0)    {66 of 66};
+  \node[n] at (8.15,-0.8) {66 of 66};
+  \node[grp] at (0,-1.7) {outside the band: too large to be a drift};
+  \node[fault] (g2a) at (2.15,-2.5)  {sign inversion (F7)};
+  \node[fault] (g2b) at (2.15,-3.3)  {gross corruption $\times3$};
+  \node[refch] (o2a) at (6.6,-2.5)   {refused};
+  \node[refch] (o2b) at (6.6,-3.3)   {refused};
+  \draw[a] (g2a) -- (o2a); \draw[a] (g2b) -- (o2b);
+  \node[n] at (8.15,-2.5) {66 of 66};
+  \node[n] at (8.15,-3.3) {66 of 66};
+  \node[grp] at (0,-4.2) {no canonical value to resolve against};
+  \node[fault] (g3a) at (2.15,-5.0)  {fused label (F8)};
+  \node[brok]  (o3a) at (6.6,-5.0)   {left broken};
+  \draw[a] (g3a) -- (o3a);
+  \node[n] at (8.15,-5.0) {66 of 66};
+  \end{tikzpicture}
+  \caption{The sanitizer stress test: each fault planted on the 66 candidate sites of the shipped narratives. Dark chips are repairs to the canonical value, light chips are refusals that leave the fault visible, and the dashed chip is a fault with no canonical resolution, left untouched. Every outcome is 66 of 66: zero false repairs.}
+  \label{fig:injection}
+  \end{figure}
 %----------------------------------------------------------------------------------------
 \chapter{Discussion and Future Directions}
 \label{chap:discussion}
