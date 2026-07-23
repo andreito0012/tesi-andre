@@ -970,7 +970,7 @@ To be precise, in the production prompt, these base rules grow into more specifi
 
 
 \begin{lstlisting}[caption={Excerpt of the directive block: one rule per observed failure mode.}, label={lst:directives}]
-  RULES (one per failure mode):
+  RULES ( every failure mode answered):
   - Copy every value from the TILES block verbatim; never
     compute, round, or derive a number yourself.       # F1, F6
   - Never state a rate or a share that is not given in
@@ -1004,7 +1004,7 @@ The application works by rebuilding the old spreadsheet weekly report with all i
 One of the key parts, as anticipated, is the possibility to have an intra-week view: the tool shows, on any day of the running period, whether the station sits above or below its plan, so the picture no longer has to wait for the week to close.
 When a flagged week closes, one click automatically pulls back the full view of it, all the data plus some extra context to help the manager understand and control the metrics of their workplace.
 Having context is a necessary condition because a manager reading the narrative must be capable of checking in real time what is being said without the need to search for the information by hand across different dashboards, the requirement Chapter~\ref{chap:introduction} tied to trust.
-The bridge itself is produced by the engine of the previous sections, and because this generation step is fixed and identical for every station, the depth of the output no longer depends on who runs it, and that settles the writing side of the third weakness of Chapter~\ref{chap:case_study}; the judgement itself does not disappear, it moves upstream into the curation of the tree.
+The bridge itself is produced by the engine of the previous sections, and because this generation step is fixed and identical for every station, the depth of the output no longer depends on who runs it, and that settles the writing side of the third weakness of Chapter~\ref{chap:case_study}; the judgment itself does not disappear, it moves upstream into the curation of the tree.
 
 Figure~\ref{fig:application} shows an anonymized sketch of the application, reusing the same synthetic values of Table~\ref{tab:ch3_decomposition}. 
 This tool is in the prototyping stage, so it is not used in daily production; in a huge company there are necessary steps that need to be taken and it is not a short process.
@@ -1101,7 +1101,7 @@ It takes the catalog of Section~\ref{sec:catalogue}, collected over three months
 The evaluation answers two separate questions: whether the framework avoids the failure modes, and how close the generated narrative lands to the bridge a manager wrote.
 Each front is measured in its own way, and a language model takes part in only one of them; both run on the same corpus of narratives, generated along the ablation ladder of Figure~\ref{fig:ladder}.
 
-The first front, which asks whether the framework reduces the failure modes, does not use any \ac{LLM} judgement. 
+The first front, which asks whether the framework reduces the failure modes, does not use any \ac{LLM} judgment. 
 For the numeric modes (F1, F2, F3) it relies on a deterministic check: every figure in the narrative has to trace back to a value the model was given.
 The causal modes (F4, F5) are counted by hand, by a single rater, against predefined rules: the named causes and actions have to exist in the admitted domain.
 Finally, the formal modes (F6, F7, F8) are tested by injection, since the final pipeline no longer produces them.
