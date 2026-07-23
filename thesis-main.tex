@@ -696,9 +696,9 @@ A pipeline of this shape offers exactly three points where a guarantee can attac
 A fourth point would sit inside the generation itself, at the token level, where constrained decoding operates (Chapter~\ref{chap:state_of_the_art}); a frontier model served through an API gives no access to its decoder, so that point is out of reach here.
 
 As presented in Figure~\ref{fig:architecture}, the first contract, \emph{tile-as-source}, sits at the top of the pipeline.
-It is positioned at the beginning because it freezes the numbers before the model sees them, to avoid any \ac{LLM} recomputation.
+It is positioned at the beginning because it freezes the numbers before the model sees them, to take away the need for any \ac{LLM} recomputation.
 The second, the \emph{curated knowledge tree}, is positioned directly inside the prompt; it is used to instruct the model with causes and actions the domain admits.
-The last contract, the \emph{sanitizer}, is located at the end of this pipeline; it serves as a deterministic check on the finished output to repair the narrow class of formal slips that survive the first two.
+The last contract, the \emph{sanitizer}, is located at the end of this pipeline; it serves as a deterministic check on the finished output to repair or refuse the narrow class of formal slips that could survive the first two.
 
 
 \begin{figure}[htbp]
@@ -769,7 +769,7 @@ For the causal side, instead, we cannot talk about hard guarantees because the t
     Rate-value hallucination (F6)\newline
     Value-as-gap (F7)\newline
     Precision drift (F3, partial) &
-    Hard (prevent)\\
+    Hard (prevent, on covered values)\\
   \addlinespace
   Curated knowledge tree &
     Mid (prompt) &
