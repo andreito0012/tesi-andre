@@ -757,17 +757,17 @@ For the causal side, instead, we cannot talk about hard guarantees because the t
 \begin{table}[ht]
   \centering
   \small
-  \renewcommand{\arraystretch}{2}
-  \setlength{\tabcolsep}{7pt}
-  \begin{tabular}{@{} >{\itshape}p{2.2cm} >{\raggedright\arraybackslash}p{4.5cm} >{\raggedright\arraybackslash}p{3.3cm} >{\raggedright\arraybackslash}p{3.3cm} @{}}
-  \toprule
+  \renewcommand{\arraystretch}{1.4}
+  \setlength{\tabcolsep}{5pt}
+  \begin{tabular}{| >{\itshape}p{2.2cm} | >{\raggedright\arraybackslash}p{3.3cm} | >{\raggedright\arraybackslash}p{3.3cm} | >{\raggedright\arraybackslash}p{3.3cm} |}
+  \hline
    & \textbf{Tile-as-source} & \textbf{Curated knowledge tree} & \textbf{Sanitizer} \\
-  \midrule
+  \hline
   Position &
     Upstream &
     Mid (prompt) &
     Downstream \\
-  \addlinespace
+  \hline
   Failure modes &
     Recalculation (F1)\newline
     Rate-value hallucination (F6)\newline
@@ -778,12 +778,12 @@ For the causal side, instead, we cannot talk about hard guarantees because the t
     Precision drift (F3)\newline
     Sign inversion (F4)\newline
     Token concatenation (F8) \\
-  \addlinespace
+  \hline
   Guarantee &
     \textbf{Hard}\newline{\footnotesize prevent, on covered values} &
     \textbf{Soft}\newline{\footnotesize bound} &
     \textbf{Hard}\newline{\footnotesize repair or refuse} \\
-  \bottomrule
+  \hline
   \end{tabular}
 
   \vspace{0.3cm}
@@ -809,7 +809,7 @@ This distinction can be observed in Table~\ref{tab:catalogue}, where the modes a
   \toprule
   \textbf{Class} & \textbf{Mode} & \textbf{What happens} \\
   \midrule
-  \multirow{3}{*}{\textbf{Numeric}} & F1 & \emph{Recalculation}: the model computes a value instead of copying the tile. \\
+  \multirow{3}{*}{\textbf{Numeric}} & F1 & \emph{Recalculation}: the model computes a value instead of copying the given one. \\
    & F6 & \emph{Rate-value hallucination}: a rate that was never given is invented. \\
    & F7 & \emph{Value-as-gap}: a contribution is stated as if it were the gap itself. \\
   \midrule
@@ -835,7 +835,7 @@ Why one contract per class is a necessity and not a redundancy is the argument o
 The formal modes came first.
 Early builds of the pipeline carried no upstream contract, so numbers drifted, precision slipped, and the occasional comparative came out with the wrong sign, on real narratives.
 The tool that caught them, day after day, was a rudimentary deterministic check on the finished text, the seed of what Section~\ref{sec:sanitizer} formalizes as the sanitizer.
-Then upstream contracts changed the picture: freezing every number before generation removed the opportunity for drifts or inversions, so the formal modes stopped showing up on their own.
+Then upstream contracts changed the picture: freezing the numbers before generation removed the opportunity for drifts or inversions, so the formal modes stopped showing up on their own.
 The next three sections present the contracts in pipeline order, upstream first, not in the order they were built.
 
 \section{Contract 1: tile-as-source}
@@ -882,9 +882,9 @@ There is no check about the intrinsic correctness of the value itself: this is f
 The tree used in the framework is a compact map, compiled from existing operational documentation, containing the causes each single driver admits together with feasible actions.
 Given that the aim of the tree is producing a single specific narrative, and not open question answering, the tree is small enough to maintain and be read in full: one entry per driver, a handful of admitted causes for each, and the actions paired with them.
 It is injected into the prompt as a list the model has to stay inside, and it is paired with the numeric rule so the narrative is held both on the numerical and causal side.
-In contract terms: the \emph{precondition} is having a tree that carries the admitted causes and actions for the drivers; the \emph{postcondition} is that every cause and action named in the narrative belongs to that set but, unlike the sanitizer, this cannot be deterministically guaranteed: a cause has no tile to be checked against.
+In contract terms: the \emph{precondition} is having a tree that carries the admitted causes and actions for the drivers; the \emph{postcondition} is that every cause and action named in the narrative belongs to that set but, unlike the sanitizer, this cannot be deterministically guaranteed at generation time: a cause has no tile to be checked against.
 
-During the generation time the pipeline does not hand the whole tree to the model. 
+At generation time the pipeline does not hand the whole tree to the model. 
 Based on the drivers that caused the gap on the day, only a subset of the full causes together with the paired actions is selected and passed to the prompt.
 This is also the reason behind a language model in the loop: choosing which admitted causes best fit the week's gap is a judgment a fixed template cannot make.
 Listing~\ref{lst:tree} shows the scoped block as the \ac{LLM} receives it: the complete set of admitted causes and actions for the drivers that moved.
@@ -959,7 +959,7 @@ The contracts in the previous sections are not abstract ideas: the first two rea
 The system prompt that drives the model is not designed to ask \enquote{in general terms} to be accurate.
 Chapter~\ref{chap:state_of_the_art} already explained that a prompt is a request not a command, and better instructions raise the odds of a correct answer without making any errors impossible \cite{wei2022cot}.
 So this design does not try to overturn that verdict, it builds with it.
-The prompt is scoped to what a request can actually do: deliver the two upstream contracts (tile-as-source and curated knowledge tree) and cut the avoidable failures at the source.
+The prompt is scoped to what a request can actually do: deliver the two pre-generation contracts (tile-as-source and curated knowledge tree) and cut the avoidable failures at the source.
 Specifically there is a directive for each failure mode observed during the development, nothing vaguer, so the \ac{LLM}'s efforts can be directed where needed.
 
 
