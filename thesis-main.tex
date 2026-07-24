@@ -1270,6 +1270,71 @@ Figure~\ref{fig:injection} shows the outcome of that stress test, which the sani
   \caption{The sanitizer stress test: each fault planted on the 66 candidate sites of the shipped narratives. Dark chips are repairs to the canonical value, light chips are refusals that leave the fault visible, and the dashed chip is a fault with no canonical resolution, left untouched. Every outcome is 66 of 66: zero false repairs.}
   \label{fig:injection}
   \end{figure}
+
+  \section{Second front: against the expert}
+  \label{sec:front_modes}
+
+Everything in the previous chapter is scored against data; now against hand-written bridges: the harder comparison that checks if the story that the \ac{LLM} produces holds against the one from the manager.
+This is measured at three depths: the headline call, the full cause set, and a composite index that folds numbers, completeness, causes and actions into a single value.
+
+The language model, distinct from the generation, declared in Section~\ref{sec:eval_design} is the core part of the evaluation, with a narrow role.
+It runs at temperature 0.2, acting as claim extractor and aligner.
+Evry number that follows is computed deterministically from those couts.
+The judge never assign a score, and I also validate all thirty final pairs by hand.
+
+The main root cause, the first cateogry the narrative nominates, concides with the expert's choice in twenty-five out of thirty station-weeks.
+The cause set tells more than the top call: infact the model recovered sixty out of the seventy-six sub-causes that where manually identified with a recall of 79\%
+Across the thirty station-weeks it proposed one hundred and fifty-eight causes in total: seventy-seven are direct matches with the expert, seventy-nine are coherent additions the expert did not mention but that do not conflict with the expert's reading, and two are contradictory, as Figure~\ref{fig:causeset} shows.
+Put as a rate, 98.7\% of the proposed causes stay inside the admitted domain.
+That adherence, not the top-cause agreement, is the substance behind the soft guarantee claimed in Table~\ref{tab:positioning}; what stays soft is which in-set cause comes first.
+
+
+
+\begin{figure}[ht]
+  \centering
+  \begin{tikzpicture}[font=\small]
+    \pgfmathsetmacro{\W}{12}
+    \pgfmathsetmacro{\xa}{77/158*\W}
+    \pgfmathsetmacro{\xb}{156/158*\W}
+    \fill[black!55] (0,0) rectangle (\xa,0.8);
+    \fill[black!15] (\xa,0) rectangle (\xb,0.8);
+    \draw[black!70] (0,0) rectangle (\W,0.8);
+    \draw[black!70] (\xa,0) -- (\xa,0.8);
+    \draw[black!70] (\xb,0) -- (\xb,0.8);
+    \node[text=white, font=\small\bfseries] at ({\xa/2},0.4) {77 direct match};
+    \node[font=\small\bfseries] at ({(\xa+\xb)/2},0.4) {79 coherent addition};
+    \node[font=\footnotesize, anchor=east] (ctr) at (\W,1.5) {2 contradictory};
+    \draw[-{Latex[length=1.8mm]}, black!70] (ctr.south) to[bend left=12] ({(\xb+\W)/2},0.85);
+    \node[font=\footnotesize\itshape, text=black!55, anchor=west] at (0,-0.5) {158 causes proposed over the 30 station-weeks};
+  \end{tikzpicture}
+  \caption{The cause set aligned against the expert bridges: of the 158 causes the model proposed, 77 match the expert directly, 79 are additions coherent with the data that the expert did not mention, and 2 contradict the expert's reading. In-domain adherence is 98.7\%.}
+  \label{fig:causeset}
+\end{figure}
+
+
+
+\begin{table}[ht]
+  \centering
+  \small
+  \begin{tabular}{l r}
+  \toprule
+  \textbf{Axis} & \textbf{30 station-weeks} \\
+  \midrule
+  Numbers (0.40)       & 93.7 \\
+  Completeness (0.20)  & 100 \\
+  Causes (0.20)        & 85.7 \\
+  Actions (0.20)       & 44.5 (n=24) \\
+  \midrule
+  \textbf{BSI}         & \textbf{85.5} \\
+  \midrule
+  Top cause = expert   & 25/30 \\
+  \bottomrule
+  \end{tabular}
+  \caption{Bridge Similarity Index by axis and in composite over the 30 station-weeks. The action axis is defined only on stations where the expert wrote at least one action derivable from the data (n=24); elsewhere the axis is excluded and the weights renormalized. The composite is the mean of per-station composites, each computed with its own renormalized weights, so it does not coincide with the weighted average of the axis column; Section~\ref{sec:threats} reports the reproducibility check on the recorded value.}
+  \label{tab:bsi}
+  \end{table}
+  
+
 %----------------------------------------------------------------------------------------
 \chapter{Discussion and Future Directions}
 \label{chap:discussion}
