@@ -1280,7 +1280,7 @@ This is measured at four depths: the headline call, the full cause set, the full
 
 The language model, distinct from the generation, declared in Section~\ref{sec:eval_design} is the core part of the evaluation, with a narrow role.
 It runs at temperature 0.2, acting as claim extractor and aligner.
-Evry number that follows is computed deterministically from those couts.
+Every number that follows is computed deterministically from those couts.
 The judge never assign a score, and I also validate all thirty final pairs by hand.
 
 The main root cause, the first cateogry the narrative nominates, concides with the expert's choice in twenty-five out of thirty station-weeks.
@@ -1293,24 +1293,68 @@ That adherence, not the top-cause agreement, is the substance behind the soft gu
 
 \begin{figure}[ht]
   \centering
-  \begin{tikzpicture}[font=\small]
+  \begin{tikzpicture}[font=\small,
+    hdr/.style={font=\small\bfseries, anchor=west},
+    note/.style={font=\footnotesize\itshape, text=black!55, anchor=west}]
     \pgfmathsetmacro{\W}{12}
+
+    % ================= depth 1: the headline call =================
+    \node[hdr] at (0,0) {Depth 1: the headline call};
+    \pgfmathsetmacro{\xh}{25/30*\W}
+    \fill[black!55] (0,-1.15) rectangle (\xh,-0.45);
+    \fill[black!8]  (\xh,-1.15) rectangle (\W,-0.45);
+    \draw[black!70] (0,-1.15) rectangle (\W,-0.45);
+    \draw[black!70] (\xh,-1.15) -- (\xh,-0.45);
+    \node[text=white, font=\small\bfseries] at ({\xh/2},-0.8) {25 principal cause = expert};
+    \node[font=\small\bfseries, text=black!60] at ({(\xh+\W)/2},-0.8) {5};
+    \node[note] at (0,-1.5) {30 station-weeks; the 5 misses diverge on ranking, not on the admitted domain};
+
+    % ================= depth 2: the full cause set =================
+    \node[hdr] at (0,-2.4) {Depth 2: the full cause set};
+    \pgfmathsetmacro{\xr}{60/76*\W}
+    \fill[black!55] (0,-3.55) rectangle (\xr,-2.85);
+    \fill[black!8]  (\xr,-3.55) rectangle (\W,-2.85);
+    \draw[black!70] (0,-3.55) rectangle (\W,-2.85);
+    \draw[black!70] (\xr,-3.55) -- (\xr,-2.85);
+    \node[text=white, font=\small\bfseries] at ({\xr/2},-3.2) {60 expert causes recovered};
+    \node[font=\small\bfseries, text=black!60] at ({(\xr+\W)/2},-3.2) {16};
+    \node[note] at (0,-3.9) {76 derivable expert causes; recall 79\%};
     \pgfmathsetmacro{\xa}{77/158*\W}
     \pgfmathsetmacro{\xb}{156/158*\W}
-    \fill[black!55] (0,0) rectangle (\xa,0.8);
-    \fill[black!15] (\xa,0) rectangle (\xb,0.8);
-    \draw[black!70] (0,0) rectangle (\W,0.8);
-    \draw[black!70] (\xa,0) -- (\xa,0.8);
-    \draw[black!70] (\xb,0) -- (\xb,0.8);
-    \node[text=white, font=\small\bfseries] at ({\xa/2},0.4) {77 direct match};
-    \node[font=\small\bfseries] at ({(\xa+\xb)/2},0.4) {79 coherent addition};
-    \node[font=\footnotesize, anchor=east] (ctr) at (\W,1.5) {2 contradictory};
-    \draw[-{Latex[length=1.8mm]}, black!70] (ctr.south) to[bend left=12] ({(\xb+\W)/2},0.85);
-    \node[font=\footnotesize\itshape, text=black!55, anchor=west] at (0,-0.5) {158 causes proposed over the 30 station-weeks};
+    \fill[black!55] (0,-5.25) rectangle (\xa,-4.55);
+    \fill[black!15] (\xa,-5.25) rectangle (\xb,-4.55);
+    \draw[black!70] (0,-5.25) rectangle (\W,-4.55);
+    \draw[black!70] (\xa,-5.25) -- (\xa,-4.55);
+    \draw[black!70] (\xb,-5.25) -- (\xb,-4.55);
+    \node[text=white, font=\small\bfseries] at ({\xa/2},-4.9) {77 direct match};
+    \node[font=\small\bfseries] at ({(\xa+\xb)/2},-4.9) {79 coherent addition};
+    \node[note] at (0,-5.6) {158 causes proposed; in-domain adherence 98.7\%};
+    \node[font=\footnotesize, anchor=east] (ctr) at (\W,-5.9) {2 contradictory};
+    \draw[-{Latex[length=1.8mm]}, black!70] (ctr.north) to[bend right=25] ({(\xb+\W)/2},-5.3);
+
+    % ================= depth 3: the full action set =================
+    \node[hdr] at (0,-6.75) {Depth 3: the full action set};
+    \pgfmathsetmacro{\ya}{22/46*\W}
+    \fill[black!55] (0,-7.9) rectangle (\ya,-7.2);
+    \fill[black!8]  (\ya,-7.9) rectangle (\W,-7.2);
+    \draw[black!70] (0,-7.9) rectangle (\W,-7.2);
+    \draw[black!70] (\ya,-7.9) -- (\ya,-7.2);
+    \node[text=white, font=\small\bfseries] at ({\ya/2},-7.55) {22 expert actions recovered};
+    \node[font=\small\bfseries, text=black!60] at ({(\ya+\W)/2},-7.55) {24};
+    \node[note] at (0,-8.25) {46 derivable expert actions; recall 48\%};
+    \pgfmathsetmacro{\yb}{34/67*\W}
+    \fill[black!55] (0,-9.6) rectangle (\yb,-8.9);
+    \fill[black!15] (\yb,-9.6) rectangle (\W,-8.9);
+    \draw[black!70] (0,-9.6) rectangle (\W,-8.9);
+    \draw[black!70] (\yb,-9.6) -- (\yb,-8.9);
+    \node[text=white, font=\small\bfseries] at ({\yb/2},-9.25) {34 aligned with the expert};
+    \node[font=\small\bfseries] at ({(\yb+\W)/2},-9.25) {33 additional levers};
+    \node[note] at (0,-9.95) {67 actions proposed; the expert wrote a derivable action in 24 of the 30 station-weeks};
   \end{tikzpicture}
-  \caption{The cause set aligned against the expert bridges: of the 158 causes the model proposed, 77 match the expert directly, 79 are additions coherent with the data that the expert did not mention, and 2 contradict the expert's reading. In-domain adherence is 98.7\%.}
+  \caption{The second front at its first three depths. }
   \label{fig:causeset}
 \end{figure}
+
 
 
 
