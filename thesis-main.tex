@@ -1275,19 +1275,26 @@ Figure~\ref{fig:injection} shows the outcome of that stress test, which the sani
   \section{Second front: against the expert}
   \label{sec:2front_modes}
 
-Everything in the previous chapter is scored against raw data; now against hand-written bridges: the harder comparison that checks if the story that the \ac{LLM} produces holds against the one from the manager.
-This is measured at four depths: the headline call, the full cause set, the full action set, and a composite index that folds numbers, completeness, causes and actions into a single value.
+Everything in the previous section is scored against source data, and predefined failure criteria; now against hand-written bridges: the harder comparison that checks if the story that the \ac{LLM} produces holds against the one from the manager.
+The bridge provides the closest available account of how an expert interpreted that week, although it cannot serve as absolute ground truth for causal priority.
 
-The language model, distinct from the generation, declared in Section~\ref{sec:eval_design} is the core part of the evaluation, with a narrow role.
-It runs at temperature 0.2, acting as claim extractor and aligner.
-Every number that follows is computed deterministically from those couts.
-The judge never assign a score, and I also validate all thirty final pairs by hand.
+
+The comparison is made at four depths. Depth one cecks the first nominated cause, Depth two compares the full cause set, depth three does the same for the full action set, and  depth four brings composite index that folds numbers, completeness, causes and actions into a single value.
+Keeping depths separate is important because agreement can be strong at one level and weak at another.
+
+
+A separate frontier language model, distinct from the generator, acts as claim extractor and aligner \cite{zheng2023judge}.
+It receives two things: the generated bridge and the manager's one, runs at temperature 0.2 to limit output variabillity, and returns a structured extraction of causes, actions and their alignments.
+The final score is calculated deterministically from the estracted alignments and source data.
+I also validate all thirty final pairs by hand.
 
 \subsection{Depth 1: the headline call}
 At depth one, the main root cause, the first cateogry the narrative nominates, concides with the expert's choice in twenty-five out of thirty station-weeks.
 Those five misses shares the same signature, none of them is an error in the \emph{ordinary} sense. 
 The model ranks the root causes by the magnitude of the driver that moved the most, while a person can rank by a domain judgement knowing an undefined smaller driver or external event that caused the gap.
-No contract can close this gap. 
+
+The pattern also has an oppsite case: in one of the analyzed bridge, both the model and the expert choose the same principal cause even though another category had a larger raw movement. In that case, the knowledge tree directed the explanation towards the mechanism recognized by the domain instead of the larger movement.
+The three contracts still cannot use site knowledge absent from both the structured data anad the tree. Figure~\ref{fig:depth_headline} reports the resulting split.
 
 
 
@@ -1313,7 +1320,7 @@ No contract can close this gap.
     \node[note] at (0,-1.7) {30 station-weeks; the 5 misses diverge on ranking, not on the admitted domain};
   \end{tikzpicture}
   \caption{The second front at its first three depths. Depth 1, the headline call: the principal root cause coincides with the expert's in 25 of the 30 station-weeks.}
-  \label{fig:causeset}
+  \label{fig:depth_headline}
 \end{figure}
 
 
