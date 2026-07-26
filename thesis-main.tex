@@ -1090,7 +1090,7 @@ What Chapter~\ref{chap:results} measures, therefore, is not its adoption rate bu
 
 Chapter~\ref{chap:proposed_solution} presented the three-contract framework and how it acts to ground the narrative.
 This chapter measures how that claim holds against thirty station-weeks of real data, each below target, each paired with the bridge a human manager wrote by hand for the same period.
-It takes the catalog of Section~\ref{sec:catalogue}, collected over three months of observations, shows how the contracts affect those failures, reports how closely the final output match the expert bridges, and closes on the limits of the evaluation.
+It takes the catalog of Section~\ref{sec:catalogue}, collected over three months of observations, shows how the contracts affect those failures, reports how closely the final outputs match the expert bridges, and closes on the limits of the evaluation.
 
 
 
@@ -1099,8 +1099,8 @@ It takes the catalog of Section~\ref{sec:catalogue}, collected over three months
 \label{sec:eval_design}
 
 The evaluation answers two separate questions: whether the framework avoids the failure modes, and how closely the final narrative lands to the bridge a manager wrote.
-Each front is measured in its own way, and a language model participates in the scoring only on the second front; both run on the same corpus of narratives, generated along the ablation ladder of Figure~\ref{fig:ladder}.
-
+Each front is measured in its own way, and a language model participates in the scoring only on the second front.
+The narratives are generated along the ablation ladder of Figure~\ref{fig:ladder}.
 The first front, which asks whether the framework reduces the failure modes, does not use any \ac{LLM} judgment. 
 For the numeric modes (F1, F2, F3) it relies on a deterministic check: every figure in the narrative has to trace back to a value the model was given.
 The causal modes (F4, F5) are counted by hand, by a single rater, against predefined rules: the named causes and actions have to exist in the admitted domain.
@@ -1111,7 +1111,7 @@ The evaluation uses real data from thirty different delivery stations, each unde
  
 All the sampled stations belong to the same country network, span two building types, and cover gap magnitudes from small to large.
 The production model is a frontier language model, the same one the app runs, and the prompt is the full app prompt, not a reduced version.
-Each generation is isolated and stateless: one conversation per station per level, three concurrent workers, and no contamination across stations.
+Each generation is isolated and stateless: one conversation per station-week per level, three concurrent workers, and no contamination across stations.
 
 
 
