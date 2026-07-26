@@ -1281,7 +1281,7 @@ The second front moves to hand-written bridges: the harder comparison, which che
 The bridge provides the closest available account of how an expert interpreted that week, although it cannot serve as absolute ground truth for causal priority.
 
 
-The comparison is made at four depths. Depth one checks the cause neamed first, Depth two compares the full cause set, Depth three does the same for the full action set, and Depth four brings a composite index that folds numbers, completeness, causes and actions into a single value called Bridge Similarity Index (BSI).
+The comparison is made at four depths. Depth one checks the cause named first, Depth two compares the full cause set, Depth three does the same for the full action set, and Depth four brings a composite index that folds numbers, completeness, causes and actions into a single value called Bridge Similarity Index (BSI).
 Keeping depths separate is important because agreement can be strong at one depth and weak at another.
 
 
@@ -1293,7 +1293,7 @@ I also validate all thirty final pairs by hand.
 \subsection{Depth 1: the headline call}
 \label{sec:depth_headline}
 At the first depth, the main root cause, the first category the narrative nominates, coincides with the expert's choice in twenty-five of the thirty station-weeks.
-Those five ranking differences share the same signature: none of them is an error in the \emph{ordinary} sense. 
+The five ranking differences share the same signature: none of them is an error in the \emph{ordinary} sense. 
 The model ranks the root causes by the magnitude of their contribution, while a person can rank by a domain judgement knowing that a smaller driver or an external event actually caused the gap.
 The disagreement concerns priority; all five selected causes remain inside the admitted domain.
 
@@ -1327,20 +1327,19 @@ The disagreement concerns priority; all five selected causes remain inside the a
 \subsection{Depth 2: the full cause set}
 \label{sec:depth_cause}
 
-This second depth focusses on comparing each causal claim, without considering the stated priority.
+This second depth focuses on comparing each causal claim, without considering the stated priority.
 The expert bridges contain one hundred and four total causes. 
-The generated bridges align with eighty-one of them, achieving a reference recall of 79\%.
+The generated bridges align with eighty-one of them, achieving a reference recall of 78\%.
 The remaining twenty-three have no aligned cause in the generated text.
-In particular twenty-eight out of the one hundred and four causes cites facts that never reached the pipeline: a severe event or a strike, for which the model aligns only when the fact leaves a visible trace in the numbers.
+In particular, twenty-eight of the one hundred and four causes cite facts that never reach the pipeline: a severe event or a strike, for which the model aligns only when the fact leaves a visible trace in the numbers.
 
-The reverse comparison calssifies the one hundred and fifty-eight causes the \ac{LLM} proposed. 
-Seventy-seven directly match the one written by the manager, seventy-nine are coherent additions absent from the hand-written bridge, and two contradict the expert's reading.
-The ones that directly matches the manager's causes, in terms of value, differ from the section above because the alignment is not one-to-one: a single generated cause can cover two lines of the expert bridge, as when the manager record thes a phenomenon and its knock-on effect as separate causes, while the model explains both in one.
-Seventy-nine are coherent additions absent from the hand-written bridge, and two contradict the expert's reading.
+The reverse comparison classifies the one hundred and fifty-eight causes the \ac{LLM} proposed. 
+Seventy-seven directly match a cause written by the manager, seventy-nine are coherent additions absent from the hand-written bridge, and two contradict the expert's reading.
+The ones that directly match the manager's causes differ in number from the eighty-one above because the alignment is not one-to-one: a single generated cause can cover two lines of the expert bridge, as when the manager records a phenomenon and its knock-on effect as separate causes, while the model explains both in one.
 
 Taken together, one hundred and fifty-six of the one hundred and fifty-eight proposed causes are either direct matches or coherent additions, equal to 98.7\%.
 This is a measure of domain admissibility, not agreement with the expert.
-This section together with the disappearance of F4 in Section~\ref{sec:front_modes} support the bounded-cause guaranteee argued in Chapter~\ref{chap:state_of_the_art} and Chapter~\ref{chap:proposed_solution}; a tree bounds what can be named, while the choice and ranking inside the domain remain a matter of judjement.
+This result, together with the disappearance of F4 at L2 in Section~\ref{sec:front_modes}, supports the bounded-cause guarantee argued in Chapter~\ref{chap:state_of_the_art} and Chapter~\ref{chap:proposed_solution}: the tree bounds what can be named, while the choice and ranking inside the admitted domain remain a matter of judgement.
 
 
 \begin{figure}[htbp]
@@ -1354,7 +1353,7 @@ This section together with the disappearance of F4 in Section~\ref{sec:front_mod
     \draw[box] (-0.35,0) rectangle (\W+0.35,-4.35);
     \node[hdr] at (0.1,0) {Depth 2: the full cause set};
 
-    \pgfmathsetmacro{\xr}{60/76*\W}
+    \pgfmathsetmacro{\xr}{81/104*\W}
     \fill[black!55] (0,-1.35) rectangle (\xr,-0.65);
     \fill[black!8]  (\xr,-1.35) rectangle (\W,-0.65);
     \draw[black!70] (0,-1.35) rectangle (\W,-0.65);
@@ -1366,7 +1365,7 @@ This section together with the disappearance of F4 in Section~\ref{sec:front_mod
           align=center, inner sep=1pt]
       at ({(\xr+\W)/2},-1.0) {23 without\\alignment};
     \node[note] at (0,-1.7)
-      {81 expert causes; reference recall 79\%};
+      {104 expert causes; reference recall 78\%};
 
     \pgfmathsetmacro{\xa}{77/158*\W}
     \pgfmathsetmacro{\xb}{156/158*\W}
