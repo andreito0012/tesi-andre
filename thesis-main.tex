@@ -1094,6 +1094,7 @@ It takes the catalog of Section~\ref{sec:catalogue}, collected over three months
 
 
 
+%------------------------------------------------------------------
 
 \section{Design of the evaluation}
 \label{sec:eval_design}
@@ -1164,6 +1165,7 @@ The bottom bar is the reason why the naive level is not a strawman: L0 already h
 This first level shows what a capable model does when nothing constrains it.
 A contract is then added by each of the rungs above: L1 freezes the values into tiles, L2 (the full app prompt) bounds causes and actions, and L3 (the configuration the app ships) places the sanitizer downstream of the generation.
 
+%------------------------------------------------------------------
 
 \section{First front: the failure modes}
 \label{sec:front_modes}
@@ -1272,9 +1274,10 @@ Figure~\ref{fig:injection} shows the outcome of that stress test, which the sani
   \label{fig:injection}
   \end{figure}
 
+%------------------------------------------------------------------
 
-  \section{Second front: against the expert}
-  \label{sec:front_expert}
+\section{Second front: against the expert}
+\label{sec:front_expert}
 
 Everything in the previous section is scored against source data and predefined failure criteria. 
 The second front moves to hand-written bridges: the harder comparison, which checks whether the story the \ac{LLM} produces is consistent with the one the manager wrote.
@@ -1289,6 +1292,7 @@ A separate frontier language model, distinct from the generator, acts as a claim
 It receives two things: the generated bridge and the manager's one, runs at temperature 0.2 to limit output variability, and returns a structured extraction of causes, actions and their alignments.
 It does not assign the final score; a value that is calculated deterministically from the extracted alignments and source data.
 I also validate all thirty final pairs by hand.
+%------------------------------------------------------------------
 
 \subsection{Depth 1: the headline call}
 \label{sec:depth_headline}
@@ -1323,6 +1327,7 @@ The disagreement concerns priority; all five selected causes remain inside the a
 \end{figure}
 \FloatBarrier
 
+%------------------------------------------------------------------
 
 \subsection{Depth 2: the full cause set}
 \label{sec:depth_cause}
@@ -1388,11 +1393,73 @@ This result, together with the disappearance of F4 at L2 in Section~\ref{sec:fro
       (ctr.north) to[bend right=25] ({(\xb+\W)/2},-3.10);
   \end{tikzpicture}
 
-  \caption{Depth 2, the full cause set. The upper bar measures reference recall over 76 derivable expert causes; the lower bar classifies the 158 causes proposed by the model.}
+  \caption{Depth 2, the full cause set. The upper bar measures reference recall over 104 expert causes; the lower bar classifies the 158 causes proposed by the model.}
   \label{fig:depth_causes}
 \end{figure}
 \FloatBarrier
 
+%------------------------------------------------------------------
+\subsection{Depth 3: the full action set}
+\label{sec:depth_actions}
+
+The third depth repeat the set comparison for the actions.
+The expert bridges contain sixty-six actions in total, and the generated bridge align with thirty-two of them, achieving a reference recall of 48\%.
+Out of all those actions, twenty depends on local information that never reaches the pipeline; those can be cited by the model, as for the actions, only if a track is left on data.
+
+The second bar in Figure~\ref{fig:depth_actions} classifies the sixty-seven actions the model proposed: thirty-four directly align with the expert while other thirty-three are admissable levers that expert did not choose.
+Also here as in Section~\ref{sec:depth_cause}, the alignment is not one-to-one: a single generated action can cover two lines of the expert bridge.
+
+Actionability ad expert agreement measure different things.
+The first shows that the tree removes out-of-mandate recommendations at L2.
+Depth three shows how an admissable action can still differ from the manager's choice, resulting in the wekest part of the comparison.
+The actions depends on specific locational factors that difficultly can be included in the model.
+
+\begin{figure}[htbp]
+  \centering
+  \begin{tikzpicture}[font=\small,
+    hdr/.style={font=\small\bfseries, anchor=west, fill=white, inner xsep=4pt},
+    note/.style={font=\footnotesize\itshape, text=black!55, anchor=west},
+    box/.style={draw=black!60, rounded corners=3pt}]
+    \pgfmathsetmacro{\W}{12}
+
+    \draw[box] (-0.35,0) rectangle (\W+0.35,-4.0);
+    \node[hdr] at (0.1,0) {Depth 3: the full action set};
+
+    \pgfmathsetmacro{\ya}{32/66*\W}
+    \fill[black!55] (0,-1.35) rectangle (\ya,-0.65);
+    \fill[black!8]  (\ya,-1.35) rectangle (\W,-0.65);
+    \draw[black!70] (0,-1.35) rectangle (\W,-0.65);
+    \draw[black!70] (\ya,-1.35) -- (\ya,-0.65);
+
+    \node[text=white, font=\small\bfseries]
+      at ({\ya/2},-1.0) {32 expert actions aligned};
+    \node[font=\small\bfseries, text=black!60]
+      at ({(\ya+\W)/2},-1.0) {34 without alignment};
+    \node[note] at (0,-1.7)
+      {66 derivable expert actions; reference recall 48\%};
+
+    \pgfmathsetmacro{\yb}{34/67*\W}
+    \fill[black!55] (0,-3.05) rectangle (\yb,-2.35);
+    \fill[black!15] (\yb,-3.05) rectangle (\W,-2.35);
+    \draw[black!70] (0,-3.05) rectangle (\W,-2.35);
+    \draw[black!70] (\yb,-3.05) -- (\yb,-2.35);
+
+    \node[text=white, font=\small\bfseries]
+      at ({\yb/2},-2.70) {34 aligned with the expert};
+    \node[font=\small\bfseries]
+      at ({(\yb+\W)/2},-2.70) {33 additional levers};
+    \node[note] at (0,-3.40)
+      {67 model actions; Actions axis defined on 24 station-weeks};
+  \end{tikzpicture}
+
+  \caption{Depth 3, the full action set. The upper bar measures reference recall over 66 derivable expert actions; the lower bar describes the 67 actions proposed by the model.}
+  \label{fig:depth_actions}
+\end{figure}
+\FloatBarrier
+
+%------------------------------------------------------------------
+
+%------------------------------------------------------------------
 
 
 %----------------------------------------------------------------------------------------
