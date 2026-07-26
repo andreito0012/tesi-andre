@@ -1275,7 +1275,7 @@ Figure~\ref{fig:injection} shows the outcome of that stress test, which the sani
   \section{Second front: against the expert}
   \label{sec:2front_modes}
 
-Everything in the previous chapter is scored against data; now against hand-written bridges: the harder comparison that checks if the story that the \ac{LLM} produces holds against the one from the manager.
+Everything in the previous chapter is scored against raw data; now against hand-written bridges: the harder comparison that checks if the story that the \ac{LLM} produces holds against the one from the manager.
 This is measured at four depths: the headline call, the full cause set, the full action set, and a composite index that folds numbers, completeness, causes and actions into a single value.
 
 The language model, distinct from the generation, declared in Section~\ref{sec:eval_design} is the core part of the evaluation, with a narrow role.
@@ -1283,10 +1283,39 @@ It runs at temperature 0.2, acting as claim extractor and aligner.
 Every number that follows is computed deterministically from those couts.
 The judge never assign a score, and I also validate all thirty final pairs by hand.
 
+\subsection{Depth 1: the headline call}
 At depth one, the main root cause, the first cateogry the narrative nominates, concides with the expert's choice in twenty-five out of thirty station-weeks.
 Those five misses shares the same signature, none of them is an error in the \emph{ordinary} sense. 
 The model ranks the root causes by the magnitude of the driver that moved the most, while a person can rank by a domain judgement knowing an undefined smaller driver or external event that caused the gap.
 No contract can close this gap. 
+
+
+
+
+\begin{figure}[ht]
+  \centering
+  \begin{tikzpicture}[font=\small,
+    hdr/.style={font=\small\bfseries, anchor=west, fill=white, inner xsep=4pt},
+    note/.style={font=\footnotesize\itshape, text=black!55, anchor=west},
+    box/.style={draw=black!60, rounded corners=3pt}]
+    \pgfmathsetmacro{\W}{12}
+
+    % ================= depth 1: the headline call =================
+    \draw[box] (-0.35,0) rectangle (\W+0.35,-2.05);
+    \node[hdr] at (0.1,0) {Depth 1: the headline call};
+    \pgfmathsetmacro{\xh}{25/30*\W}
+    \fill[black!55] (0,-1.35) rectangle (\xh,-0.65);
+    \fill[black!8]  (\xh,-1.35) rectangle (\W,-0.65);
+    \draw[black!70] (0,-1.35) rectangle (\W,-0.65);
+    \draw[black!70] (\xh,-1.35) -- (\xh,-0.65);
+    \node[text=white, font=\small\bfseries] at ({\xh/2},-1.0) {25 principal cause = expert};
+    \node[font=\footnotesize\bfseries, text=black!60] at ({(\xh+\W)/2},-1.0) {5 misses};
+    \node[note] at (0,-1.7) {30 station-weeks; the 5 misses diverge on ranking, not on the admitted domain};
+  \end{tikzpicture}
+  \caption{The second front at its first three depths. Depth 1, the headline call: the principal root cause coincides with the expert's in 25 of the 30 station-weeks.}
+  \label{fig:causeset}
+\end{figure}
+
 
 
 \begin{figure}[ht]
