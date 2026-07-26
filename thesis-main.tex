@@ -1090,7 +1090,7 @@ What Chapter~\ref{chap:results} measures, therefore, is not its adoption rate bu
 
 Chapter~\ref{chap:proposed_solution} presented the three-contract framework and how it acts to ground the narrative.
 This chapter measures how that claim holds against thirty station-weeks of real data, each below target, each paired with the bridge a human manager wrote by hand for the same period.
-It takes the catalog of Section~\ref{sec:catalogue}, collected over three months of observations, shows what ablation does to those failures, reports how close the final output sits to the expert's bridge, and closes on the limits of all of it.
+It takes the catalog of Section~\ref{sec:catalogue}, collected over three months of observations, shows how the contracts affect those failures, reports how closely the final output match the expert bridges, and closes on the limits of the evaluation.
 
 
 
@@ -1098,17 +1098,18 @@ It takes the catalog of Section~\ref{sec:catalogue}, collected over three months
 \section{Design of the evaluation}
 \label{sec:eval_design}
 
-The evaluation answers two separate questions: whether the framework avoids the failure modes, and how close the generated narrative lands to the bridge a manager wrote.
-Each front is measured in its own way, and a language model takes part in only one of them; both run on the same corpus of narratives, generated along the ablation ladder of Figure~\ref{fig:ladder}.
+The evaluation answers two separate questions: whether the framework avoids the failure modes, and how closely the final narrative lands to the bridge a manager wrote.
+Each front is measured in its own way, and a language model participates in the scoring only on the second front; both run on the same corpus of narratives, generated along the ablation ladder of Figure~\ref{fig:ladder}.
 
 The first front, which asks whether the framework reduces the failure modes, does not use any \ac{LLM} judgment. 
 For the numeric modes (F1, F2, F3) it relies on a deterministic check: every figure in the narrative has to trace back to a value the model was given.
 The causal modes (F4, F5) are counted by hand, by a single rater, against predefined rules: the named causes and actions have to exist in the admitted domain.
 Finally, the formal modes (F6, F7, F8) are tested by injection, since the final pipeline no longer produces them.
 
-The second front compares each generated narrative with the corresponding human bridge. 
-It uses real data from thirty different delivery stations, each under target during a specific week; each station is run through the four levels of the ladder, which gives one hundred and twenty narratives. 
-All the stations belong to the same country network, span two building types, and cover gap magnitudes from small to large.
+The second front compares each final narrative with the corresponding human bridge. 
+The evaluation uses real data from thirty different delivery stations, each under target during a specific week; each station is run through the four levels of the ladder, which gives one hundred and twenty narratives, but only the thirty final bridge produced by the shipped configuration are used.
+ 
+All the sampled stations belong to the same country network, span two building types, and cover gap magnitudes from small to large.
 The production model is a frontier language model, the same one the app runs, and the prompt is the full app prompt, not a reduced version.
 Each generation is isolated and stateless: one conversation per station per level, three concurrent workers, and no contamination across stations.
 
@@ -1229,7 +1230,7 @@ At the previous two levels the model invents definitions for the different bucke
 
 For what regards the formal modes (F6, F7, F8), they cannot be read off the natural output: by the time the sanitizer runs, the upstream contracts have already removed almost everything it is built to catch, and counting occurrences would report a zero that says nothing about the guard itself.
 On the natural runs it indeed stayed idle: zero corrections across the thirty shipped narratives.
-So the sanitizer is measured by injection: the four numeric faults are each planted on all sixty-six sites of the shipped narratives, two hundred and sixty-four injections in total, plus a separate sweep that fuses the label of one metric with the value of another on the same sixty-six sites.
+So the sanitizer is measured by injection: the four value faults are each planted on all sixty-six sites of the shipped narratives, two hundred and sixty-four injections in total, plus a separate sweep that fuses the label of one metric with the value of another on the same sixty-six sites.
 Figure~\ref{fig:injection} shows the outcome of that stress test, which the sanitizer fully passed, with zero false repairs.
 
 
@@ -1273,23 +1274,25 @@ Figure~\ref{fig:injection} shows the outcome of that stress test, which the sani
 
 
   \section{Second front: against the expert}
-  \label{sec:2front_modes}
+  \label{sec:front_expert}
 
-Everything in the previous section is scored against source data, and predefined failure criteria; now against hand-written bridges: the harder comparison that checks if the story that the \ac{LLM} produces holds against the one from the manager.
+Everything in the previous section is scored against source data and predefined failure criteria. 
+Now, for the second front, against hand-written bridges: the harder comparison that checks whether the story that the \ac{LLM} produces holds against the one from the manager.
 The bridge provides the closest available account of how an expert interpreted that week, although it cannot serve as absolute ground truth for causal priority.
 
 
-The comparison is made at four depths. Depth one cecks the first nominated cause, Depth two compares the full cause set, depth three does the same for the full action set, and  depth four brings composite index that folds numbers, completeness, causes and actions into a single value.
+The comparison is made at four depths. Depth one cecks the cause neamed first, Depth two compares the full cause set, depth three does the same for the full action set, and  depth four brings composite index that folds numbers, completeness, causes and actions into a single value called Bridge Similarity Index (BSI).
 Keeping depths separate is important because agreement can be strong at one level and weak at another.
 
 
 A separate frontier language model, distinct from the generator, acts as claim extractor and aligner \cite{zheng2023judge}.
-It receives two things: the generated bridge and the manager's one, runs at temperature 0.2 to limit output variabillity, and returns a structured extraction of causes, actions and their alignments.
-The final score is calculated deterministically from the estracted alignments and source data.
+It receives two things: the generated bridge and the manager's one, runs at temperature 0.2 to limit output variability, and returns a structured extraction of causes, actions and their alignments.
+It does not assign the final score.
+The final score is calculated deterministically from the extracted alignments and source data.
 I also validate all thirty final pairs by hand.
 
 \subsection{Depth 1: the headline call}
-At depth one, the main root cause, the first cateogry the narrative nominates, concides with the expert's choice in twenty-five out of thirty station-weeks.
+At the first depth, the main root cause, the first cateogry the narrative nominates, coincides with the expert's choice in twenty-five of the thirty station-weeks.
 Those five misses shares the same signature, none of them is an error in the \emph{ordinary} sense. 
 The model ranks the root causes by the magnitude of the driver that moved the most, while a person can rank by a domain judgement knowing an undefined smaller driver or external event that caused the gap.
 
