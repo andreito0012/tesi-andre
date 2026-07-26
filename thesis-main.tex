@@ -1098,7 +1098,7 @@ It takes the catalog of Section~\ref{sec:catalogue}, collected over three months
 \section{Design of the evaluation}
 \label{sec:eval_design}
 
-The evaluation answers two separate questions: whether the framework avoids the failure modes, and how closely the final narrative lands to the bridge a manager wrote.
+The evaluation answers two separate questions: whether the framework avoids the failure modes, and how closely the final narrative matches the bridge a manager wrote.
 Each front is measured in its own way, and a language model participates in the scoring only on the second front.
 The narratives are generated along the ablation ladder of Figure~\ref{fig:ladder}.
 The first front, which asks whether the framework reduces the failure modes, does not use any \ac{LLM} judgment. 
@@ -1107,7 +1107,7 @@ The causal modes (F4, F5) are counted by hand, by a single rater, against predef
 Finally, the formal modes (F6, F7, F8) are tested by injection, since the final pipeline no longer produces them.
 
 The second front compares each final narrative with the corresponding human bridge. 
-The evaluation uses real data from thirty different delivery stations, each under target during a specific week; each station is run through the four levels of the ladder, which gives one hundred and twenty narratives, but only the thirty final bridge produced by the shipped configuration are used.
+The evaluation uses real data from thirty station-weeks, each below target during a specific week; each one is run through the four levels of the ladder, which gives one hundred and twenty narratives, but only the thirty final narratives produced by the shipped configuration are used.
  
 All the sampled stations belong to the same country network, span two building types, and cover gap magnitudes from small to large.
 The production model is a frontier language model, the same one the app runs, and the prompt is the full app prompt, not a reduced version.
@@ -1223,6 +1223,7 @@ Starting with the numeric modes, at L0 the model fabricates numbers freely: it r
 One rung of the ladder is enough to remove nearly all of it.
 In particular, the increase observed for F1 at levels L2 and L3 is not a regression of the tile contract: the tree makes the narrative richer, more buckets get discussed together, and the model finds more occasions to state their total.
 The residual five are all such self-summed totals, the boundary declared in Section~\ref{sec:tileasource}.
+Counted over the thirty shipped narratives, fourhundred and eight of the fourhundred and thirteen numeric tokens trace back to the input; the five self-summed totals are the only exceptions.
 
 The causal modes (F4, F5) shrink at L1 and disappear completely only when the tree enters at level L2.
 At the previous two levels the model invents definitions for the different buckets, reading operational meaning into labels it was never given, and proposes out-of-mandate actions; both disappear at L2.
@@ -1277,28 +1278,25 @@ Figure~\ref{fig:injection} shows the outcome of that stress test, which the sani
   \label{sec:front_expert}
 
 Everything in the previous section is scored against source data and predefined failure criteria. 
-Now, for the second front, against hand-written bridges: the harder comparison that checks whether the story that the \ac{LLM} produces holds against the one from the manager.
+The second front moves to hand-written bridges: the harder comparison, which checks whether the story the \ac{LLM} produces is consitent with the one the manager wrote.
 The bridge provides the closest available account of how an expert interpreted that week, although it cannot serve as absolute ground truth for causal priority.
 
 
-The comparison is made at four depths. Depth one cecks the cause neamed first, Depth two compares the full cause set, depth three does the same for the full action set, and  depth four brings composite index that folds numbers, completeness, causes and actions into a single value called Bridge Similarity Index (BSI).
+The comparison is made at four depths. Depth one cecks the cause neamed first, Depth two compares the full cause set, Depth three does the same for the full action set, and Depth four brings composite index that folds numbers, completeness, causes and actions into a single value called Bridge Similarity Index (BSI).
 Keeping depths separate is important because agreement can be strong at one level and weak at another.
 
 
-A separate frontier language model, distinct from the generator, acts as claim extractor and aligner \cite{zheng2023judge}.
+A separate frontier language model, distinct from the generator, acts as a claim extractor and aligner \cite{zheng2023judge}.
 It receives two things: the generated bridge and the manager's one, runs at temperature 0.2 to limit output variability, and returns a structured extraction of causes, actions and their alignments.
-It does not assign the final score.
-The final score is calculated deterministically from the extracted alignments and source data.
+It does not assign the final score; It is calculated deterministically from the extracted alignments and source data.
 I also validate all thirty final pairs by hand.
 
 \subsection{Depth 1: the headline call}
-At the first depth, the main root cause, the first cateogry the narrative nominates, coincides with the expert's choice in twenty-five of the thirty station-weeks.
-Those five misses shares the same signature, none of them is an error in the \emph{ordinary} sense. 
-The model ranks the root causes by the magnitude of the driver that moved the most, while a person can rank by a domain judgement knowing an undefined smaller driver or external event that caused the gap.
-
-The pattern also has an oppsite case: in one of the analyzed bridge, both the model and the expert choose the same principal cause even though another category had a larger raw movement. In that case, the knowledge tree directed the explanation towards the mechanism recognized by the domain instead of the larger movement.
-The three contracts still cannot use site knowledge absent from both the structured data anad the tree. Figure~\ref{fig:depth_headline} reports the resulting split.
-
+\label{sec:depth_headline}
+At the first depth, the main root cause, the first category the narrative nominates, coincides with the expert's choice in twenty-five of the thirty station-weeks.
+Those five ranking differences share the same signature: none of them is an error in the \emph{ordinary} sense. 
+The model ranks the root causes by the magnitude of their contribution, while a person can rank by a domain judgement knowing that a smaller driver or an external event actually caused the gap.
+The disagreement concerns priority; all five selected causes remain inside the admitted domain.
 
 
 
@@ -1318,107 +1316,18 @@ The three contracts still cannot use site knowledge absent from both the structu
     \fill[black!8]  (\xh,-1.35) rectangle (\W,-0.65);
     \draw[black!70] (0,-1.35) rectangle (\W,-0.65);
     \draw[black!70] (\xh,-1.35) -- (\xh,-0.65);
-    \node[text=white, font=\small\bfseries] at ({\xh/2},-1.0) {25 principal cause = expert};
-    \node[font=\footnotesize\bfseries, text=black!60] at ({(\xh+\W)/2},-1.0) {5 misses};
-    \node[note] at (0,-1.7) {30 station-weeks; the 5 misses diverge on ranking, not on the admitted domain};
+    \node[text=white, font=\small\bfseries] at ({\xh/2},-1.0) {25 headline calls aligned};
+    \node[font=\footnotesize\bfseries, text=black!60] at ({(\xh+\W)/2},-1.0) {5 ranking differences};
+    \node[note] at (0,-1.7) {30 station-weeks; 5 ranking differences within the admitted domain.};
   \end{tikzpicture}
-  \caption{The second front at its first three depths. Depth 1, the headline call: the principal root cause coincides with the expert's in 25 of the 30 station-weeks.}
+  \caption{Depth 1, the headline call: the principal root cause coincides with the expert's in 25 of the 30 station-weeks.}
   \label{fig:depth_headline}
 \end{figure}
+\FloatBarrier
 
 
 
-\begin{figure}[ht]
-  \centering
-  \begin{tikzpicture}[font=\small,
-    hdr/.style={font=\small\bfseries, anchor=west, fill=white, inner xsep=4pt},
-    note/.style={font=\footnotesize\itshape, text=black!55, anchor=west},
-    box/.style={draw=black!60, rounded corners=3pt}]
-    \pgfmathsetmacro{\W}{12}
 
-    % ================= depth 1: the headline call =================
-    \draw[box] (-0.35,0) rectangle (\W+0.35,-2.05);
-    \node[hdr] at (0.1,0) {Depth 1: the headline call};
-    \pgfmathsetmacro{\xh}{25/30*\W}
-    \fill[black!55] (0,-1.35) rectangle (\xh,-0.65);
-    \fill[black!8]  (\xh,-1.35) rectangle (\W,-0.65);
-    \draw[black!70] (0,-1.35) rectangle (\W,-0.65);
-    \draw[black!70] (\xh,-1.35) -- (\xh,-0.65);
-    \node[text=white, font=\small\bfseries] at ({\xh/2},-1.0) {25 principal cause = expert};
-    \node[font=\footnotesize\bfseries, text=black!60] at ({(\xh+\W)/2},-1.0) {5 misses};
-    \node[note] at (0,-1.7) {30 station-weeks; the 5 misses diverge on ranking, not on the admitted domain};
-
-    % ================= depth 2: the full cause set =================
-    \draw[box] (-0.35,-2.65) rectangle (\W+0.35,-7.0);
-    \node[hdr] at (0.1,-2.65) {Depth 2: the full cause set};
-    \pgfmathsetmacro{\xr}{60/76*\W}
-    \fill[black!55] (0,-4.0) rectangle (\xr,-3.3);
-    \fill[black!8]  (\xr,-4.0) rectangle (\W,-3.3);
-    \draw[black!70] (0,-4.0) rectangle (\W,-3.3);
-    \draw[black!70] (\xr,-4.0) -- (\xr,-3.3);
-    \node[text=white, font=\small\bfseries] at ({\xr/2},-3.65) {60 expert causes recovered};
-    \node[font=\footnotesize\bfseries, text=black!60, align=center, inner sep=1pt]
-      at ({(\xr+\W)/2},-3.65) {16 not\\recovered};
-    \node[note] at (0,-4.35) {76 derivable expert causes; recall 79\%};
-    \pgfmathsetmacro{\xa}{77/158*\W}
-    \pgfmathsetmacro{\xb}{156/158*\W}
-    \fill[black!55] (0,-5.7) rectangle (\xa,-5.0);
-    \fill[black!15] (\xa,-5.7) rectangle (\xb,-5.0);
-    \draw[black!70] (0,-5.7) rectangle (\W,-5.0);
-    \draw[black!70] (\xa,-5.7) -- (\xa,-5.0);
-    \draw[black!70] (\xb,-5.7) -- (\xb,-5.0);
-    \node[text=white, font=\small\bfseries] at ({\xa/2},-5.35) {77 direct match};
-    \node[font=\small\bfseries] at ({(\xa+\xb)/2},-5.35) {79 coherent addition};
-    \node[note] at (0,-6.05) {158 causes proposed; in-domain adherence 98.7\%};
-    \node[font=\footnotesize, anchor=east] (ctr) at (\W,-6.55) {2 contradictory};
-    \draw[-{Latex[length=1.8mm]}, black!70] (ctr.north) to[bend right=25] ({(\xb+\W)/2},-5.75);
-
-    % ================= depth 3: the full action set =================
-    \draw[box] (-0.35,-7.6) rectangle (\W+0.35,-11.35);
-    \node[hdr] at (0.1,-7.6) {Depth 3: the full action set};
-    \pgfmathsetmacro{\ya}{22/46*\W}
-    \fill[black!55] (0,-8.95) rectangle (\ya,-8.25);
-    \fill[black!8]  (\ya,-8.95) rectangle (\W,-8.25);
-    \draw[black!70] (0,-8.95) rectangle (\W,-8.25);
-    \draw[black!70] (\ya,-8.95) -- (\ya,-8.25);
-    \node[text=white, font=\small\bfseries] at ({\ya/2},-8.6) {22 expert actions recovered};
-    \node[font=\small\bfseries, text=black!60] at ({(\ya+\W)/2},-8.6) {24 not recovered};
-    \node[note] at (0,-9.3) {46 derivable expert actions; recall 48\%};
-    \pgfmathsetmacro{\yb}{34/67*\W}
-    \fill[black!55] (0,-10.65) rectangle (\yb,-9.95);
-    \fill[black!15] (\yb,-10.65) rectangle (\W,-9.95);
-    \draw[black!70] (0,-10.65) rectangle (\W,-9.95);
-    \draw[black!70] (\yb,-10.65) -- (\yb,-9.95);
-    \node[text=white, font=\small\bfseries] at ({\yb/2},-10.3) {34 aligned with the expert};
-    \node[font=\small\bfseries] at ({(\yb+\W)/2},-10.3) {33 additional levers};
-    \node[note] at (0,-11.0) {67 actions proposed; a derivable expert action exists in 24 of the 30 station-weeks};
-  \end{tikzpicture}
-  \caption{The second front at its first three depths. Depth 1, the headline call: the principal root cause coincides with the expert's in 25 of the 30 station-weeks. Depth 2, the full cause set: the model recovers 60 of the 76 derivable expert causes (recall 79\%), and of the 158 causes it proposes, 77 match the expert directly, 79 are coherent additions, and 2 contradict the expert's reading (in-domain adherence 98.7\%). Depth 3, the full action set: the model recovers 22 of the 46 derivable expert actions (recall 48\%), and of the 67 actions it proposes, 34 align with an action the expert wrote while 33 are admissible levers the expert did not choose. The fourth depth, the composite index, is reported in Table~\ref{tab:bsi}.}
-  \label{fig:causeset}
-\end{figure}
-
-
-\begin{table}[ht]
-  \centering
-  \small
-  \begin{tabular}{l r}
-  \toprule
-  \textbf{Axis} & \textbf{30 station-weeks} \\
-  \midrule
-  Numbers (0.40)       & 93.7 \\
-  Completeness (0.20)  & 100 \\
-  Causes (0.20)        & 85.7 \\
-  Actions (0.20)       & 44.5 (n=24) \\
-  \midrule
-  \textbf{BSI}         & \textbf{85.5} \\
-  \midrule
-  Top cause = expert   & 25/30 \\
-  \bottomrule
-  \end{tabular}
-  \caption{Bridge Similarity Index by axis and in composite over the 30 station-weeks. The action axis is defined only on stations where the expert wrote at least one action derivable from the data (n=24); elsewhere the axis is excluded and the weights renormalized. The composite is the mean of per-station composites, each computed with its own renormalized weights, so it does not coincide with the weighted average of the axis column; Section~\ref{sec:threats} reports the reproducibility check on the recorded value.}
-  \label{tab:bsi}
-  \end{table}
-  
 
 %----------------------------------------------------------------------------------------
 \chapter{Discussion and Future Directions}
