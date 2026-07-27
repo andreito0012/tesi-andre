@@ -1292,7 +1292,7 @@ Keeping depths separate is important because agreement can be strong at one dept
 A separate frontier language model, distinct from the generator, acts as a claim extractor and aligner \cite{zheng2023judge}.
 It receives two inputs: the generated bridge and the manager's one. 
 It runs at temperature 0.2 to limit output variability, and returns a structured extraction of causes, actions and their alignments.
-Furthermore, it does not assign the final score; a value calculated deterministically from the extracted alignments and source data, and I also validate all thirty final pairs by hand.
+Furthermore, it does not assign the final score, a value calculated deterministically from the extracted alignments and source data, and I also validate all thirty final pairs by hand.
 %------------------------------------------------------------------
 
 \subsection{Depth 1: the headline call}
