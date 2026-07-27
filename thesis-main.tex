@@ -1285,14 +1285,14 @@ The second front moves to hand-written bridges: the harder comparison, which che
 The bridge provides the closest available account of how an expert interpreted that week, although it cannot serve as absolute ground truth for causal priority.
 
 
-The comparison is made at four depths. Depth one checks the cause named first, Depth two compares the full cause set, Depth three does the same for the full action set, and Depth four brings a composite index that folds numbers, completeness, causes and actions into a single value called the \ac{BSI}
+The comparison is made at four depths. Depth one checks the cause named first, Depth two compares the full cause set, Depth three does the same for the full action set, and Depth four brings a composite index that folds numbers, completeness, causes and actions into a single value called the \ac{BSI}.
 Keeping depths separate is important because agreement can be strong at one depth and weak at another.
 
 
 A separate frontier language model, distinct from the generator, acts as a claim extractor and aligner \cite{zheng2023judge}.
-It receives two input: the generated bridge and the manager's one. 
+It receives two inputs: the generated bridge and the manager's one. 
 It runs at temperature 0.2 to limit output variability, and returns a structured extraction of causes, actions and their alignments.
-Furthermore, it does not assign the final score; a value that is calculated deterministically from the extracted alignments and source data, and I also validate all thirty final pairs by hand.
+Furthermore, it does not assign the final score; a value calculated deterministically from the extracted alignments and source data, and I also validate all thirty final pairs by hand.
 %------------------------------------------------------------------
 
 \subsection{Depth 1: the headline call}
