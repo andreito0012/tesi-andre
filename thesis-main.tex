@@ -1103,7 +1103,7 @@ It takes the catalog of Section~\ref{sec:catalogue}, collected over three months
 The evaluation answers two separate questions: whether the framework avoids the failure modes, and how closely the final narrative matches the bridge a manager wrote.
 Each front is measured in its own way, and a language model participates in the scoring only on the second front.
 The narratives are generated along the ablation ladder of Figure~\ref{fig:ladder}.
-For the numeric modes (F1, F2, F3) it relies on a deterministic check: every figure in the narrative has to trace back to a value the model was given.
+For the numeric modes (F1, F2, F3) the first front relies on a deterministic check: every figure in the narrative has to trace back to a value the model was given.
 The causal modes (F4, F5) are counted by hand, by a single rater, against predefined rules: the named causes and actions have to exist in the admitted domain.
 Finally, the formal modes (F6, F7, F8) are tested by injection, since the final pipeline no longer produces them.
 
@@ -1161,7 +1161,7 @@ Each generation is isolated and stateless: one conversation per station-week per
   \label{fig:ladder}
   \end{figure}
 
-Figure~\ref{fig:ladder} shows that the ladder itself has four rungs, each adding a contract.
+Figure~\ref{fig:ladder} shows that the ladder itself has four rungs.
 The bottom bar is the reason why the naive level is not a strawman: L0 already hands the model the full decomposition with the correct values, plan, actual, and variance included, and already asks the model to name drivers, quantify the contribution, and give causes and actions.
 This first level shows what a capable model does when nothing constrains it.
 A contract is then added by each of the rungs above: L1 freezes the values into tiles, L2 (the full app prompt) bounds causes and actions, and L3 (the configuration the app ships) places the sanitizer downstream of the generation.
@@ -1461,6 +1461,92 @@ Many of these actions depend on specific local factors that can difficultly be i
 %------------------------------------------------------------------
 \subsection{Depth 4: the Bridge Similarity Index}
 \label{sec:bsi}
+
+The fourth depth combines the previous comparisons with numerical fidelity and material-driver coverage. I define the BSI for each station-week $s$ as
+
+\begin{equation}
+  \mathrm{BSI}_s = 100\,
+  \frac{\sum_{i \in D_s} w_i A_{i,s}}
+       {\sum_{i \in D_s} w_i},
+  \qquad
+  (w_N,w_{\mathrm{Comp}},w_C,w_A)=(0.40,0.20,0.20,0.20),
+  \label{eq:bsi}
+\end{equation}
+
+where $D_s$ contains the axes defined for that station-week, and $A_{i,s}$ is the score of axis $i$ between zero and one.
+Sometimes it happens that in the manager's bridge no action is included, if so the Actions axis is excluded and remaining weights are renormalized.
+The reported \ac{BSI} is the mean of the thirty per-station values.
+
+The four axes combine different parts of the bridge:
+
+\begin{itemize}
+  \item \textbf{Numbers} combines source traceability with agreement on the numbers shared with the expert, using weights 0.75 and 0.25 respectively; when no shared number is recorded, source traceability alone defines the axis;
+  \item \textbf{Completeness} checks whether the narrative cites the drivers that cumulatively explain 80\% of the absolute movement in the direction of the gap, capped at five drivers;
+  \item \textbf{Causes} gives equal weight to the headline match of Depth 1 and the harmonic mean of precision and recall over the cause set of Depth 2;
+  \item \textbf{Actions} is the same harmonic mean, computed per station-week over the action levers of Depth 3, local ones included.
+\end{itemize}
+
+For what regards actions and causes the harmonic mean between precision and recall is a necessary choice: those two measures reward opposite shortcuts.
+Recall alone favors a bridge that keeps adding levels until every line of the expert is covered, while precision alone favors a bridge that writes one safe claim and stops.
+In Figure~\ref{fig:depth_bsi}, each station-week contributes its own score before averaging, so a week with many claims does not outweigh a week with two.
+
+
+\begin{figure}[htbp]
+  \centering
+  \begin{tikzpicture}[font=\small,
+    lab/.style={anchor=east, font=\footnotesize},
+    val/.style={anchor=west, font=\footnotesize\bfseries},
+    note/.style={anchor=west, font=\footnotesize\itshape, text=black!55}]
+    \def\W{10}
+
+    \node[lab] at (-0.2,0)
+      {Numbers ($w=0.40$)};
+    \node[lab] at (-0.2,-0.85)
+      {Completeness ($w=0.20$)};
+    \node[lab] at (-0.2,-1.70)
+      {Causes ($w=0.20$)};
+    \node[lab] at (-0.2,-2.55)
+      {Actions ($w=0.20$)};
+    \node[lab, font=\footnotesize\bfseries]
+      at (-0.2,-3.65) {BSI};
+
+    \foreach \y in {0,-0.85,-1.70,-2.55,-3.65} {
+      \draw[black!35] (0,\y-0.25) rectangle (\W,\y+0.25);
+    }
+
+    \pgfmathsetmacro{\n}{93.7/100*\W}
+    \pgfmathsetmacro{\k}{100/100*\W}
+    \pgfmathsetmacro{\c}{84.3/100*\W}
+    \pgfmathsetmacro{\a}{53.4/100*\W}
+    \pgfmathsetmacro{\b}{85.3/100*\W}
+
+    \fill[black!45] (0,-0.25) rectangle (\n,0.25);
+    \fill[black!45] (0,-1.10) rectangle (\k,-0.60);
+    \fill[black!45] (0,-1.95) rectangle (\c,-1.45);
+    \fill[black!45] (0,-2.80) rectangle (\a,-2.30);
+    \fill[black!75] (0,-3.90) rectangle (\b,-3.40);
+
+    \node[val] at (\n+0.12,0) {93.7};
+    \node[val] at (\k+0.12,-0.85) {100};
+    \node[val] at (\c+0.12,-1.70) {84.3};
+    \node[val] at (\a+0.12,-2.55) {53.4 ($n=29$)};
+    \node[val] at (\b+0.12,-3.65) {85.3};
+
+    \draw[black!45] (0,-4.35) -- (\W,-4.35);
+    \node[note] at (0,-4.70)
+      {Axis means and mean per-station composite, scale 0--100};
+  \end{tikzpicture}
+
+  \caption{Depth 4, the Bridge Similarity Index. Axis values are means over the 30 station-weeks, except Actions, defined on 29.}
+  \label{fig:depth_bsi}
+\end{figure}
+\FloatBarrier
+
+The value for the \ac{BSI} of 85.3 define how similar on avarage the generated bridge is to the expert's one, it does not indicate the percentage of station-weeks in which the system is correct.
+The manager's narrative is the reference, not the absolute truth: in Section~\ref{sec:depth_cause}, the model suggested seventy-nine coherent addition not choosen by the expert.
+
+Two distinction keep the result aligned with the preceding chapters.
+Completeness reaches 100\% because the model cited every material driver of the gap; the 78\% cause recall concern the finer explanation of those buckets.
 
 
 %------------------------------------------------------------------
