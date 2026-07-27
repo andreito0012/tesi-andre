@@ -1402,17 +1402,17 @@ This result, together with the disappearance of F4 at L2 in Section~\ref{sec:fro
 \subsection{Depth 3: the full action set}
 \label{sec:depth_actions}
 
-The third depth repeat the set comparison for the actions.
-The expert bridges contain sixty-six actions in total, and the generated bridge align with thirty-two of them, achieving a reference recall of 48\%.
-Out of all those actions, twenty depends on local information that never reaches the pipeline; those can be cited by the model, as for the actions, only if a track is left on data.
+The third depth repeats the set comparison for the actions.
+The expert bridges contain sixty-six actions in total, and the generated bridges align with thirty-two of them, achieving a reference recall of 48\%.
+Out of all those actions, twenty depends on local information that never reaches the pipeline; those can be aligned by the model, as for causes, only if a trace is left on data.
 
-The second bar in Figure~\ref{fig:depth_actions} classifies the sixty-seven actions the model proposed: thirty-four directly align with the expert while other thirty-three are admissable levers that expert did not choose.
+The second bar in Figure~\ref{fig:depth_actions} classifies the sixty-seven actions the model proposed: thirty-four directly align with an action written by the expert, while the other thirty-three are admissible levers that the manager did not choose.
 Also here as in Section~\ref{sec:depth_cause}, the alignment is not one-to-one: a single generated action can cover two lines of the expert bridge.
 
-Actionability ad expert agreement measure different things.
-The first shows that the tree removes out-of-mandate recommendations at L2.
-Depth three shows how an admissable action can still differ from the manager's choice, resulting in the wekest part of the comparison.
-The actions depends on specific locational factors that difficultly can be included in the model.
+Actionability and expert agreement measure different things.
+The first front shows that the tree removes out-of-mandate recommendations at L2.
+Depth three shows how an admissible action can still differ from the manager's choice, resulting in the weakest part of the comparison.
+Many of these actions depend on specific local factors that can difficultly be included in the model.
 
 \begin{figure}[htbp]
   \centering
@@ -1436,7 +1436,7 @@ The actions depends on specific locational factors that difficultly can be inclu
     \node[font=\small\bfseries, text=black!60]
       at ({(\ya+\W)/2},-1.0) {34 without alignment};
     \node[note] at (0,-1.7)
-      {66 derivable expert actions; reference recall 48\%};
+      {66 expert actions; reference recall 48\%};
 
     \pgfmathsetmacro{\yb}{34/67*\W}
     \fill[black!55] (0,-3.05) rectangle (\yb,-2.35);
@@ -1452,7 +1452,7 @@ The actions depends on specific locational factors that difficultly can be inclu
       {67 model actions; Actions axis defined on 24 station-weeks};
   \end{tikzpicture}
 
-  \caption{Depth 3, the full action set. The upper bar measures reference recall over 66 derivable expert actions; the lower bar describes the 67 actions proposed by the model.}
+  \caption{Depth 3, the full action set. The upper bar measures reference recall over 66 expert actions; the lower bar describes the 67 actions proposed by the model.}
   \label{fig:depth_actions}
 \end{figure}
 \FloatBarrier
