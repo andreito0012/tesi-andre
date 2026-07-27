@@ -60,6 +60,7 @@
 \acrodef{FActSCore}{FActual precision in Atomicity Score}
 \acrodef{HaluEval}{Hallucination Evaluation}
 \acrodef{TruthfulQA}{Truthful Question Answering}
+\acrodef{BSI}{Bridge Similarity Index}
 
 
 \lstdefinelanguage{TypeScript}{
@@ -1284,14 +1285,14 @@ The second front moves to hand-written bridges: the harder comparison, which che
 The bridge provides the closest available account of how an expert interpreted that week, although it cannot serve as absolute ground truth for causal priority.
 
 
-The comparison is made at four depths. Depth one checks the cause named first, Depth two compares the full cause set, Depth three does the same for the full action set, and Depth four brings a composite index that folds numbers, completeness, causes and actions into a single value called Bridge Similarity Index (BSI).
+The comparison is made at four depths. Depth one checks the cause named first, Depth two compares the full cause set, Depth three does the same for the full action set, and Depth four brings a composite index that folds numbers, completeness, causes and actions into a single value called the \ac{BSI}
 Keeping depths separate is important because agreement can be strong at one depth and weak at another.
 
 
 A separate frontier language model, distinct from the generator, acts as a claim extractor and aligner \cite{zheng2023judge}.
-It receives two things: the generated bridge and the manager's one, runs at temperature 0.2 to limit output variability, and returns a structured extraction of causes, actions and their alignments.
-It does not assign the final score; a value that is calculated deterministically from the extracted alignments and source data.
-I also validate all thirty final pairs by hand.
+It receives two input: the generated bridge and the manager's one. 
+It runs at temperature 0.2 to limit output variability, and returns a structured extraction of causes, actions and their alignments.
+Furthermore, it does not assign the final score; a value that is calculated deterministically from the extracted alignments and source data, and I also validate all thirty final pairs by hand.
 %------------------------------------------------------------------
 
 \subsection{Depth 1: the headline call}
@@ -1404,7 +1405,7 @@ This result, together with the disappearance of F4 at L2 in Section~\ref{sec:fro
 
 The third depth repeats the set comparison for the actions.
 The expert bridges contain sixty-six actions in total, and the generated bridges align with thirty-two of them, achieving a reference recall of 48\%.
-Out of all those actions, twenty depend on local information that never reaches the pipeline; those can be aligned by the model, as for causes, only if a trace is left in data.
+Out of all those actions, twenty depend on local information that never reaches the pipeline; those can be aligned by the model, as for causes, only if a trace is left in the data.
 
 The second bar in Figure~\ref{fig:depth_actions} classifies the sixty-seven actions the model proposed: thirty-four directly align with an action written by the expert, while the other thirty-three are admissible levers that the manager did not choose.
 Also here as in Section~\ref{sec:depth_cause}, the alignment is not one-to-one: a single generated action can cover two lines of the expert bridge.
@@ -1458,6 +1459,9 @@ Many of these actions depend on specific local factors that can difficultly be i
 \FloatBarrier
 
 %------------------------------------------------------------------
+\subsection{Depth 4: the Bridge Similarity Index}
+\label{sec:bsi}
+
 
 %------------------------------------------------------------------
 
