@@ -1108,7 +1108,7 @@ The causal modes (F4, F5) are counted by hand, by a single rater, against predef
 Finally, the formal modes (F6, F7, F8) are tested by injection, since the final pipeline no longer produces them.
 
 The second front compares each final narrative with the corresponding human bridge. 
-The evaluation uses real data from thirty station-weeks, each below target during a specific week; each one is run through the four levels of the ladder, which gives one hundred and twenty narratives. The first front counts the failure across all four levels; the comparison with the expert uses only the thirty final narratives produced by the shipped configuration.
+The evaluation uses real data from thirty station-weeks, each below target during a specific week; each one is run through the four levels of the ladder, which gives one hundred and twenty narratives. The first front counts the failures across all four levels; the comparison with the expert uses only the thirty final narratives produced by the shipped configuration.
  
 All the sampled stations belong to the same country network, span two building types, and cover gap magnitudes from small to large.
 The production model is a frontier language model, the same one the app runs, and the prompt is the full app prompt, not a reduced version.
@@ -1169,7 +1169,7 @@ A contract is then added by each of the rungs above: L1 freezes the values into 
 %------------------------------------------------------------------
 
 \section{First front: the failure modes}
-\label{chap:front_modes}
+\label{sec:front_modes}
 
 This section organizes the failure modes in the order the contracts enter the pipeline.
 Figure~\ref{fig:descent} collects the counts.
@@ -1410,12 +1410,11 @@ The expert bridges contain sixty-six actions in total, and the generated bridges
 Out of all those actions, twenty depend on local information that never reaches the pipeline; those can be aligned by the model, as for causes, only if a trace is left in the data.
 
 The second bar in Figure~\ref{fig:depth_actions} classifies the sixty-seven actions the model proposed: thirty-four directly align with an action written by the expert, while the other thirty-three are admissible levers that the manager did not choose.
-Also here as in Section~\ref{sec:depth_cause}, the alignment is not one-to-one: a single generated action can cover two lines of the expert bridge.
+Also here as in Section~\ref{sec:depth_cause}, the alignment is not one-to-one.
 
 Actionability and expert agreement measure different things.
 The first front shows that the tree removes out-of-mandate recommendations at L2.
 Depth three shows how an admissible action can still differ from the manager's choice, resulting in the weakest part of the comparison.
-Many of these actions depend on specific local factors that can hardly be included in the model.
 
 \begin{figure}[htbp]
   \centering
@@ -1490,7 +1489,7 @@ The four axes combine different parts of the bridge:
 
 For what regards actions and causes the harmonic mean between precision and recall is a necessary choice: those two measures reward opposite shortcuts.
 Recall alone favors a bridge that keeps adding levers until every line of the expert is covered, while precision alone favors a bridge that writes one safe claim and stops.
-The harmonic mean falls sharply when either of the two is low, so a high score requires covering the ecpert list and staying concise at the same time.
+The harmonic mean falls sharply when either of the two is low, so a high score requires covering the expert list and staying concise at the same time.
 In Figure~\ref{fig:depth_bsi}, each station-week contributes its own score before averaging, so a week with many claims does not outweigh a week with two.
 
 
@@ -1550,14 +1549,14 @@ The manager's narrative is the reference, not the absolute truth: in Section~\re
 
 Two distinctions keep the result aligned with the preceding chapters.
 Completeness reaches 100\% because the model cited every material driver of the gap; the 78\% cause recall concerns the finer explanation of those buckets.
-The Numbers axis blends source traceability and agreement on shared values, averaged per station, that scores 93.7\%.
+The Numbers axis blends source traceability and agreement on shared values, averaged per station-week, and scores 93.7\%.
 Moreover, the number of tokens traceable to the source is four hundred and eight out of four hundred and thirteen or 98.8\%, with the five model-summed aggregates marking the declared boundary of tile-as-source.
 On the agreement side, the judge paired one hundred and thirty-four values quoted by both bridges and one hundred and six agree.
 
 
 The weakest axis is the Actions one, which scores 53.4\% over twenty-nine station-weeks (the ones that have at least one action in the expert bridge).
-Each of those weeks contributes the harmonic mean of precision and recall against the expert list, so the pooled ratio of fourty-four over sixty-seven from Section~\ref{sec:depth_actions} is not the axis score.
-This value records how rarely the proposed levers coincide with the actions chosen by the manager, while actionability is already established in Chapter~\ref{chap:front_modes}.
+Each of those weeks contributes the harmonic mean of precision and recall against the expert list, so the pooled ratio of thirty-four over sixty-seven from Section~\ref{sec:depth_actions} is not the axis score.
+This value records how rarely the proposed levers coincide with the actions chosen by the manager, while actionability is already established in Section~\ref{sec:front_modes}.
 %------------------------------------------------------------------
 \section{Threats to validity}
 \label{sec:evaluation_close}
