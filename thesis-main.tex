@@ -1558,26 +1558,28 @@ The weakest axis is the Actions one, which scores 53.4\% over twenty-nine statio
 Each of those weeks contributes the harmonic mean of precision and recall against the expert list, so the pooled ratio of thirty-four over sixty-seven from Section~\ref{sec:depth_actions} is not the axis score.
 This value records how rarely the proposed levers coincide with the actions chosen by the manager, while actionability is already established in Section~\ref{sec:front_modes}.
 
-A last check removes the completeness axis from the \ac{BIS} calculation and renormalize the remaining weights to 0.50 for Numbers and 0.25 for Actions and Causes. 
-The index drops to 81.6\% so...
 %------------------------------------------------------------------
 \section{Threats to validity}
 \label{sec:evaluation_close}
 
-These two front defines completely different evaluation methods. 
-The first consist in looking at the narrative's number and ceck if it exists upstream, it is an objective measure. 
-The second cecks the generated narrative against the hand-written one, that depends on the quality of the manager's bridge.
-Therefore a \ac{BSI} of 85.3\% is not a percentage of correctness, but is a similarity index to the one were using as comparison.
+These two fronts defines completely different evaluation methods. 
+The first consists in looking at the narrative's number and checking if they exist upstream, it is an objective measure. 
+The second checks the generated narrative against the hand-written one, that depends on the quality of the manager's bridge.
+Therefore, a \ac{BSI} of 85.3 is not a percentage of correctness, but a similarity index to the bridge we are using as comparison.
 
 
 Everything in this chapter is measured on one single country, one key ration, and thirty station-weeks. 
 The failure modes are derived from a single pilot site used as starting point during development, so I make no transfer claim beyond that setting.
+The counts at L0 also reflect the specific frontier model used, so a different \ac{LLM} would change the measured size of the reduction even if the contracts do not depend on it.
 
-On the measurement side I kept the choices concervatives.
-All the ambiguous tokens were excluded automatically rather than counted in system favour, so the numeric scorer works on the exact denominator of four hundred and thirteen quantitative tokens ove the thirty final narratives.
+
+On the measurement side I kept the choices concervative.
+All the ambiguous tokens were excluded automatically rather than counted in system's favour, so the numeric scorer works on the exact denominator of four hundred and thirteen quantitative tokens over the thirty final narratives.
 The judgment step, the one that extracted causes and actions, was run only once per narrative, but I manually checked them as a control.
-My check confirms numbers and causes, the only disagreement was on the headline cause the model saw twenty-two while I determined twenty-five, so this last one was kept.
+My check confirms numbers and causes, the only disagreement was on the headline cause, where my manual count was twenty-seven against the twenty-two seen by the model, so this last one is kept.
+I was the only rater for all the manual judments in this chapter, no double-check has been done to very my prospective.
 
+A last check removes the completeness axis from the \ac{BSI} calculation, that sits alway on one hundred, and renormalize the remaining weights to 0.50 for Numbers and 0.25 for Actions and Causes. The recalculated index drops to 81.6\%. 
 
 %----------------------------------------------------------------------------------------
 \chapter{Discussion and Future Directions}
