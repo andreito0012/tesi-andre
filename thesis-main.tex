@@ -1568,7 +1568,7 @@ The second checks the generated narrative against the hand-written one, that dep
 Therefore, a \ac{BSI} of 85.3 is not a percentage of correctness, but a similarity index to the bridge we are using as comparison.
 
 
-Everything in this chapter is measured on one single country, the headline productivity ration, and thirty station-weeks. 
+Everything in this chapter is measured on one single country, the headline productivity ratio, and thirty station-weeks. 
 The failure modes are derived from a single pilot site used as starting point during development, so I make no transfer claim beyond that setting.
 The counts at L0 also reflect the specific frontier model used, so a different \ac{LLM} would change the measured size of the reduction even if the contracts do not depend on it.
 
@@ -1577,14 +1577,15 @@ On the measurement side I kept the choices conservative.
 All the ambiguous tokens were excluded automatically rather than counted in the system's favor, so the numeric scorer works on the exact denominator of four hundred and thirteen quantitative tokens over the thirty final narratives.
 The judgment step, the one that extracted causes and actions, was run only once per narrative, but I manually checked them as a control.
 My check confirms numbers and causes, the only disagreement was on the headline cause, where my manual count was twenty-seven against the twenty-five seen by the model, so I kept the lower one.
-I was the only rater for all the manual judgments in this chapter, and no indipendent double-check has been done to assess my prospective; the same caution applies to the manual F5 screening of Section~\ref{sec:front_modes}.
+I was the only rater for all the manual judgments in this chapter, and no indipendent double-check has been done to assess my perspective; the same caution applies to the manual F5 screening of Section~\ref{sec:front_modes}.
 
-A last check removes the Completeness axis, that sits alway on one hundred, from the \ac{BSI} calculation, and renormalize the remaining weights to 0.50 for Numbers and 0.25 for Actions and Causes. The recalculated index drops to 81.6. 
-The headline 85.3 is computed with the stricker of two possible choices.
-As explained before the bridge does not represent the truth in the world, but a personal judgment, that therefore relies on claim than can be found on data, and others that are founded on belief or events not raccontati from the available data.
-So, i deciided to include also the ones the model cannot know by contruction, without considering them it would be an increase of 0.4 in the \ac{BSI}.
-The weight are also a design choice, so I tested how much the result depend on them: By moving up or down each weight by 0.10 for all the eight combinations, the results always stays between 82.5 and 88.7, and the largest swing comes from axis with the furthest score: the Actions.
+A further check removes the Completeness axis, that always sits on one hundred, from the \ac{BSI} calculation, and renormalizes the remaining weights to 0.50 for Numbers and 0.25 for Actions and Causes. The recalculated index drops to 81.6. 
+The headline 85.3 is computed with the stricter of two possible choices.
+As explained before the bridge does not represent the truth in the world, but a personal judgment, that therefore relies on claims than can be found on data, and others that are founded on personal knowledge or events not recorded in the available data.
+So, I decided to include also the ones the model cannot know by contruction; without them the \ac{BSI} would increase by 0.4, to 85.7.
+The weights are also a design choice, so I tested how much the result depends on them: by moving up or down each weight by 0.10 and renormilizing the others, for all the eight combinations, the result always stays between 82.5 and 88.7, and the largest swing comes from the axis with the furthest score: the Actions.
 
+In the end the source-based counts give the clearest result, the causal comparison supports a bounded but fallible choice among the admitted causes, and the action selection remains the weakest part once local knowledge enters.
 %----------------------------------------------------------------------------------------
 \chapter{Discussion and Future Directions}
 \label{chap:discussion}
