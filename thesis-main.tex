@@ -1339,7 +1339,7 @@ This second depth focuses on comparing each causal claim, without considering th
 The expert bridges contain one hundred and four total causes. 
 The generated bridges align with eighty-one of them, achieving a reference recall of 78\% (Figure~\ref{fig:depth_causes}).
 The remaining twenty-three have no aligned cause in the generated text.
-In particular, twenty-eight of the one hundred and four causes cite facts that never reach the pipeline: a severe event or a strike, for which the model aligns only when the fact leaves a visible trace in the numbers.
+Moreover, twenty-eight of the one hundred and four causes cite facts that never reach the pipeline: a severe event or a strike, for which the model aligns only when the fact leaves a visible trace in the numbers.
 
 The reverse comparison classifies the one hundred and fifty-eight causes the \ac{LLM} proposed. 
 Seventy-seven directly match a cause written by the manager, seventy-nine are coherent additions absent from the hand-written bridge, and two contradict the expert's reading.
@@ -1476,7 +1476,7 @@ The fourth depth combines the previous comparisons with numerical fidelity and m
 
 where $D_s$ contains the axes defined for that station-week, and $A_{i,s}$ is the score of axis $i$ between zero and one.
 Sometimes it happens that in the manager's bridge no action is included, if so, the Actions axis is excluded and remaining weights are renormalized.
-The reported \ac{BSI} is the mean of the thirty per-station values.
+The reported \ac{BSI} is the mean of the thirty per-station-week values.
 
 The four axes combine different parts of the bridge:
 
@@ -1490,8 +1490,8 @@ The four axes combine different parts of the bridge:
 For what regards actions and causes the harmonic mean between precision and recall is a necessary choice: those two measures reward opposite shortcuts.
 Recall alone favors a bridge that keeps adding levers until every line of the expert is covered, while precision alone favors a bridge that writes one safe claim and stops.
 The harmonic mean falls sharply when either of the two is low, so a high score requires covering the expert list and staying concise at the same time.
-In Figure~\ref{fig:depth_bsi}, each station-week contributes its own score before averaging, so a week with many claims does not outweigh a week with two.
-
+Each station-week contributes its own score before averaging, so a week with many claims does not outweigh a week with two.
+Figure~\ref{fig:depth_bsi} reports the resulting axis means and the composite.
 
 \begin{figure}[htbp]
   \centering
@@ -1536,7 +1536,7 @@ In Figure~\ref{fig:depth_bsi}, each station-week contributes its own score befor
 
     \draw[black!45] (0,-4.35) -- (\W,-4.35);
     \node[note] at (0,-4.70)
-      {Axis means and mean per-station composite, scale 0--100};
+      {Axis means and mean per-station-week composite, scale 0--100};
   \end{tikzpicture}
 
   \caption{Depth 4, the Bridge Similarity Index. Axis values are means over the 30 station-weeks, except Actions, defined on 29.}
@@ -1564,8 +1564,8 @@ This value records how rarely the proposed levers coincide with the actions chos
 
 These two fronts define completely different evaluation methods. 
 The first consists in looking at the narrative's numbers and checking if they exist upstream, it is an objective measure. 
-The second checks the generated narrative against the hand-written one, that depends on the quality of the manager's bridge.
-Therefore, a \ac{BSI} of 85.3 is not a percentage of correctness, but a similarity index to the bridge we are using as comparison.
+The second checks the generated narrative against the hand-written one, so it depends on the quality of the manager's bridge.
+Therefore, a \ac{BSI} of 85.3 is not a percentage of correctness, but a similarity index to the bridge I use as comparison.
 
 
 Everything in this chapter is measured on one single country, the headline productivity ratio, and thirty station-weeks. 
@@ -1577,7 +1577,7 @@ On the measurement side I kept the choices conservative.
 All the ambiguous tokens were excluded automatically rather than counted in the system's favor, so the numeric scorer works on the exact denominator of four hundred and thirteen quantitative tokens over the thirty final narratives.
 The judgment step, the one that extracted causes and actions, was run only once per narrative, but I manually checked them as a control.
 My check confirms numbers and causes, the only disagreement was on the headline cause, where my manual count was twenty-seven against the twenty-five seen by the model, so I kept the lower one.
-I was the only rater for all the manual judgments in this chapter, and no independent double-check has been done to assess my perspective; the same caution applies to the manual F5 screening of Section~\ref{sec:front_modes}.
+I was the only rater for all the manual judgments in this chapter, and no independent double-check has been done to assess my perspective; the same caution applies to the manual screening of F4 and F5 in Section~\ref{sec:front_modes}.
 
 A further check removes the Completeness axis, that always sits at one hundred, from the \ac{BSI} calculation, and renormalizes the remaining weights to 0.50 for Numbers and 0.25 for Actions and Causes. The recalculated index drops to 81.6. 
 The headline 85.3 is computed with the stricter of two possible choices.
