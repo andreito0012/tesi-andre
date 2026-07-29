@@ -699,7 +699,7 @@ A fourth point would sit inside the generation itself, at the token level, where
 As presented in Figure~\ref{fig:architecture}, the first contract, \emph{tile-as-source}, sits at the top of the pipeline.
 It is positioned at the beginning because it freezes the numbers before the model sees them, to take away the need for any \ac{LLM} recomputation.
 The second, the \emph{curated knowledge tree}, is positioned directly inside the prompt; it is used to instruct the model with causes and actions the domain admits.
-The last contract, the \emph{sanitizer}, is located at the end of this pipeline; it serves as a deterministic check on the finished output to repair or refuse the narrow class of formal slips that could survive the first two.
+The last contract, the \emph{sanitizer}, is located at the end of this pipeline; it serves as a deterministic check on the finished output to repair or refuse any mismatch that could survive the first two.
 
 
 \begin{figure}[htbp]
@@ -751,7 +751,7 @@ The last contract, the \emph{sanitizer}, is located at the end of this pipeline;
 
 Table~\ref{tab:contracts} captures the key conceptual difference.
 Two of the three contracts bring a hard guarantee, the third a soft one instead. 
-The two sides differ in what they constrain: a number either matches its source or it does not, and a deterministic check settles that with no judgment, so the numeric side admits a hard guarantee.
+The two sides differ in what they constrain: a number either matches its source or it does not, and a deterministic check settles that with no judgment, so the numerical side admits a hard guarantee.
 For the causal side, instead, we cannot talk about hard guarantees because the tree bounds the set the model may pick from, but which cause represents the best fit to explain the movement is left to the \ac{LLM}, so there is no deterministic wall to enforce it.
 
 
@@ -783,7 +783,7 @@ For the causal side, instead, we cannot talk about hard guarantees because the t
   Guarantee &
     \textbf{Hard}\newline{\footnotesize prevent, on covered values} &
     \textbf{Soft}\newline{\footnotesize bound} &
-    \textbf{Hard}\newline{\footnotesize repair or refuse} \\
+    \textbf{Hard}\newline{\footnotesize repair, refuse or leave broken} \\
   \hline
   \end{tabular}
 
@@ -830,13 +830,14 @@ This distinction can be observed in Table~\ref{tab:catalogue}, where the modes a
 \end{table}
 
 Each class points at one of the three contracts this chapter presents.
-Tile-as-source (Section~\ref{sec:tileasource}) defines what the model may report, and targets the numeric class; the knowledge tree (Section~\ref{sec:knowledgetree}) bounds the admissible causes and actions, working on the causal side; the sanitizer (Section~\ref{sec:sanitizer}) checks the form of every value on the finished text, covering the formal class.
-Why one contract per class is a necessity and not a redundancy is the argument of Section~\ref{sec:coreconcept}, while how often each mode occurs, and how far the contracts push those counts down, is measured in Chapter~\ref{chap:results}.
+Tile-as-source (Section~\ref{sec:tileasource}) defines what the model may report, and targets the numeric class; the knowledge tree (Section~\ref{sec:knowledgetree}) bounds the admissible causes and actions, working on the causal side; the sanitizer (Section~\ref{sec:sanitizer}) checks the form and value of every cited number in the finished text, covering the formal class.
+Why three contracts are a necessity and not a redundancy is the argument of Section~\ref{sec:coreconcept}, while how often each mode occurs, and how far the contracts push those counts down, is measured in Chapter~\ref{chap:results}.
 
 The formal modes came first.
 Early builds of the pipeline carried no upstream contract, so numbers drifted, precision slipped, and the occasional comparative came out with the wrong sign, on real narratives.
 The tool that caught them, day after day, was a rudimentary deterministic check on the finished text, the seed of what Section~\ref{sec:sanitizer} formalizes as the sanitizer.
 Then upstream contracts changed the picture: freezing the numbers before generation removed the opportunity for drifts or inversions, so the formal modes stopped showing up on their own.
+That is why the mapping above reads as design intent and not as a partition: each contract is build against one class, but the upstream one takes most of the formal modes away by itself, and what stays with the sanitizer is the check that every figure still matches its tile.
 The next three sections present the contracts in pipeline order, upstream first, not in the order they were built.
 
 \section{Contract 1: tile-as-source}
@@ -927,7 +928,7 @@ Then canonical resolution checks that the value exists in the pipeline at all, t
 The magnitude guard comes third. 
 It corrects a figure when the gap between the generated number and the dashboard one is small enough to look like a precision or recalculation drift, and refuses when that gap is too large to be one; the threshold is deliberately generous, half of the canonical value in Listing~\ref{lst:sanitizer}, because with every number frozen upstream a cited figure is almost always the right value in a slightly wrong form, so the guard only has to tell a drifted copy from a genuinely different one. 
 Last comes the precision lock, that holds a value in its canonical shape, so a figure that should read one way does not appear in another.
-The magnitude guard acts on formal modes: it is what refuses a sign inversion (F7), since a flipped value lands far outside any plausible drift; a fused label (F8) instead fails canonical resolution, so it stays visibly broken.
+The magnitude guard works on the value: it repairs a small mismatch, whether that came from a precision slip (F6) or from a leftover recalculation (F1), and refuses a sign inversion (F7). A fused label (F8) fails canonical resolution, so it stays visibly broken.  
 
 \begin{lstlisting}[language=Python, caption={Precision lock and magnitude guard.}, label={lst:sanitizer}]
   def sanitize(text, canonical):
@@ -1591,8 +1592,23 @@ In the end the source-based counts give the clearest result, the causal comparis
 \label{chap:discussion}
 %----------------------------------------------------------------------------------------
 
-\section{Synthesis}
-How the observed results successfully answer the initial research question.
+\section{The three questions answered}
+
+In Chapter~\ref{chap:state_of_the_art} I discussed the three questions this thesis promises to answer: One empirical, and two about design.
+
+The First one asks to determine the common grounding failure when a \ac{LLM} iterates over a dense dashboard, full of KPIs.
+The answer that came from the field, after three months of observation, are the eight failure modes detailed in Section~\ref{sec:front_modes}.
+Numeric modes currupt the value.
+Causal modes give a domain term a meaning it does not have or propose an action noone at the site can take.
+Formal modes involve a slip in form or sign.
+
+Starting with the design questions now.
+The first asks what achitecture can costrain the model on both numeric and causal grounding.
+The solution is the three-contract framework of Chapter~\ref{chap:proposed_solution}.
+What matters is the composition, since no contract covers more than one class of failures, so they are needed all together.
+Tile-as-source freezes the numbers upstream and carries most of the numeric load.
+The tree bounds the causal half, while the sanitizer audits from audits forms after the fact.
+
 
 \section{Contributions}
 The specific value added to the existing literature regarding LLMs and BI.
