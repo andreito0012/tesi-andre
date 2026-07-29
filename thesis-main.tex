@@ -1289,7 +1289,7 @@ The comparison is made at four depths. Depth one checks the cause named first, D
 Keeping depths separate is important because agreement can be strong at one depth and weak at another.
 
 
-A separate frontier language model, distinct from the generator, acts as a claim extractor and aligner \cite{zheng2023judge}.
+A separate frontier language model, distinct from the generator, acts as a claim extractor and aligner.
 It receives two inputs: the generated bridge and the manager's one. 
 It runs at temperature 0.2 to limit output variability, and returns a structured extraction of causes, actions and their alignments.
 It does not assign the final score: that value is calculated deterministically from the extracted alignments and source data. 
@@ -1548,13 +1548,13 @@ The value for the \ac{BSI} of 85.3 reports how similar on average the generated 
 The manager's narrative is the reference, not the absolute truth: in Section~\ref{sec:depth_cause}, the model suggested seventy-nine coherent additions not chosen by the expert.
 
 Two distinctions keep the result aligned with the preceding chapters.
-Completeness reaches 100\% because the model cited every material driver of the gap; the 78\% cause recall concerns the finer explanation of those drivers.
-The Numbers axis blends source traceability and agreement on shared values, averaged per station-week, and scores 93.7\%.
+Completeness reaches 100 because the model cited every material driver of the gap; the 78\% cause recall concerns the finer explanation of those drivers.
+The Numbers axis blends source traceability and agreement on shared values, averaged per station-week, and scores 93.7.
 Moreover, the number of tokens traceable to the source is four hundred and eight out of four hundred and thirteen or 98.8\%, with the five model-summed aggregates marking the declared boundary of tile-as-source.
 On the agreement side, the judge paired one hundred and thirty-four values quoted by both bridges and one hundred and six agree.
 
 
-The weakest axis is the Actions one, which scores 53.4\% over twenty-nine station-weeks (the ones that have at least one action in the expert bridge).
+The weakest axis is the Actions one, which scores 53.4 over twenty-nine station-weeks (the ones that have at least one action in the expert bridge).
 Each of those weeks contributes the harmonic mean of precision and recall against the expert list, so the pooled ratio of thirty-four over sixty-seven from Section~\ref{sec:depth_actions} is not the axis score.
 This value records how rarely the proposed levers coincide with the actions chosen by the manager, while actionability is already established in Section~\ref{sec:front_modes}.
 
