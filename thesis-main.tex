@@ -751,7 +751,7 @@ The last contract, the \emph{sanitizer}, is located at the end of this pipeline;
 
 Table~\ref{tab:contracts} captures the key conceptual difference.
 Two of the three contracts bring a hard guarantee, the third a soft one instead.
-The split follows the two sides of the narrative can fail on, the numerical one and the causal one.
+The split follows the two sides a narrative can fail on, the numerical one and the causal one.
 The two sides differ in what they constrain: a number either matches its source or it does not, and a deterministic check settles that with no judgment, so the numerical side admits a hard guarantee.
 For the causal side, instead, we cannot talk about hard guarantees because the tree bounds the set the model may pick from, but which cause represents the best fit to explain the movement is left to the \ac{LLM}, so there is no deterministic wall to enforce it.
 
@@ -1228,6 +1228,7 @@ One rung of the ladder is enough to remove nearly all of it.
 In particular, the increase observed for F1 at levels L2 and L3 is not a regression of the tile contract: the tree makes the narrative richer, more drivers get discussed together, and the model finds more occasions to state their total.
 The residual five are all such self-summed totals, the boundary declared in Section~\ref{sec:tileasource}.
 Counted over the thirty shipped narratives, four hundred and eight of the four hundred and thirteen numeric tokens trace back to the input; the five self-summed totals are the only exceptions.
+They also sit outside the reach of the sanitizer, because they are recomputed value for which there is no tile than can be used as surce of truth.
 
 The causal modes (F4, F5) shrink at L1 and disappear completely only when the tree enters at level L2.
 At the previous two levels the model invents definitions for the different drivers, reading operational meaning into labels it was never given, and proposes out-of-mandate actions; both disappear at L2.
@@ -1236,6 +1237,7 @@ At the previous two levels the model invents definitions for the different drive
 For what regards the formal modes (F6, F7, F8), they cannot be read off the natural output: by the time the sanitizer runs, the upstream contracts have already removed almost everything it is built to catch, and counting occurrences would report a zero that says nothing about the guard itself.
 On the natural runs it indeed stayed idle: zero corrections across the thirty shipped narratives.
 So the sanitizer is measured by injection: the four value faults are each planted on all sixty-six sites of the shipped narratives, two hundred and sixty-four injections in total, plus a separate sweep that welds a metric label to its own value, removing the separator between them, on the same sixty-six sites.
+A cite is a figure the bridge mentions, for which the sanitizer holds a canonical value: sixty-six of the four hundred and thirteen cited figures satisfy that precondition, so the injection works on the set where the contract can act at all.
 Figure~\ref{fig:injection} shows the outcome of that stress test, which the sanitizer fully passed, with zero false repairs.
 
 
@@ -1273,7 +1275,7 @@ Figure~\ref{fig:injection} shows the outcome of that stress test, which the sani
   \draw[a] (g3a) -- (o3a);
   \node[n] at (8.15,-5.0) {66 of 66};
   \end{tikzpicture}
-  \caption{The sanitizer stress test: each fault planted on the 66 candidate sites of the shipped narratives. Dark chips are repairs to the canonical value, light chips are refusals that leave the fault visible, and the dashed chip is a fault with no canonical resolution, left untouched. Every outcome is 66 of 66: zero false repairs.}
+  \caption{The sanitizer stress test: each fault planted on the 66 candidate sites of the shipped narratives. Dark chips are repairs to the canonical value, light chips are refusals that leave the fault visible, and the dashed chip is a fault with no canonical resolution, left broken. Every outcome is 66 of 66: zero false repairs.}
   \label{fig:injection}
   \end{figure}
 
@@ -1606,7 +1608,7 @@ Formal modes involve a slip in form or sign.
 Starting with the design questions now.
 The first asks what achitecture can costrain the model on both numeric and causal grounding.
 The solution is the three-contract framework of Chapter~\ref{chap:proposed_solution}.
-What matters is the composition, since each contract is built against and none of them can act at the point where the others do, so they are needed all together.
+What matters is the composition, since each contract is built against one class and none of them can act at the point where the others do, so they are needed all together.
 Tile-as-source freezes the numbers upstream and carries most of the numeric load.
 The tree bounds the causal half, while the sanitizer audits from audits forms after the fact.
 
