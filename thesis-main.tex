@@ -374,7 +374,7 @@ All those instruments were not built for operational \ac{BI}.
 For example, an atomic-fact check has no notion of the exact value, while the sampling-based detector is probabilistic: the result is not reproducible since a run is not deterministic.
 A retrieval faithfulness score measures support, not identity \cite{es2023ragas}. 
 And more to the point, none of them distinguishes between a numerical error and a causal one, which is the very distinction this work is built around.
-For that reason, Chapter~\ref{chap:results} measures the presence rate of each failure mode, compared across all the configurations, so the effectiveness of each contract can be read directly. 
+For that reason, Chapter~\ref{chap:results} measures the counts of each failure mode, compared across all the configurations, so the effectiveness of each contract can be read directly. 
 
 
 \section{Positioning of this work}
@@ -1266,7 +1266,7 @@ Figure~\ref{fig:injection} shows the outcome of that stress test, which the sani
   \node[n] at (8.15,-2.5) {66 of 66};
   \node[n] at (8.15,-3.3) {66 of 66};
   \node[grp] at (0,-4.2) {no canonical value to resolve against};
-  \node[fault] (g3a) at (2.15,-5.0)  {fused label (F8)};
+  \node[fault] (g3a) at (2.15,-5.0)  {token concatenation (F8)};
   \node[brok]  (o3a) at (6.6,-5.0)   {left broken};
   \draw[a] (g3a) -- (o3a);
   \node[n] at (8.15,-5.0) {66 of 66};
