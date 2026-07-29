@@ -1107,7 +1107,7 @@ Each front is measured in its own way, and a language model participates in the 
 The narratives are generated along the ablation ladder of Figure~\ref{fig:ladder}.
 For the numeric modes (F1, F2, F3) the first front relies on a deterministic check: every figure in the narrative has to trace back to a value the model was given.
 The causal modes (F4, F5) are counted by hand, by a single rater, against predefined rules: the named causes and actions have to exist in the admitted domain.
-Finally, the formal modes (F6, F7, F8) are tested by injection, since the final pipeline no longer produces them.
+Finally, the formal modes (F6, F7, F8) are tested by injection since the final pipeline no longer produces them, for this specic sample of thirty stations.
 
 The second front compares each final narrative with the corresponding human bridge. 
 The evaluation uses real data from thirty station-weeks, each below target during a specific week; each one is run through the four levels of the ladder, which gives one hundred and twenty narratives. The first front counts the failures across all four levels; the comparison with the expert uses only the thirty final narratives produced by the shipped configuration.
@@ -1219,8 +1219,7 @@ Each different mode is counted with the procedure that fits its nature, as set o
   \node[cell, fill=black!0]              at (\cC,\rE) {0};
   \node[cell, fill=black!0]              at (\cD,\rE) {0};
   \end{tikzpicture}
-  \caption{Failure-mode counts across the ablation ladder, as total instances over the 30 station-weeks.}
-  \label{fig:descent}
+  \caption{Failure-mode counts across the ablation ladder, as total instances over the 30 station-weeks. The three formal modes (F6, F7, F8) are missing because they were never observed on the natural output.}
   \end{figure}
 
 Starting with the numeric modes, at L0 the model fabricates numbers freely: it recalculates forty-four numbers (F1), invents twenty-one rates (F2), and states twenty-two values-as-gap (F3).
@@ -1237,7 +1236,7 @@ At the previous two levels the model invents definitions for the different drive
 For what regards the formal modes (F6, F7, F8), they cannot be read off the natural output: by the time the sanitizer runs, the upstream contracts have already removed almost everything it is built to catch, and counting occurrences would report a zero that says nothing about the guard itself.
 On the natural runs it indeed stayed idle: zero corrections across the thirty shipped narratives.
 So the sanitizer is measured by injection: the four value faults are each planted on all sixty-six sites of the shipped narratives, two hundred and sixty-four injections in total, plus a separate sweep that welds a metric label to its own value, removing the separator between them, on the same sixty-six sites.
-A cite is a figure the bridge mentions, for which the sanitizer holds a canonical value: sixty-six of the four hundred and thirteen cited figures satisfy that precondition, so the injection works on the set where the contract can act at all.
+Not every number in the narrative is a cite. A cite is a figure the bridge mentions, for which the sanitizer holds a canonical value: sixty-six of the four hundred and thirteen cited figures satisfy that precondition, so the injection works on the set where the contract can act at all.
 Figure~\ref{fig:injection} shows the outcome of that stress test, which the sanitizer fully passed, with zero false repairs.
 
 
