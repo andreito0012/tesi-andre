@@ -923,7 +923,7 @@ Being a hand-curated tree allows for compactness, but it is also a major downsid
 
 This last deterministic contract runs directly on the finished text after the model.
 The first two shape what the \ac{LLM} sees, while the sanitizer audits what the model produced, comparing every cited figure it can tie to a metric against its canonical value, when one exists, and repairs a small set of specific errors.
-In contract terms: the \emph{precondition} is that a cited figure sits next to its own metric label and a know-correct value of that label exists; the \emph{postcondition} is that such a figure either matches the known value or is left as the model wrote it.
+In contract terms: the \emph{precondition} is that a cited figure sits next to its own metric label and a known-correct value of that label exists; the \emph{postcondition} is that such a figure either matches the known value or is left as the model wrote it.
 A figure the sanitizer cannot tie to a metric passes through untouched, and keeping that one right is the first contract's job.
 
 It works through four mechanisms that run one after the other. 
@@ -1237,8 +1237,8 @@ At the previous two levels the model invents definitions for the different drive
 For what regards the formal modes (F6, F7, F8), they cannot be read off the natural output: Chapter~\ref{chap:proposed_solution} already explained why the upstream contracts leave nothing to catch for the sanitizer.
 On the natural runs it stayed silent, and not because it was inactive: it compared every recognizable value, and made zero corrections across the thirty shipped narratives.
 So the sanitizer is measured by injection: the four value faults are each planted on all sixty-six sites of the shipped narratives, two hundred and sixty-four injections, of which two of the four faults sit inside the half-value guard band.
-A separate sweep welds a metric label to its own value, removing the separator between them, on the same sixty-six sites, for the three hundred and thirty injections in all.
-Not every number in the narrative is a site: it has to be one the sanitizer holds a canonical value for. 
+A separate sweep welds a metric label to its own value, removing the separator between them, on the same sixty-six sites, for three hundred and thirty injections in all.
+Not every number in the narrative is a site: it has to be one the sanitizer holds a canonical value for, and it has to sit next to its own metric label. 
 Sixty-six of the four hundred and thirteen numeric tokens satisfy the precondition of Section~\ref{sec:sanitizer}, so the injection works on the set where the contract can act at all.
 Figure~\ref{fig:injection} shows the outcome of that stress test: every fault ends where its own mechanism predicts, and no injection produced a false repair.
 
@@ -1556,7 +1556,7 @@ Two distinctions keep the result aligned with the preceding chapters.
 Completeness reaches 100 because the model cited every material driver of the gap; the 78\% cause recall concerns the finer explanation of those drivers.
 The Numbers axis blends source traceability and agreement on shared values, averaged per station-week, and scores 93.7.
 Traceability is the 98.8\% of Section~\ref{sec:front_modes}.
-On the agreement side, the judge confirms one hundred and six correspondances out of one hundred and thirty-four values quoted by both bridges, reaching an agreement of 79\%.
+On the agreement side, the judge confirms one hundred and six correspondences out of one hundred and thirty-four values quoted by both bridges, reaching an agreement of 79\%.
 
 The weakest axis is the Actions one, which scores 53.4 over twenty-nine station-weeks (the ones that have at least one action in the expert bridge).
 Each of those weeks contributes the harmonic mean of precision and recall against the expert list, so the pooled ratio of thirty-four over sixty-seven from Section~\ref{sec:depth_actions} is not the axis score.
