@@ -214,7 +214,7 @@ The remainder of this document is organized as follows:
     
     \item \textbf{Chapter 3} introduces the case study, detailing the operational setting, the core metric, the pre-AI baseline, and the single-case methodology adopted during the internship.
     
-    \item \textbf{Chapter 4} presents the proposed solution, opening with the conceptual innovation of the three-contract framework (tile-as-source, curated knowledge tree, and sanitizer), the system architecture, and the catalog of grounding failures.
+    \item \textbf{Chapter 4} presents the proposed solution, opening with the core concept and the grounding-faliure catalog, then it presents the conceptual innovation of the three-contract framework (tile-as-source, curated knowledge tree, and sanitizer), and the application that contains them.
     
     \item \textbf{Chapter 5} focuses on the results and evaluation, measuring the framework against failure modes and comparing the generated narratives with the bridges managers wrote by hand.
     
@@ -952,7 +952,7 @@ The magnitude guard works on the value: it repairs a small mismatch, whether tha
   The conservative option I decided to go for preserves a big mismatch through the magnitude guard.
 
   The sanitizer is a corrector rather than a preventer. 
-  It acts like a smoke detector that will probably stay off, as demonstrated in Chapter~\ref{chap:results}, but it is needed anyway: it is what enforces the numeric bound on every figure it can trace back to a tile.
+  It acts like a smoke detector that will probably stay off, as demonstrated in Chapter~\ref{chap:results}, but it is needed anyway: it is what enforces the numeric bound on every figure it can tie to a metric.
   This last contract is not free of risks.
   Label disambiguation can collide if two drivers share the same number: in that case the value could end up matched with the wrong label; or the cleanup of orphaned formatting around rate values can, if written too broadly, strip a figure that should have stayed.
   The risk is real but small. It is the price of having a downstream check that runs without judgment.
@@ -1219,7 +1219,7 @@ Figure~\ref{fig:descent} collects the counts.
   \node[cell, fill=black!0]              at (\cC,\rE) {0};
   \node[cell, fill=black!0]              at (\cD,\rE) {0};
   \end{tikzpicture}
-  \caption{Failure-mode counts across the ablation ladder, as total instances over the 30 station-weeks. The three formal modes (F6, F7, F8) have no row because they were never observed on the natural output.}
+  \caption{Failure-mode counts across the ablation ladder, as total instances over the 30 station-weeks. The three formal modes (F6, F7, F8) have no row because they were never observed on the natural output of this sample in the shipped configuration.}
   \label{fig:descent}
   \end{figure}
 
@@ -1488,7 +1488,7 @@ The four axes combine different parts of the bridge:
 
 \begin{itemize}
   \item \textbf{Numbers} combines source traceability with agreement on the numbers shared with the expert, using weights 0.75 and 0.25 respectively; when no shared number is recorded, source traceability alone defines the axis;
-  \item \textbf{Completeness} checks whether the narrative cites the drivers that cumulatively explain 80\% of the absolute movement in the direction of the gap, capped at five drivers;
+  \item \textbf{Completeness} checks whether the narrative cites the drivers that cumulatively explain 80\% of the sum of the absolute impact, capped at five drivers;
   \item \textbf{Causes} gives equal weight to the headline match of Depth 1 and the harmonic mean of precision and recall over the cause set of Depth 2;
   \item \textbf{Actions} is the same harmonic mean, computed per station-week over the action levers of Depth 3, local ones included.
 \end{itemize}
