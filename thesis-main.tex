@@ -1107,10 +1107,10 @@ Each front is measured in its own way, and a language model participates in the 
 The narratives are generated along the ablation ladder of Figure~\ref{fig:ladder}.
 For the numeric modes (F1, F2, F3) the first front relies on a deterministic check: every figure in the narrative has to trace back to a value the model was given.
 The causal modes (F4, F5) are counted by hand, by a single rater, against predefined rules: the named causes and actions have to exist in the admitted domain.
-Finally, the formal modes (F6, F7, F8) are tested by injection since the final pipeline no longer produces them, for this specic sample of thirty stations.
+Finally, the formal modes (F6, F7, F8) are tested by injection since the final pipeline, for this specic sample, no longer produces them.
 
-The second front compares each final narrative with the corresponding human bridge. 
-The evaluation uses real data from thirty station-weeks, each below target during a specific week; each one is run through the four levels of the ladder, which gives one hundred and twenty narratives. The first front counts the failures across all four levels; the comparison with the expert uses only the thirty final narratives produced by the shipped configuration.
+Each of the thirty station-weeks is run through the four levels of the ladder, which gives one hundred and twenty narratives. 
+The first front counts the failures across all four levels; the comparison with the expert uses only the thirty final narratives produced by the shipped configuration.
  
 All the sampled stations belong to the same country network, span two building types, and cover gap magnitudes from small to large.
 The production model is a frontier language model, the same one the app runs, and the prompt is the full app prompt, not a reduced version.
@@ -1163,19 +1163,16 @@ Each generation is isolated and stateless: one conversation per station-week per
   \label{fig:ladder}
   \end{figure}
 
-Figure~\ref{fig:ladder} shows that the ladder itself has four rungs.
-The bottom bar is the reason why the naive level is not a strawman: L0 already hands the model the full decomposition with the correct values, plan, actual, and variance included, and already asks the model to name drivers, quantify the contribution, and give causes and actions.
+The bottom bar of Figure~\ref{fig:ladder} is the reason why the naive level is not a strawman: L0 already hands the model the full decomposition with the correct values, plan, actual, and variance included, and already asks the model to name drivers, quantify the contribution, and give causes and actions.
 This first level shows what a capable model does when nothing constrains it.
-A contract is then added by each of the rungs above: L1 freezes the values into tiles, L2 (the full app prompt) bounds causes and actions, and L3 (the configuration the app ships) places the sanitizer downstream of the generation.
 
 %------------------------------------------------------------------
 
 \section{First front: the failure modes}
 \label{sec:front_modes}
 
-This section organizes the failure modes in the order the contracts enter the pipeline.
+This section organizes the failure modes in the order the contracts enter the pipeline, each counted with the procedure of Section~\ref{sec:eval_design}.
 Figure~\ref{fig:descent} collects the counts.
-Each different mode is counted with the procedure that fits its nature, as set out in Section~\ref{sec:eval_design}, and the totals are reported across the thirty station-weeks.
 
 
 
@@ -1219,25 +1216,27 @@ Each different mode is counted with the procedure that fits its nature, as set o
   \node[cell, fill=black!0]              at (\cC,\rE) {0};
   \node[cell, fill=black!0]              at (\cD,\rE) {0};
   \end{tikzpicture}
-  \caption{Failure-mode counts across the ablation ladder, as total instances over the 30 station-weeks. The three formal modes (F6, F7, F8) are missing because they were never observed on the natural output.}
+  \caption{Failure-mode counts across the ablation ladder, as total instances over the 30 station-weeks. The three formal modes (F6, F7, F8) have no row because they were never observed on the natural output.}
+  \label{fig:descent}
   \end{figure}
 
 Starting with the numeric modes, at L0 the model fabricates numbers freely: it recalculates forty-four numbers (F1), invents twenty-one rates (F2), and states twenty-two values-as-gap (F3).
 One rung of the ladder is enough to remove nearly all of it.
-In particular, the increase observed for F1 at levels L2 and L3 is not a regression of the tile contract: the tree makes the narrative richer, more drivers get discussed together, and the model finds more occasions to state their total.
-The residual five are all such self-summed totals, the boundary declared in Section~\ref{sec:tileasource}.
+Moreover, the increase observed for F1 at levels L2 and L3 is not a regression of the tile contract: the tree makes the narrative richer, more drivers get discussed together, and the model finds more occasions to state their total.
+The single case at L1 and the residual five are all such self-summed totals, the boundary declared in Section~\ref{sec:tileasource}.
 Counted over the thirty shipped narratives, four hundred and eight of the four hundred and thirteen numeric tokens trace back to the input; the five self-summed totals are the only exceptions.
-They also sit outside the reach of the sanitizer, because they are recomputed value for which there is no tile than can be used as surce of truth.
+They also sit outside the reach of the sanitizer,  a total the model summed itself has no tile to be compared against, and that is why those five do not move between L2 and L3. 
 
 The causal modes (F4, F5) shrink at L1 and disappear completely only when the tree enters at level L2.
 At the previous two levels the model invents definitions for the different drivers, reading operational meaning into labels it was never given, and proposes out-of-mandate actions; both disappear at L2.
 
 
-For what regards the formal modes (F6, F7, F8), they cannot be read off the natural output: by the time the sanitizer runs, the upstream contracts have already removed almost everything it is built to catch, and counting occurrences would report a zero that says nothing about the guard itself.
-On the natural runs it indeed stayed idle: zero corrections across the thirty shipped narratives.
-So the sanitizer is measured by injection: the four value faults are each planted on all sixty-six sites of the shipped narratives, two hundred and sixty-four injections in total, plus a separate sweep that welds a metric label to its own value, removing the separator between them, on the same sixty-six sites.
-Not every number in the narrative is a cite. A cite is a figure the bridge mentions, for which the sanitizer holds a canonical value: sixty-six of the four hundred and thirteen cited figures satisfy that precondition, so the injection works on the set where the contract can act at all.
-Figure~\ref{fig:injection} shows the outcome of that stress test, which the sanitizer fully passed, with zero false repairs.
+For what regards the formal modes (F6, F7, F8), they cannot be read off the natural output: Chapter~\ref{chap:proposed_solution} already explained why the upstream contracts leave nothing to catch for the sanitizer.
+On the natural runs it stayed off, not because it was inactive: it compared every recognizable value, and made zero corrections across the thirty shipped narratives.
+So the sanitizer is measured by injection: the four value faults are each planted on all sixty-six sites of the shipped narratives, two hundred and sixty-four injections in total, of which two of the four faults sit inside the half-value guard band; plus a separate sweep that welds a metric label to its own value, removing the separator between them, on the same sixty-six sites.
+Not every number in the narrative is a cite: it has to be one the sanitizer holds a canonical value for. 
+Sixty-six of the four hundred and thirteen cited figures satisfy the precondition of Section~\ref{sec:sanitizer}, so the injection works on the set where the contract can act at all.
+Figure~\ref{fig:injection} shows the outcome of that stress test: every fault ends where its own mechanism predicts, and no injection produced a false repair.
 
 
 
@@ -1342,7 +1341,7 @@ This second depth focuses on comparing each causal claim, without considering th
 The expert bridges contain one hundred and four total causes. 
 The generated bridges align with eighty-one of them, achieving a reference recall of 78\% (Figure~\ref{fig:depth_causes}).
 The remaining twenty-three have no aligned cause in the generated text.
-Moreover, twenty-eight of the one hundred and four causes cite facts that never reach the pipeline: a severe event or a strike, for which the model aligns only when the fact leaves a visible trace in the numbers.
+Moreover, twenty-eight of the one hundred and four causes cite facts that never reach the pipeline, a severe event or a strike; so the model aligns with them only when the fact leaves a visible trace in the numbers.
 
 The reverse comparison classifies the one hundred and fifty-eight causes the \ac{LLM} proposed. 
 Seventy-seven directly match a cause written by the manager, seventy-nine are coherent additions absent from the hand-written bridge, and two contradict the expert's reading.
@@ -1417,7 +1416,7 @@ Also here as in Section~\ref{sec:depth_cause}, the alignment is not one-to-one.
 
 Actionability and expert agreement measure different things.
 The first front shows that the tree removes out-of-mandate recommendations at L2.
-Depth three shows how an admissible action can still differ from the manager's choice, resulting in the weakest part of the comparison.
+Depth three shows how an admissible action can still differ from the manager's choice, and this is the weakest part of the comparison.
 
 \begin{figure}[htbp]
   \centering
@@ -1493,7 +1492,6 @@ The four axes combine different parts of the bridge:
 For what regards actions and causes the harmonic mean between precision and recall is a necessary choice: those two measures reward opposite shortcuts.
 Recall alone favors a bridge that keeps adding levers until every line of the expert is covered, while precision alone favors a bridge that writes one safe claim and stops.
 The harmonic mean falls sharply when either of the two is low, so a high score requires covering the expert list and staying concise at the same time.
-Each station-week contributes its own score before averaging, so a week with many claims does not outweigh a week with two.
 Figure~\ref{fig:depth_bsi} reports the resulting axis means and the composite.
 
 \begin{figure}[htbp]
@@ -1553,22 +1551,20 @@ The manager's narrative is the reference, not the absolute truth: in Section~\re
 Two distinctions keep the result aligned with the preceding chapters.
 Completeness reaches 100 because the model cited every material driver of the gap; the 78\% cause recall concerns the finer explanation of those drivers.
 The Numbers axis blends source traceability and agreement on shared values, averaged per station-week, and scores 93.7.
-Moreover, the number of tokens traceable to the source is four hundred and eight out of four hundred and thirteen or 98.8\%, with the five model-summed aggregates marking the declared boundary of tile-as-source.
-On the agreement side, the judge paired one hundred and thirty-four values quoted by both bridges and one hundred and six agree.
-
+Traceability is the 98.8\% of Section~\ref{sec:front_modes}.
+On the agreement side, the judge confirms one hundred and six correspondance out of one hundred and thirty-four values quoted by both bridges, reaching a precision of 79\%.
 
 The weakest axis is the Actions one, which scores 53.4 over twenty-nine station-weeks (the ones that have at least one action in the expert bridge).
 Each of those weeks contributes the harmonic mean of precision and recall against the expert list, so the pooled ratio of thirty-four over sixty-seven from Section~\ref{sec:depth_actions} is not the axis score.
-This value records how rarely the proposed levers coincide with the actions chosen by the manager, while actionability is already established in Section~\ref{sec:front_modes}.
+This value records how rarely the proposed levers coincide with the actions chosen by the manager.
 
 %------------------------------------------------------------------
 \section{Threats to validity}
 \label{sec:evaluation_close}
 
-These two fronts define completely different evaluation methods. 
+These two fronts are not equally solid. 
 The first consists in looking at the narrative's numbers and checking if they exist upstream, it is an objective measure. 
 The second checks the generated narrative against the hand-written one, so it depends on the quality of the manager's bridge.
-Therefore, a \ac{BSI} of 85.3 is not a percentage of correctness, but a similarity index to the bridge I use as comparison.
 
 
 Everything in this chapter is measured on one single country, the headline productivity ratio, and thirty station-weeks. 
@@ -1579,13 +1575,12 @@ The counts at L0 also reflect the specific frontier model used, so a different \
 On the measurement side I kept the choices conservative.
 All the ambiguous tokens were excluded automatically rather than counted in the system's favor, so the numeric scorer works on the exact denominator of four hundred and thirteen quantitative tokens over the thirty final narratives.
 The judgment step, the one that extracted causes and actions, was run only once per narrative, but I manually checked them as a control.
-My check confirms numbers and causes, the only disagreement was on the headline cause, where my manual count was twenty-seven against the twenty-five seen by the model, so I kept the lower one.
+My check confirms numbers and cause set; the only disagreement was on the headline cause, where my manual count was twenty-seven against the twenty-five seen by the model, so I kept the lower one.
 I was the only rater for all the manual judgments in this chapter, and no independent double-check has been done to assess my perspective; the same caution applies to the manual screening of F4 and F5 in Section~\ref{sec:front_modes}.
 
 A further check removes the Completeness axis, that always sits at one hundred, from the \ac{BSI} calculation, and renormalizes the remaining weights to 0.50 for Numbers and 0.25 for Actions and Causes. The recalculated index drops to 81.6. 
-The headline 85.3 is computed with the stricter of two possible choices.
 As explained before, the bridge is the result of personal judgment, that relies on claims that can be found in the data, and others that are founded on personal knowledge or events not recorded in the available data.
-So, I decided to include also the ones the model cannot know by construction; without them the \ac{BSI} would increase by 0.4, to 85.7.
+So, I decided to include also the ones the model cannot know by construction; without them the \ac{BSI} would increase by 0.4, to 85.7, so the headline value is the stricter of the two choices.
 The weights are also a design choice, so I tested how much the result depends on them: by moving up or down each weight by 0.10 and renormalizing the others, for all the eight combinations, the result always stays between 82.5 and 88.7, and the largest swing comes from the axis with the furthest score: the Actions.
 
 In the end the source-based counts give the clearest result, the causal comparison supports a bounded but fallible choice among the admitted causes, and the action selection remains the weakest part once local knowledge enters.
