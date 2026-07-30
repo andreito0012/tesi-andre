@@ -192,6 +192,7 @@ In particular, once the numeric side was frozen upstream, most of the failures I
 
 
 \section{Research questions}
+\label{sec:Research_questions:}
 The two criticalities highlighted in the previous section shape the questions that guide the thesis.
 I framed the work around one main question and two subsequent ones, each at a different level.
 
@@ -921,8 +922,8 @@ Being a hand-curated tree allows for compactness, but it is also a major downsid
 \label{sec:sanitizer}
 
 This last deterministic contract runs directly on the finished text after the model.
-The first two shape what the \ac{LLM} sees, while the sanitizer audits what the model produced, comparing every cited figure against its canonical value, when one exists, and repairs a small set of specific errors.
-In contract terms: the \emph{precondition} is that for every metric in the narrative, a known-correct value of it exists; the \emph{postcondition} is that every cited figure either matches the known value or is left visibly broken.
+The first two shape what the \ac{LLM} sees, while the sanitizer audits what the model produced, comparing every cited figure it can tie to a metric against its canonical value, when one exists, and repairs a small set of specific errors.
+In contract terms: the \emph{precondition} is that a cited figure sits next to its own metric label and a know-correct value of that lable exists; the \emph{postcondition} is that such a figure either matches the known value or is left as the model wrote it.
 It works through four mechanisms that run one after the other. 
 The first is label disambiguation: before touching a figure, the sanitizer works out which metric that number belongs to, so it does not swap one driver's value for another's. 
 Then canonical resolution checks that the value exists in the pipeline at all, the ground-truth path drawn dashed in Figure~\ref{fig:architecture}. 
@@ -1233,8 +1234,8 @@ At the previous two levels the model invents definitions for the different drive
 
 For what regards the formal modes (F6, F7, F8), they cannot be read off the natural output: Chapter~\ref{chap:proposed_solution} already explained why the upstream contracts leave nothing to catch for the sanitizer.
 On the natural runs it stayed silent, and not because it was inactive: it compared every recognizable value, and made zero corrections across the thirty shipped narratives.
-So the sanitizer is measured by injection: the four value faults are each planted on all sixty-six sites of the shipped narratives, two hundred and sixty-four injections in total, of which two of the four faults sit inside the half-value guard band.
-A separate sweep that welds a metric label to its own value, removing the separator between them, on the same sixty-six sites.
+So the sanitizer is measured by injection: the four value faults are each planted on all sixty-six sites of the shipped narratives, two hundred and sixty-four injections, of which two of the four faults sit inside the half-value guard band.
+A separate sweep welds a metric label to its own value, removing the separator between them, on the same sixty-six sites.
 Not every number in the narrative is a site: it has to be one the sanitizer holds a canonical value for. 
 Sixty-six of the four hundred and thirteen numeric tokens satisfy the precondition of Section~\ref{sec:sanitizer}, so the injection works on the set where the contract can act at all.
 Figure~\ref{fig:injection} shows the outcome of that stress test: every fault ends where its own mechanism predicts, and no injection produced a false repair.
@@ -1350,7 +1351,7 @@ The ones that directly match the manager's causes differ in number from the eigh
 
 Taken together, one hundred and fifty-six of the one hundred and fifty-eight proposed causes are either direct matches or coherent additions, equal to 98.7\%.
 This is a measure of domain admissibility, not agreement with the expert.
-This result, together with the disappearance of F4 at L2 in Section~\ref{sec:front_modes}, supports the soft  guarantee on causes argued in Chapter~\ref{chap:state_of_the_art} and Chapter~\ref{chap:proposed_solution}: the tree bounds what can be named, while the choice and ranking inside the admitted domain remain a matter of judgment.
+This result, together with the disappearance of F4 at L2 in Section~\ref{sec:front_modes}, supports the soft guarantee on causes argued in Chapter~\ref{chap:state_of_the_art} and Chapter~\ref{chap:proposed_solution}: the tree bounds what can be named, while the choice and ranking inside the admitted domain remain a matter of judgment.
 
 
 \begin{figure}[htbp]
@@ -1592,20 +1593,20 @@ In the end the source-based counts give the clearest result, the causal comparis
 
 \section{The three questions answered}
 
-In Chapter~\ref{chap:state_of_the_art} I discussed the three questions this thesis promises to answer: One empirical, and two about design.
+In Section~\ref{sec:Research_questions:} I discussed the three questions this thesis promises to answer: One empirical, and two about design.
 
-The First one asks to determine the common grounding failure when a \ac{LLM} iterates over a dense dashboard, full of KPIs.
-The answer that came from the field, after three months of observation, are the eight failure modes detailed in Section~\ref{sec:front_modes}.
-Numeric modes currupt the value.
-Causal modes give a domain term a meaning it does not have or propose an action noone at the site can take.
+The first one asks to determine the common grounding failure when a \ac{LLM} iterates over a dense dashboard, full of KPIs.
+The answer that came from the field, after three months of observation, are the eight failure modes detailed in Section~\ref{sec:catalogue} and counted in Section~\ref{sec:front_modes}.
+Numeric modes corrupt the value.
+Causal modes give a domain term a meaning it does not have or propose an action no one at the site can take.
 Formal modes involve a slip in form or sign.
 
 Starting with the design questions now.
-The first asks what achitecture can costrain the model on both numeric and causal grounding.
+The first asks what achitecture can constrain the model on both numeric and causal grounding.
 The solution is the three-contract framework of Chapter~\ref{chap:proposed_solution}.
 What matters is the composition, since each contract is built against one class and none of them can act at the point where the others do, so they are needed all together.
 Tile-as-source freezes the numbers upstream and carries most of the numeric load.
-The tree bounds the causal half, while the sanitizer audits from audits forms after the fact.
+The tree bounds the causal half, while the sanitizer audits the forms after the fact.
 
 
 \section{Contributions}
