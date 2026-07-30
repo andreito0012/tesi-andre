@@ -1107,7 +1107,7 @@ Each front is measured in its own way, and a language model participates in the 
 The narratives are generated along the ablation ladder of Figure~\ref{fig:ladder}.
 For the numeric modes (F1, F2, F3) the first front relies on a deterministic check: every figure in the narrative has to trace back to a value the model was given.
 The causal modes (F4, F5) are counted by hand, by a single rater, against predefined rules: the named causes and actions have to exist in the admitted domain.
-Finally, the formal modes (F6, F7, F8) are tested by injection since the final pipeline, for this specic sample, no longer produces them.
+Finally, the formal modes (F6, F7, F8) are tested by injection since the final pipeline, for this specific sample, no longer produces them.
 
 Each of the thirty station-weeks is run through the four levels of the ladder, which gives one hundred and twenty narratives. 
 The first front counts the failures across all four levels; the comparison with the expert uses only the thirty final narratives produced by the shipped configuration.
@@ -1222,20 +1222,21 @@ Figure~\ref{fig:descent} collects the counts.
 
 Starting with the numeric modes, at L0 the model fabricates numbers freely: it recalculates forty-four numbers (F1), invents twenty-one rates (F2), and states twenty-two values-as-gap (F3).
 One rung of the ladder is enough to remove nearly all of it.
-Moreover, the increase observed for F1 at levels L2 and L3 is not a regression of the tile contract: the tree makes the narrative richer, more drivers get discussed together, and the model finds more occasions to state their total.
+The one increase observed for F1 at levels L2 and L3 is not a regression of the tile contract: the tree makes the narrative richer, more drivers get discussed together, and the model finds more occasions to state their total.
 The single case at L1 and the residual five are all such self-summed totals, the boundary declared in Section~\ref{sec:tileasource}.
 Counted over the thirty shipped narratives, four hundred and eight of the four hundred and thirteen numeric tokens trace back to the input; the five self-summed totals are the only exceptions.
-They also sit outside the reach of the sanitizer,  a total the model summed itself has no tile to be compared against, and that is why those five do not move between L2 and L3. 
+They also sit outside the reach of the sanitizer, because a total the model summed itself has no tile to be compared against, and that is why those five do not move between L2 and L3. 
 
 The causal modes (F4, F5) shrink at L1 and disappear completely only when the tree enters at level L2.
 At the previous two levels the model invents definitions for the different drivers, reading operational meaning into labels it was never given, and proposes out-of-mandate actions; both disappear at L2.
 
 
 For what regards the formal modes (F6, F7, F8), they cannot be read off the natural output: Chapter~\ref{chap:proposed_solution} already explained why the upstream contracts leave nothing to catch for the sanitizer.
-On the natural runs it stayed off, not because it was inactive: it compared every recognizable value, and made zero corrections across the thirty shipped narratives.
-So the sanitizer is measured by injection: the four value faults are each planted on all sixty-six sites of the shipped narratives, two hundred and sixty-four injections in total, of which two of the four faults sit inside the half-value guard band; plus a separate sweep that welds a metric label to its own value, removing the separator between them, on the same sixty-six sites.
-Not every number in the narrative is a cite: it has to be one the sanitizer holds a canonical value for. 
-Sixty-six of the four hundred and thirteen cited figures satisfy the precondition of Section~\ref{sec:sanitizer}, so the injection works on the set where the contract can act at all.
+On the natural runs it stayed silent, and not because it was inactive: it compared every recognizable value, and made zero corrections across the thirty shipped narratives.
+So the sanitizer is measured by injection: the four value faults are each planted on all sixty-six sites of the shipped narratives, two hundred and sixty-four injections in total, of which two of the four faults sit inside the half-value guard band.
+A separate sweep that welds a metric label to its own value, removing the separator between them, on the same sixty-six sites.
+Not every number in the narrative is a site: it has to be one the sanitizer holds a canonical value for. 
+Sixty-six of the four hundred and thirteen numeric tokens satisfy the precondition of Section~\ref{sec:sanitizer}, so the injection works on the set where the contract can act at all.
 Figure~\ref{fig:injection} shows the outcome of that stress test: every fault ends where its own mechanism predicts, and no injection produced a false repair.
 
 
@@ -1349,7 +1350,7 @@ The ones that directly match the manager's causes differ in number from the eigh
 
 Taken together, one hundred and fifty-six of the one hundred and fifty-eight proposed causes are either direct matches or coherent additions, equal to 98.7\%.
 This is a measure of domain admissibility, not agreement with the expert.
-This result, together with the disappearance of F4 at L2 in Section~\ref{sec:front_modes}, supports the bounded-cause guarantee argued in Chapter~\ref{chap:state_of_the_art} and Chapter~\ref{chap:proposed_solution}: the tree bounds what can be named, while the choice and ranking inside the admitted domain remain a matter of judgment.
+This result, together with the disappearance of F4 at L2 in Section~\ref{sec:front_modes}, supports the soft  guarantee on causes argued in Chapter~\ref{chap:state_of_the_art} and Chapter~\ref{chap:proposed_solution}: the tree bounds what can be named, while the choice and ranking inside the admitted domain remain a matter of judgment.
 
 
 \begin{figure}[htbp]
@@ -1477,7 +1478,7 @@ The fourth depth combines the previous comparisons with numerical fidelity and m
 \end{equation}
 
 where $D_s$ contains the axes defined for that station-week, and $A_{i,s}$ is the score of axis $i$ between zero and one.
-Sometimes it happens that in the manager's bridge no action is included, if so, the Actions axis is excluded and remaining weights are renormalized.
+Sometimes it happens that in the manager's bridge no action is included; in that case the Actions axis is excluded and remaining weights are renormalized.
 The reported \ac{BSI} is the mean of the thirty per-station-week values.
 
 The four axes combine different parts of the bridge:
@@ -1552,7 +1553,7 @@ Two distinctions keep the result aligned with the preceding chapters.
 Completeness reaches 100 because the model cited every material driver of the gap; the 78\% cause recall concerns the finer explanation of those drivers.
 The Numbers axis blends source traceability and agreement on shared values, averaged per station-week, and scores 93.7.
 Traceability is the 98.8\% of Section~\ref{sec:front_modes}.
-On the agreement side, the judge confirms one hundred and six correspondance out of one hundred and thirty-four values quoted by both bridges, reaching a precision of 79\%.
+On the agreement side, the judge confirms one hundred and six correspondances out of one hundred and thirty-four values quoted by both bridges, reaching an agreement of 79\%.
 
 The weakest axis is the Actions one, which scores 53.4 over twenty-nine station-weeks (the ones that have at least one action in the expert bridge).
 Each of those weeks contributes the harmonic mean of precision and recall against the expert list, so the pooled ratio of thirty-four over sixty-seven from Section~\ref{sec:depth_actions} is not the axis score.
