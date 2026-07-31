@@ -1117,7 +1117,7 @@ Each of the thirty station-weeks is run through the four levels of the ladder, w
 The first front counts the failures across all four levels; the comparison with the expert uses only the thirty final narratives produced by the shipped configuration.
  
 All the sampled stations belong to the same country network, span two building types, and cover gap magnitudes from small to large.
-The production model is a frontier language model, the same one the app runs, and the prompt is the full app prompt, not a reduced version.
+The production model is a frontier language model, the same one the app runs, at L3 the prompt is the full app prompt, and not a reduced version.
 Each generation is isolated and stateless: one conversation per station-week per level, three concurrent workers, and no contamination across stations.
 
 
@@ -1220,7 +1220,7 @@ Figure~\ref{fig:descent} collects the counts.
   \node[cell, fill=black!0]              at (\cC,\rE) {0};
   \node[cell, fill=black!0]              at (\cD,\rE) {0};
   \end{tikzpicture}
-  \caption{Failure-mode counts across the ablation ladder, as total instances over the 30 station-weeks. The three formal modes (F6, F7, F8) have no row because they were never observed on the natural output of this sample in the shipped configuration.}
+  \caption{Failure-mode counts across the ablation ladder, as total instances over the 30 station-weeks. The three formal modes (F6, F7, F8) have no row because they were never observed on the natural output of this sample in the shipped configuration; they are measured by injection.}
   \label{fig:descent}
   \end{figure}
 
@@ -1228,7 +1228,7 @@ Starting with the numeric modes, at L0 the model fabricates numbers freely: it r
 One rung of the ladder is enough to remove nearly all of it.
 The one increase observed for F1 at levels L2 and L3 is not a regression of the tile contract: the tree makes the narrative richer, more drivers get discussed together, and the model finds more occasions to state their total.
 The single case at L1 and the residual five are all such self-summed totals, the boundary declared in Section~\ref{sec:tileasource}.
-Counted over the thirty shipped narratives, four hundred and eight of the four hundred and thirteen numeric tokens trace back to the input; the five self-summed totals are the only exceptions.
+Counted over the thirty shipped narratives, four hundred and eight of the four hundred and thirteen numeric tokens trace back to the input, that is 98.8\%; the five self-summed totals are the only exceptions.
 They also sit outside the reach of the sanitizer, because a total the model summed itself has no tile to be compared against, and that is why those five do not move between L2 and L3. 
 
 The causal modes (F4, F5) shrink at L1 and disappear completely only when the tree enters at level L2.
@@ -1414,7 +1414,7 @@ This result, together with the disappearance of F4 at L2 in Section~\ref{sec:fro
 
 The third depth repeats the set comparison for the actions.
 The expert bridges contain sixty-six actions in total, and the generated bridges align with thirty-two of them, achieving a reference recall of 48\%.
-Out of all those actions, twenty depend on local information that never reaches the pipeline; those can be aligned by the model, as for causes, only if a trace is left in the data.
+Out of all the sixty-six expert actions, twenty depend on local information that never reaches the pipeline; those can be aligned by the model, as for causes, only if a trace is left in the data.
 
 The second bar in Figure~\ref{fig:depth_actions} classifies the sixty-seven actions the model proposed: thirty-four directly align with an action written by the expert, while the other thirty-three are admissible levers that the manager did not choose.
 Also here as in Section~\ref{sec:depth_cause}, the alignment is not one-to-one.
@@ -1422,8 +1422,8 @@ Also here as in Section~\ref{sec:depth_cause}, the alignment is not one-to-one.
 Actionability and expert agreement measure different things.
 The first front shows that the tree removes out-of-mandate recommendations at L2.
 Depth three shows how an admissible action can still differ from the manager's choice, and this is the weakest part of the comparison.
-A cause is supported by data or contradicted by it, while an action has not that luck.
-Its effects show up only if someone performs it, so a non-match at this depth is not an error but a differnt target or a lighter form of intervention.
+A cause is supported by data or contradicted by it, while an action has no such luck (infact Figure~\ref{fig:depth_causes} carries a contradiction while Figure~\ref{fig:depth_actions} does not).
+Its effects show up only if someone performs it, so a non-match at this depth is not an error but a different target or a lighter form of intervention.
 
 
 \begin{figure}[htbp]
@@ -1614,7 +1614,7 @@ Tile-as-source freezes the numbers upstream and carries most of the numeric load
 The tree bounds the causal half, while the sanitizer audits the forms after the fact.
 
 The last one asks what role can a curated tree, a well build map, play in bounding causes and actions to what a model possibly say.
-Among all the causes in the tested sample, one hundred and fifty-eight were inside the admitted domain reaching 98.7\%, with only two of them that contradict the expert's reading.
+Among all the causes in the tested sample, one hundred and fifty-six were inside the admitted domain reaching 98.7\%, with only two of them that contradict the expert's reading.
 On the action side the model proposed sixty-seven actions that directly mathced the managers one, and thirty-three additional levels that were not choosen.
 
 
