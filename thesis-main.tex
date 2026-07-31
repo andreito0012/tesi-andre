@@ -1117,7 +1117,7 @@ Each of the thirty station-weeks is run through the four levels of the ladder, w
 The first front counts the failures across all four levels; the comparison with the expert uses only the thirty final narratives produced by the shipped configuration.
  
 All the sampled stations belong to the same country network, span two building types, and cover gap magnitudes from small to large.
-The production model is a frontier language model, the same one the app runs, at L3 the prompt is the full app prompt, and not a reduced version.
+The production model is a frontier language model, the same one the app runs, from L2 onwards the prompt is the full app prompt, and not a reduced version.
 Each generation is isolated and stateless: one conversation per station-week per level, three concurrent workers, and no contamination across stations.
 
 
@@ -1574,11 +1574,9 @@ These two fronts are not equally solid.
 The first consists in looking at the narrative's numbers and checking if they exist upstream, it is an objective measure. 
 The second checks the generated narrative against the hand-written one, so it depends on the quality of the manager's bridge.
 
-
 Everything in this chapter is measured on one single country, one single headline indicator (Metric\_R), and thirty station-weeks, all below target. 
 The failure modes are derived from a single pilot site used as starting point during development, so I make no transfer claim beyond that setting.
 The counts at L0 also reflect the specific frontier model used, so a different \ac{LLM} would change the measured size of the reduction even if the contracts do not depend on it.
-
 
 On the measurement side I kept the choices conservative.
 All the ambiguous tokens were excluded automatically rather than counted in the system's favor, so the numeric scorer works on the exact denominator of four hundred and thirteen quantitative tokens over the thirty final narratives.
@@ -1593,13 +1591,13 @@ The weights are also a design choice, so I tested how much the result depends on
 
 In the end the source-based counts give the clearest result, the causal comparison supports a bounded but fallible choice among the admitted causes, and the action selection remains the weakest part once local knowledge enters.
 %----------------------------------------------------------------------------------------
-\chapter{Discussion and Future Directions}
+\chapter{Conclusions}
 \label{chap:discussion}
 %----------------------------------------------------------------------------------------
 
 \section{The three questions answered}
 
-In Section~\ref{sec:Research_questions:} I discussed the three questions this thesis promises to answer: One empirical, and two about design.
+In Section~\ref{sec:Research_questions:} I discussed the three questions this thesis promises to answer: one empirical, and two about design.
 
 The first one asks to determine the common grounding failure when a \ac{LLM} iterates over a dense dashboard, full of KPIs.
 The answer that came from the field, after three months of observation, are the eight failure modes detailed in Section~\ref{sec:catalogue} and counted in Section~\ref{sec:front_modes}.
@@ -1607,15 +1605,17 @@ Numeric modes corrupt the value.
 Causal modes give a domain term a meaning it does not have or propose an action no one at the site can take.
 Formal modes involve a slip in form or sign.
 
-The second  asks what architecture can constrain the model on both numeric and causal grounding.
+The second one asks what architecture can constrain the model on both numeric and causal grounding.
 The solution is the three-contract framework of Chapter~\ref{chap:proposed_solution}.
 What matters is the composition, since each contract is built against one class and none of them can act at the point where the others do, so they are needed all together.
 Tile-as-source freezes the numbers upstream and carries most of the numeric load.
 The tree bounds the causal half, while the sanitizer audits the forms after the fact.
 
-The last one asks what role can a curated tree, a well build map, play in bounding causes and actions to what a model possibly say.
+The last one asks what role can a curated tree, a well built map, play in bounding causes and actions to what a model possibly say.
 Among all the causes in the tested sample, one hundred and fifty-six were inside the admitted domain reaching 98.7\%, with only two of them that contradict the expert's reading.
-On the action side the model proposed sixty-seven actions that directly mathced the managers one, and thirty-three additional levels that were not choosen.
+On the action side the model proposed thirty-four actions that directly mathced the managers one, and thirty-three additional levels that were not choosen, reaching 50.7\%.
+
+
 
 
 
