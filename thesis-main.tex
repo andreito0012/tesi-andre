@@ -130,6 +130,7 @@ The main difficulty of this project is the grounding problem, understood in a st
 It can be decomposed into two main requirements that need to hold together. 
 The first is numerical: the number must correspond exactly to the value behind the dashboard, not an approximation of it.
 The second one is causal: every explanation and every recommendation must come from a well-defined set of causes that the domain admits, not from everything that seems reasonable.
+In the following chapters I refer to those two requirements as \emph{numeric fidelity} and \emph{bounded cause}.
 Figure~\ref{fig:ch1_problem} shows the two requirements and the related failure points.
 
 \begin{figure}[ht]
@@ -245,7 +246,7 @@ The requirement that matters for \ac{BI} is faithfulness.
 Operational \ac{BI} requires a higher standard. 
 Generic support is not enough.
 A figure of 49.0 is either reproduced exactly or it is wrong. Any representation that deviates from the defined value is incorrect. 
-As anticipated in the introduction: a narrative is grounded when every quantitative token is traceable, character by character, to a structured field, and every comparative statement agrees in sign with the source.
+The narrative is grounded when every quantitative token is traceable, character by character, to a structured field, and every comparative statement agrees in sign with the source.
 This aligns more with faithfulness than with factuality, and it is tighter than both because it asks for fidelity to an exact value and not for consistency with a passage. 
 Controlled table-to-text work, the ToTTo dataset for instance \cite{parikh2020totto}, pushes the generation in that direction, by asking the model to describe only the given cells without any deviation.
 
@@ -656,7 +657,7 @@ How each of these is addressed is discussed in Chapter~\ref{chap:proposed_soluti
 
 \section{Methodology}
 The study is organized around a single operation, developed following a longitudinal design: I worked on the system observing day after day the working routine.
-The system presented in Chapter~\ref{chap:proposed_solution} was developed through an iterative loop: code, observe what the output is, isolate one issue at a time, fix it, validate the solution, and repeat; this loop ran roughly several dozen times, and each pass left a record of what had gone wrong and why.
+The system presented in Chapter~\ref{chap:proposed_solution} was developed through an iterative loop: code, observe what the output is, isolate one issue at a time, fix it, validate the solution, and repeat; this loop ran several dozen times, and each pass left a record of what had gone wrong and why.
 Those traces are the base material of the analysis: I organized them into families by the kind of error they represent, and labeled them as grounding failures in Chapter~\ref{chap:proposed_solution}. 
 The data behind the test sits on two layers.
 The development layer is the pilot site itself: three months of daily observation at DFV2, which is where failures came from.
@@ -923,7 +924,7 @@ Being a hand-curated tree allows for compactness, but it is also a major downsid
 
 This last deterministic contract runs directly on the finished text after the model.
 The first two shape what the \ac{LLM} sees, while the sanitizer audits what the model produced, comparing every cited figure it can tie to a metric against its canonical value, when one exists, and repairs a small set of specific errors.
-In contract terms: the \emph{precondition} is that a cited figure sits next to its own metric label and a known-correct value of that label exists; the \emph{postcondition} is that such a figure either matches the known value or is left as the model wrote it.
+In contract terms: the \emph{precondition} is that a cited figure sits next to its own metric label and a known-correct value of that label exists; the \emph{postcondition} is that such a figure is repaired to the known value if the drift is minimal, or is left as the model wrote it.
 A figure the sanitizer cannot tie to a metric passes through untouched, and keeping that one right is the first contract's job.
 
 It works through four mechanisms that run one after the other. 
@@ -1556,7 +1557,7 @@ Two distinctions keep the result aligned with the preceding chapters.
 Completeness reaches 100 because the model cited every material driver of the gap; the 78\% cause recall concerns the finer explanation of those drivers.
 The Numbers axis blends source traceability and agreement on shared values, averaged per station-week, and scores 93.7.
 Traceability is the 98.8\% of Section~\ref{sec:front_modes}.
-On the agreement side, the judge confirms one hundred and six correspondences out of one hundred and thirty-four values quoted by both bridges, reaching an agreement of 79\%.
+On the agreement side, the aligner confirms one hundred and six correspondences out of one hundred and thirty-four values quoted by both bridges, reaching an agreement of 79\%.
 
 The weakest axis is the Actions one, which scores 53.4 over twenty-nine station-weeks (the ones that have at least one action in the expert bridge).
 Each of those weeks contributes the harmonic mean of precision and recall against the expert list, so the pooled ratio of thirty-four over sixty-seven from Section~\ref{sec:depth_actions} is not the axis score.
@@ -1571,7 +1572,7 @@ The first consists in looking at the narrative's numbers and checking if they ex
 The second checks the generated narrative against the hand-written one, so it depends on the quality of the manager's bridge.
 
 
-Everything in this chapter is measured on one single country, the headline productivity ratio, and thirty station-weeks. 
+Everything in this chapter is measured on one single country, one single headline indicator (Metric\_R), and thirty station-weeks, all below target. 
 The failure modes are derived from a single pilot site used as starting point during development, so I make no transfer claim beyond that setting.
 The counts at L0 also reflect the specific frontier model used, so a different \ac{LLM} would change the measured size of the reduction even if the contracts do not depend on it.
 
