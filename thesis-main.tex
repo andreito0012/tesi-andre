@@ -1623,6 +1623,18 @@ The catalogue of the first one is what made possible the second answer, and the 
 \section{Contributions and how far they travel}
 \label{sec:contributions}
 
+The center of this thesis is the contract framework that results from the questions detailed in the previous section, and around it sit three things I count as contributions.
+
+The first one is the way of framing the intial problem that, in my case, requires two things together: every quantitative token traciable character by character to a computed value, and every cause drawn from a set the domain admits.
+Thant definition is much more sticter than the grounding the hallucination literature usually mesures, where a claim count as grounded if some source broadly supports it \cite{ji2023survey,min2023factscore}, and no existing family carries both at once in Table~\ref{tab:positioning}.
+Naming the two fronts, and showing that they do not reduce to each other, is what lets the rest of the work be precise about which guarantee is hard and which is soft.
+
+The second is the faiulure catalogue itself: eight modes and three classes, developed during the internship while working on real data, not on synthetic proxy.
+This same map can be used, on symilar systems, to understand and evaluate what tends to break, and proactively act on that.
+
+The third one is the ablation ladder, that was used as the evaluation protocol.
+It works by adding one contract per rung, a composite similarity index, and a separate model as claim extractor, so the generator is not graded with itself, and a fault-injection rig for the one contract that stays silent on natural output.
+
 
 
 %----------------------------------------------------------------------------------------
