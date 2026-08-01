@@ -1599,8 +1599,8 @@ In the end the source-based counts give the clearest result, the causal comparis
 
 In Section~\ref{sec:Research_questions:} I discussed the three questions this thesis promises to answer: one empirical, and two about design.
 
-The first one asks to determine the common grounding failure when a \ac{LLM} iterates over a dense dashboard, full of KPIs.
-The answer that came from the field, after three months of observation, are the eight failure modes detailed in Section~\ref{sec:catalogue} and counted in Section~\ref{sec:front_modes}.
+The first one asks which are the common grounding failure when a \ac{LLM} iterates over a dense dashboard, full of KPIs.
+The answer that came from the field, after three months of observation, is the set of eight failure modes detailed in Section~\ref{sec:catalogue} and counted in Section~\ref{sec:front_modes}.
 Numeric modes corrupt the value.
 Causal modes give a domain term a meaning it does not have or propose an action no one at the site can take.
 Formal modes involve a slip in form or sign.
@@ -1625,16 +1625,17 @@ The catalogue of the first one is what made possible the second answer, and the 
 
 The center of this thesis is the contract framework that results from the second question in the previous section, and around it sit three things I count as contributions.
 
-The first is the way of framing the grounding for operational \ac{BI}, that in my case, requires two things together: every quantitative token traceable character by character to a computed value, and every cause drawn from a set the domain admits.
+The first is the way of framing the grounding for operational \ac{BI}, that requires two things together: every quantitative token traceable character by character to a computed value, and every cause drawn from a set the domain admits.
 That definition is stricter than the grounding the hallucination literature usually measures, where a claim counts as grounded if some source broadly supports it \cite{ji2023survey,min2023factscore}, and no existing family carries both at once, as shown in Table~\ref{tab:positioning}.
 Naming the two requirements, and showing that they do not reduce to each other, is what lets the rest of the work be precise about which guarantee is hard and which is soft.
 
 The second is the failure catalogue itself: eight modes in three classes, collected during the internship while working on real data, not on a synthetic proxy.
+At the naive level the model already had the full decomposition with the correct values, and a prompt that asked for drivers, causes and actions; it still recomputed forty-four numbers, invented twenty-one rates and sated twenty-two values as the gap over thirty narratives.
 This same catalogue can be used, on similar systems, to understand what tends to break, and where in the pipeline each break can be caught.
 
 The third is the evaluation protocol.
-It is made of  four instruments: an ablation ladder that works by adding one contract per rung, a composite similarity index, a separate model as claim extractor and aligner, and a fault-injection rig for the one contract that stays silent on natural output.
-That extractor keeps the generator from being grade with itself, while the scores themselves are computed deterministically from what is extracted.
+It is made of four instruments: an ablation ladder that works by adding one contract per rung, a composite similarity index over four axes (the \ac{BSI}), a separate model as claim extractor and aligner, and a fault-injection rig for the one contract that stays silent on natural output.
+That extractor keeps the generator from being graded with itself, while the scores themselves are computed deterministically from what is extracted.
 
 
 
