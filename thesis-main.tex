@@ -1625,15 +1625,16 @@ The catalogue of the first one is what made possible the second answer, and the 
 
 The center of this thesis is the contract framework that results from the second question in the previous section, and around it sit three things I count as contributions.
 
-The first one is the way of framing the grounding for operational \ac{BI}, in my case, requires two things together: every quantitative token traciable character by character to a computed value, and every cause drawn from a set the domain admits.
-Thant definition is much more sticter than the grounding the hallucination literature usually mesures, where a claim count as grounded if some source broadly supports it \cite{ji2023survey,min2023factscore}, and no existing family carries both at once in Table~\ref{tab:positioning}.
+The first is the way of framing the grounding for operational \ac{BI}, that in my case, requires two things together: every quantitative token traceable character by character to a computed value, and every cause drawn from a set the domain admits.
+That definition is stricter than the grounding the hallucination literature usually measures, where a claim counts as grounded if some source broadly supports it \cite{ji2023survey,min2023factscore}, and no existing family carries both at once, as shown in Table~\ref{tab:positioning}.
 Naming the two requirements, and showing that they do not reduce to each other, is what lets the rest of the work be precise about which guarantee is hard and which is soft.
 
-The second is the faiulure catalogue itself: eight modes and three classes, developed during the internship while working on real data, not on synthetic proxy.
-This same map can be used, on symilar systems, to understand what tends to break, and the point of the pipeline where each break can be caught.
+The second is the failure catalogue itself: eight modes in three classes, collected during the internship while working on real data, not on a synthetic proxy.
+This same catalogue can be used, on similar systems, to understand what tends to break, and where in the pipeline each break can be caught.
 
-The third one is the evaluation protocol.
-It is made of an ablation ladder that works by adding one contract per rung, a composite similarity index, and a separate model as claim extractor, so the generator is not graded with itself,while the scores themselces are computed deterministically from what it extracts, and a fault-injection rig for the one contract that stays silent on natural output.
+The third is the evaluation protocol.
+It is made of  four instruments: an ablation ladder that works by adding one contract per rung, a composite similarity index, a separate model as claim extractor and aligner, and a fault-injection rig for the one contract that stays silent on natural output.
+That extractor keeps the generator from being grade with itself, while the scores themselves are computed deterministically from what is extracted.
 
 
 
