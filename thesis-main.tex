@@ -1599,7 +1599,7 @@ In the end the source-based counts give the clearest result, the causal comparis
 
 In Section~\ref{sec:Research_questions:} I discussed the three questions this thesis promises to answer: one empirical, and two about design.
 
-The first one asks which are the common grounding failure when a \ac{LLM} iterates over a dense dashboard, full of KPIs.
+The first one asks which are the common grounding failures when a \ac{LLM} iterates over a dense dashboard, full of KPIs.
 The answer that came from the field, after three months of observation, is the set of eight failure modes detailed in Section~\ref{sec:catalogue} and counted in Section~\ref{sec:front_modes}.
 Numeric modes corrupt the value.
 Causal modes give a domain term a meaning it does not have or propose an action no one at the site can take.
@@ -1617,7 +1617,7 @@ On the action side, only thirty-two expert actions were aligned out of the sixty
 This lower figure shows how difficult it is to predict actions compared to causes, since the choice of a lever rests on personal judgment.
 
 The three answers depend on each other.
-The catalogue of the first one is what made possible the second answer, and the solid architecture of that answer is what allowed me to explore the third, creating a chain where each responce justifies the next.
+The catalogue of the first one is what made possible the second answer, and the solid architecture of that answer is what allowed me to explore the third, creating a chain where each response justifies the next.
 
 
 \section{Contributions and how far they travel}
@@ -1630,7 +1630,7 @@ That definition is stricter than the grounding the hallucination literature usua
 Naming the two requirements, and showing that they do not reduce to each other, is what lets the rest of the work be precise about which guarantee is hard and which is soft.
 
 The second is the failure catalogue itself: eight modes in three classes, collected during the internship while working on real data, not on a synthetic proxy.
-At the naive level the model already had the full decomposition with the correct values, and a prompt that asked for drivers, causes and actions; it still recomputed forty-four numbers, invented twenty-one rates and sated twenty-two values as the gap over thirty narratives.
+At the naive level the model already had the full decomposition with the correct values, and a prompt that asked for drivers, causes and actions; it still recomputed forty-four numbers, invented twenty-one rates and stated twenty-two values as the gap over thirty narratives.
 This same catalogue can be used, on similar systems, to understand what tends to break, and where in the pipeline each break can be caught.
 
 The third is the evaluation protocol.
