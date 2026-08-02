@@ -398,7 +398,7 @@ With all of them the day-after explanation, in the end, rests on trust and not o
 Table~\ref{tab:positioning} summarizes all those approaches. 
 The two middle columns contain the requirements from Chapter~\ref{chap:introduction}, and the last one asks whether the approach produces a written justification.
 In particular, in the last row a yes appears in both requirements, but the two carry different meanings. 
-The numeric one is hard because every value the contract covers is a copy of the upstream one and a deterministic check guarantees that; where that promise stops is declared in Chapter~\ref{chap:proposed_solution}.
+The numeric one is hard because every value the contract covers is a copy of the upstream one, audited by a deterministic check on the figures it can tie to a metric; where that promise stops is declared in Chapter~\ref{chap:proposed_solution}.
 The causal one is soft: a knowledge tree defines the domain, but there is no enforcement of that as it happens on the value's side.
 
 \begin{table}[ht]
@@ -952,6 +952,8 @@ The magnitude guard works on the value: it repairs a small mismatch, whether tha
   The reason for that comes directly from the operational setting: the worst result is a wrong sentence that reads as correct, worse than a visible error a reader could catch.
   An aggressive sanitizer that corrects any value close to the canonical one in a broken sentence would wash the break away, leaving a clean-looking lie.
   The conservative option I decided to go for preserves a big mismatch through the magnitude guard.
+  That visibility, however, is not uniform across the model: a fused label reads as broken, while a refused sign inversion still reads as plausible. 
+  There the refusal only avoids a false repair, and the protection against it rests on the upstream contract, which left no inversion on the natural output of Chapter~\ref{chap:results}.
 
   The sanitizer is a corrector rather than a preventer. 
   It acts like a smoke detector that will probably stay off, as demonstrated in Chapter~\ref{chap:results}, but it is needed anyway: it is what enforces the numeric bound on every figure it can tie to a metric.
@@ -1263,6 +1265,7 @@ So the sanitizer is measured by injection: the four value faults are each plante
 A separate sweep welds a metric label to its own value, removing the separator between them, on the same sixty-six sites, for three hundred and thirty injections in all.
 Not every number in the narrative is a site: it has to be one the sanitizer holds a canonical value for, and it has to sit next to its own metric label. 
 Sixty-six numeric tokens, one per metric label in each narrative, satisfy the precondition of Section~\ref{sec:sanitizer}, so the injection works on the set where the contract can act at all.
+That set is sixty-six of the four hundred and thirteen numeric tokens, the rest are values that do not have a canonical reference.
 Figure~\ref{fig:injection} shows the outcome of that stress test: every fault ends where its own mechanism predicts, and no injection produced a false repair.
 
 
