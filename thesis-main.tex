@@ -1112,7 +1112,8 @@ Each front is measured in its own way, and a language model participates in the 
 The narratives are generated along the ablation ladder of Figure~\ref{fig:ladder}.
 For the numeric modes (F1, F2, F3) the first front relies on a deterministic check: every figure in the narrative has to trace back to a value the model was given.
 The causal modes (F4, F5) are counted by hand, by a single rater, against predefined rules: the named causes and actions have to exist in the admitted domain.
-Finally, the formal modes (F6, F7, F8) are tested by injection since the final pipeline, for this specific sample, no longer produces them.
+Finally, the formal modes (F6, F7, F8) are read off the natural output under one attribute rule: a formal slip is a slip of copying, and at L0 no copy rule exists, so a figure with a drifted precision or sign inversion cannot be told apart from a recomputed one and is attributed to the numeric class.
+From L1 onwards, where the copy contract makes the class identifiable, the natural output counted on this sample is zero; that's why the sanitizer is tested by injection.
 
 Each of the thirty station-weeks is run through the four levels of the ladder, which gives one hundred and twenty narratives. 
 The first front counts the failures across all four levels; the comparison with the expert uses only the thirty final narratives produced by the shipped configuration.
@@ -1179,8 +1180,6 @@ This first level shows what a capable model does when nothing constrains it.
 This section organizes the failure modes in the order the contracts enter the pipeline, each counted with the procedure of Section~\ref{sec:eval_design}.
 Figure~\ref{fig:descent} collects the counts.
 
-
-
 \begin{figure}[ht]
   \centering
   \begin{tikzpicture}[
@@ -1188,9 +1187,11 @@ Figure~\ref{fig:descent} collects the counts.
     rowlab/.style={anchor=east, font=\footnotesize, inner sep=3pt},
     colhead/.style={anchor=south, font=\footnotesize\bfseries},
     colsub/.style={anchor=north, font=\scriptsize\itshape, text=black!55},
+    nid/.style={cell, draw=black!35, dashed, fill=black!4, font=\scriptsize\itshape, text=black!55},
   ]
   \def\cA{0}\def\cB{1.6}\def\cC{3.2}\def\cD{4.8}
   \def\rA{0}\def\rB{-0.86}\def\rC{-1.72}\def\rD{-2.58}\def\rE{-3.44}
+  \def\rF{-4.44}\def\rG{-5.30}\def\rH{-6.16}
   \node[colhead] at (\cA,1.02) {L0};   \node[colsub] at (\cA,0.97) {baseline};
   \node[colhead] at (\cB,1.02) {L1};   \node[colsub] at (\cB,0.97) {tile-as-source};
   \node[colhead] at (\cC,1.02) {L2};   \node[colsub] at (\cC,0.97) {tree};
@@ -1220,10 +1221,30 @@ Figure~\ref{fig:descent} collects the counts.
   \node[cell, fill=black!38]             at (\cB,\rE) {26};
   \node[cell, fill=black!0]              at (\cC,\rE) {0};
   \node[cell, fill=black!0]              at (\cD,\rE) {0};
+  % ---- formal modes: identifiable only where a copy rule exists ----
+  \draw[black!30, dashed] (-4.9,-3.94) -- (5.6,-3.94);
+  \node[rowlab] at (-0.95,\rF) {F6 precision drift};
+  \node[rowlab] at (-0.95,\rG) {F7 sign inversion};
+  \node[rowlab] at (-0.95,\rH) {F8 token concatenation};
+  \node[nid] at (\cA,\rF) {in F1--F3};
+  \node[cell, fill=black!0] at (\cB,\rF) {0};
+  \node[cell, fill=black!0] at (\cC,\rF) {0};
+  \node[cell, fill=black!0] at (\cD,\rF) {0$^{\dagger}$};
+  \node[nid] at (\cA,\rG) {in F1--F3};
+  \node[cell, fill=black!0] at (\cB,\rG) {0};
+  \node[cell, fill=black!0] at (\cC,\rG) {0};
+  \node[cell, fill=black!0] at (\cD,\rG) {0$^{\dagger}$};
+  \node[nid] at (\cA,\rH) {in F1--F3};
+  \node[cell, fill=black!0] at (\cB,\rH) {0};
+  \node[cell, fill=black!0] at (\cC,\rH) {0};
+  \node[cell, fill=black!0] at (\cD,\rH) {0$^{\dagger}$};
+  \node[anchor=north west, font=\scriptsize\itshape, text=black!55] at (-0.8,-6.68)
+    {$\dagger$ mechanics additionally verified by injection (Figure~\ref{fig:injection})};
   \end{tikzpicture}
-  \caption{Failure-mode counts across the ablation ladder, as total instances over the 30 station-weeks. The three formal modes (F6, F7, F8) have no row because they were never observed on the natural output of this sample in the shipped configuration; they are measured by injection.}
+  \caption{Failure-mode counts across the ablation ladder, as total instances over the 30 station-weeks.}
   \label{fig:descent}
   \end{figure}
+
 
 Starting with the numeric modes, at L0 the model fabricates numbers freely: it recalculates forty-four numbers (F1), invents twenty-one rates (F2), and states twenty-two values-as-gap (F3).
 One rung of the ladder is enough to remove nearly all of it.
@@ -1236,7 +1257,7 @@ The causal modes (F4, F5) shrink at L1 and disappear completely only when the tr
 At the previous two levels the model invents definitions for the different drivers, reading operational meaning into labels it was never given, and proposes out-of-mandate actions; both disappear at L2.
 
 
-As regards the formal modes (F6, F7, F8), they cannot be read off the natural output: Chapter~\ref{chap:proposed_solution} already explained why the upstream contracts leave nothing to catch for the sanitizer.
+As regards the formal modes (F6, F7, F8), they cannot be read off the natural output: at L0 the attibution rule of Section~\ref{sec:eval_design} folds them into numeric rows, and from L1 onwards Chapter~\ref{chap:proposed_solution} already explained why the upstream contracts leave nothing to catch for the sanitizer.
 On the natural runs it stayed silent, and not because it was inactive: it compared every recognizable value, and made zero corrections across the thirty shipped narratives.
 So the sanitizer is measured by injection: the four value faults are each planted on all sixty-six sites of the shipped narratives, two hundred and sixty-four injections, of which two of the four faults sit inside the half-value guard band.
 A separate sweep welds a metric label to its own value, removing the separator between them, on the same sixty-six sites, for three hundred and thirty injections in all.
@@ -1354,7 +1375,7 @@ Seventy-seven directly match a cause written by the manager, seventy-nine are co
 The ones that directly match the manager's causes differ in number from the eighty-one above because the alignment is not one-to-one: a single generated cause can cover two lines of the expert bridge, as when the manager records a phenomenon and its knock-on effect as separate causes, while the model explains both in one.
 
 Taken together, one hundred and fifty-six of the one hundred and fifty-eight proposed causes are either direct matches or coherent additions, equal to 98.7\%.
-This is a measure of domain admissibility, not agreement with the expert.
+This is a measure of non-contradiction with the expert, not agreement with him.
 This result, together with the disappearance of F4 at L2 in Section~\ref{sec:front_modes}, supports the soft guarantee on causes argued in Chapter~\ref{chap:state_of_the_art} and Chapter~\ref{chap:proposed_solution}: the tree bounds what can be named, while the choice and ranking inside the admitted domain remain a matter of judgment.
 
 
@@ -1487,15 +1508,15 @@ The fourth depth combines the previous comparisons with numeric fidelity and mat
 
 where $D_s$ contains the axes defined for that station-week, and $A_{i,s}$ is the score of axis $i$ between zero and one.
 Sometimes it happens that in the manager's bridge no action is included; in that case the Actions axis is excluded and remaining weights are renormalized.
-The reported \ac{BSI} is the mean of the thirty per-station-week values.
+The reported \ac{BSI} is the mean of the thirty per-station-week values; it differs slightly from the weighted sum of the axis means in Figure~\ref{fig:depth_bsi} (85.0) because weights, exclusions and renormalizations act inside each week, before averaging
 
 The four axes combine different parts of the bridge:
 
 \begin{itemize}
-  \item \textbf{Numbers} combines source traceability with agreement on the numbers shared with the expert, using weights 0.75 and 0.25 respectively; when no shared number is recorded, source traceability alone defines the axis;
-  \item \textbf{Completeness} checks whether the narrative cites the drivers that cumulatively explain 80\% of the sum of the absolute impact, capped at five drivers;
-  \item \textbf{Causes} gives equal weight to the headline match of Depth 1 and the harmonic mean of precision and recall over the cause set of Depth 2;
-  \item \textbf{Actions} is the same harmonic mean, computed per station-week over the action levers of Depth 3, local ones included.
+  \item \textbf{Numbers} combines source traceability with agreement on the numbers shared with the expert, using weights 0.75 and 0.25 respectively; when no shared number is recorded, source traceability alone defines the axis.
+  \item \textbf{Completeness} checks whether the narrative cites the drivers that cumulatively explain 80\% of the sum of the absolute impact, capped at five drivers.
+  \item \textbf{Causes} gives equal weight to the headline match of Depth 1 and the harmonic mean of precision and recall over the cause set of Depth 2, where both direct matches and coherent additions count as precision hit, since a cause is checked against data.
+  \item \textbf{Actions} is the same harmonic mean, computed per station-week over the action levers of Depth 3, local ones included; here only the leels aligned with the expert count as precision hit, because an action cannot be checked against data.
 \end{itemize}
 
 As regards actions and causes the harmonic mean between precision and recall is a necessary choice: those two measures reward opposite shortcuts.
@@ -1616,7 +1637,7 @@ Tile-as-source freezes the numbers upstream and carries most of the numeric load
 The tree bounds the causal half, while the sanitizer audits the forms after the fact.
 
 The last one asks what role a curated knowledge tree, a well-built map, can play in bounding what a model is allowed to say.
-On the bounding side the causal mode disappear once the three enters the prompt, and 98.7\% of the proposed causes fall inside the admitted domain.
+On the bounding side the causal mode disappear once the three enters the prompt, and 98.7\% of the proposed causes do not contradict the expert's reading.
 Coverage on the expert reading is a different matter since, among all the causes in the tested sample, eighty-one expert causes were covered out of the one hundred and four total, reaching 78\%.
 On the action side, only thirty-two expert actions were aligned out of the sixty-six total, reaching 48\%.
 This lower figure shows how difficult it is to predict actions compared to causes, since the choice of a lever rests on personal judgment.
