@@ -103,26 +103,26 @@ Optional. Max a few lines.
 During one of the audited weeks of my internship, the operational dashboard flagged a clear gap at the station. 
 The AI summary built on top of it, an early version of the system this thesis describes, explained that difference with full confidence, but the explanation produced was factually incorrect. 
 It pointed to a structural metric that had little to do with the real cause of the difference, proposed corrective actions and root analyses that no manager could realistically carry out.
-I noticed the error, that morning, because I was familiar with the station and the metric, but a manager reading the same paragraph on a busy day, or a less experienced one, could have easily taken that for true and acted on it. 
+I noticed the error, that morning, because I was familiar with the station and the metric, but a manager reading the same paragraph on a busy day, or a less experienced one, could have easily taken that as true and acted on it. 
 
 That episode marked the beginning of my thesis and frames the general problem it addresses: what happens when a \ac{LLM} is placed on top of a \ac{BI} dashboard and asked to turn numbers into decisions? 
 That is a key question considering the setting of a \ac{DS}. 
-It is the final node of the logistic network, the place where packages are sorted in the early morning and loaded onto routes to be delivered to final customers.
+It is the final node of the logistics network, the place where packages are sorted in the early morning and loaded onto routes to be delivered to final customers.
 The station where I worked, DFV2 in Udine, runs on a standard daily rhythm: plan the day, run it, measure what happens, adjust for tomorrow. 
 The manager controls the rhythm through a large set of indicators that are read every day to determine if any correction is needed. Normally the window to act is narrow so it is important that a manager does not get the picture late or even wrong, otherwise the chances to fix it would be lost.
 
 Among all the indicators that we used at the station, one metric acts as the headline indicator, a single number that captures how the station operates.
 Most of the days this number is close to the planned one, but not exactly on it, and that gap is what a manager has to explore, understand and explain. 
 A process that is anything but trivial.
-This difference is the combined effect of many separate factors: some of them are internal to the station while the rest of them are completely external, and working out which factor and its weight is a task that, before this project, was done completely by hand.
+This difference is the combined effect of many separate factors: some of them are internal to the station while the rest of them are completely external, and working out which factor contributed and its weight is a task that, before this project, was done completely by hand.
 
 When a station misses its target, the designated manager has to produce a written justification, internally referred to as the \enquote{bridge}, based on a weekly spreadsheet report that states how the previous one had closed. A manual and slow activity that said nothing about how the current week was going while there was still time to act on it.
 
-This is the exact scenario where a \ac{LLM} could be the right fit. 
+This is the exact scenario where an \ac{LLM} could be the right fit. 
 A model capable of reading the numbers and turning them into paragraphs within seconds, replacing hours of manual assembly.
 The downside is that the same flexibility that makes it so powerful and useful is also the source of risks.
 A language model hallucinates on numbers, quietly recomputing a value or inventing one that looks plausible, and it explains causes with the same fluency whether the cause is real or not.
-For a tool that is used to feed decisions on the floor, those errors are not acceptable, and they must be reduced as much as possible, while keeping in mind that hallucinations cannot be avoided at 100\%. 
+For a tool that is used to feed decisions on the floor, those errors are not acceptable, and they must be reduced as much as possible, while keeping in mind that hallucinations cannot be completely avoided. 
 A manager must be able to safely rely on the output of the model while at the same time having the underlying numbers within reach. 
 
 
@@ -175,14 +175,14 @@ Figure~\ref{fig:ch1_problem} shows the two requirements and the related failure 
 
 
 Consider the numerical side first. The one that is shown to the user must be equal to the retrieved one. If that value is close but not exact, a decision taken on the basis of it can still be wrong. 
-This is more demanding than the usual faithfulness a retrieval system offers, where a claim counts as grounded if it is broadly supported by some documentation. For Operational \ac{BI} a broad support is not enough.
+This is more demanding than the usual faithfulness a retrieval system offers, where a claim counts as grounded if it is broadly supported by some documentation. For Operational \ac{BI} broad support is not enough.
 
 
 The causal side is even harder. Reporting a number without changing its value is a matter of staying true to the base data. 
 Explaining why we have that precise value, instead, is connected to the domain knowledge. 
 The set of plausible-sounding causes for any gap is enormous, while the possible set of causes admitted by the domain is small and specific. 
 A narrative defined as \enquote{useful} has to stay inside this small set. 
-It should behave like an expert analyst that among the possible explanations of the gap, chooses only the feasible ones, and consequently the actions that a manager can adopt in order to improve the situation.
+It should behave like an expert analyst who, among the possible explanations of the gap, chooses only the feasible ones, and consequently the actions that a manager can adopt in order to improve the situation.
 Domain constraint without numeric fidelity buys very little, a right explanation based on a wrong input is meaningless.
 
 Those two requirements matter even more because a wrong output does not stay only on the screen. 
@@ -383,15 +383,15 @@ For that reason, Chapter~\ref{chap:results} measures the counts of each failure 
 \section{Positioning of this work}
 Together, all the families above show a pattern. 
 Each of them secures at most one of the two requirements: numerical or causal.
-Prompting improves how the model reasons but, while it reduces domain disconnections, it is a request not a command.
+Prompting improves how the model reasons but, while it reduces domain disconnections, it is a request, not a command.
 Tool use works well for grounding numbers, but the narrative is left free.
 The part related to guided decoding is stricter on form, but it does not mention the correctness of the value or the cause.
-The semantic layer hands the official number and stops there; knowledge-graphs bound the explanation, but say nothing about the real value.
+The semantic layer hands over the official number and stops there; knowledge graphs bound the explanation, but say nothing about the real value.
 
 The applied systems capable of building a narrative fall into three groups.
 Tableau Pulse is capable of writing insights over tiles; it describes the fidelity mechanism without any measure of it, and on the causal side it surfaces statistical drivers without binding them to a domain.
 A newer group of academic systems produces a real day-after narrative: one of these approaches detects the domain on its own, while another identifies the root cause by performing a statistical analysis, but in both the numbers generated by the model are not guaranteed.
-\ac{OLAP}-narrative systems like VOOL, instead, focus on the number's fidelity by keeping the \ac{LLM} away from them, yet they stop at description or navigation, and none of them ties the cause to a curated set.
+\ac{OLAP}-narrative systems like VOOL, instead, focus on the numbers' fidelity by keeping the \ac{LLM} away from them, yet they stop at description or navigation, and none of them ties the cause to a curated set.
 With all of them the day-after explanation, in the end, rests on trust and not on a check.
 
 
@@ -431,7 +431,7 @@ LLM-assisted OLAP & yes & no & partial & \\
 %FINE TABELLA
 Figure~\ref{fig:positioning} represents the same idea on the two requirements alone.
 Numeric fidelity is located on the x-axis, causal grounding on the y-axis, and each of them has three possible states: none, partial, full.
-This work sits in the top-right corner, while every other family lands off a side.
+This work sits in the top-right corner, while every other family lands off to one side.
 
 %INIZIO IMMAGINE
 \begin{figure}[ht]
@@ -498,7 +498,7 @@ This work sits in the top-right corner, while every other family lands off a sid
 \end{figure}
 
 As presented, across the ten families reviewed, not one fully addresses both requirements while also writing the explanation a manager reads the day after.
-There is a reason for it: the two sides are not the same kind of problem. The number can be made a hard guarantee, while the cause only bounded to what the domain admits. 
+There is a reason for it: the two sides are not the same kind of problem. The number can be made a hard guarantee, while the cause can only be bounded to what the domain admits. 
 The chapters that follow go in that direction, exploring the case where the gap first appeared. 
 
 
@@ -533,7 +533,7 @@ This second level is needed because it shows which specific part caused the shif
 
 The categories do not contribute to the total gap as a raw value, but they get scaled by their own weight, which is heterogeneous and changes across all categories. 
 Each category has its own unit of measure; the weight translates a movement in that unit into points of the headline ratio that can now be summed up since they speak the same language.
-This means that a large movement in a lightly-weighted category can matter less than a smaller movement in a heavy one.
+This means that a large movement in a lightly weighted category can matter less than a smaller movement in a heavy one.
 There is also a residual term that absorbs whatever difference the named categories do not explain. 
 It guarantees that the parts add back to the whole, and prevents anything from being forced into a named category where it does not belong.
 
@@ -657,7 +657,7 @@ The numbers, by contrast, were never a problem at all: the manager pastes them d
 How each of these is addressed is discussed in Chapter~\ref{chap:proposed_solution}, where the three-contract framework is introduced.
 
 \section{Methodology}
-The study is organized around a single operation, developed following a longitudinal, single-case design: I worked on the system observing day after day the working routine.
+The study is organized around a single operation, developed following a longitudinal, single-case design: I worked on the system observing the working routine day after day.
 The system presented in Chapter~\ref{chap:proposed_solution} was developed through an iterative loop: code, observe what the output is, isolate one issue at a time, fix it, validate the solution, and repeat; this loop ran several dozen times, and each pass left a record of what had gone wrong and why.
 Those traces are the base material of the analysis: I organized them into families by the kind of error they represent, and labeled them as grounding failures in Chapter~\ref{chap:proposed_solution}. 
 The data behind the test sits on two layers.
@@ -851,7 +851,7 @@ The first contract is founded on the idea that the safest number is the number t
 It is one single rule that might seem boring and almost too plain to matter: every number that might appear in the narrative is only computed once; the \ac{LLM} is never asked to calculate a percentage, a difference or anything that has not been deterministically precalculated.
 In contract terms: the \emph{precondition} is that every number needed by the model exists as a frozen tile in the prompt; the \emph{postcondition} is that every number in the narrative is a verbatim copy of a tile; the two boundaries at the end of this section state where this promise stops.
 
-The idea is consistent with the one introduced in Chapter~\ref{chap:state_of_the_art} for what regards semantic layers \cite{dbt2024semantic}.
+The idea is consistent with the one introduced in Chapter~\ref{chap:state_of_the_art} as regards semantic layers \cite{dbt2024semantic}.
 What is specific here is the target. 
 A semantic layer manages the value inside a dashboard and stops there; instead I decided to push the same concept further onto the generated text, so what a manager reads is only the upstream computed tile, carried through unchanged.
 
@@ -924,7 +924,7 @@ Being a hand-curated tree allows for compactness, but it is also a major downsid
 \label{sec:sanitizer}
 
 This last deterministic contract runs directly on the finished text after the model.
-The first two shape what the \ac{LLM} sees, while the sanitizer audits what the model produced, comparing every cited figure it can tie to a metric against its canonical value, when one exists, and repairs a small set of specific errors.
+The first two shape what the \ac{LLM} sees, while the sanitizer audits what the model produced, comparing every cited figure it can tie to a metric against its canonical value, when one exists, and repairing a small set of specific errors.
 In contract terms: the \emph{precondition} is that a cited figure sits next to its own metric label and a known-correct value of that label exists; the \emph{postcondition} is that such a figure is repaired to the known value if the drift is minimal, or is left as the model wrote it.
 A figure the sanitizer cannot tie to a metric passes through untouched, and keeping that one right is the first contract's job.
 
@@ -933,7 +933,7 @@ The first is label disambiguation: before touching a figure, the sanitizer works
 Then canonical resolution checks that the value exists in the pipeline at all, the ground-truth path drawn dashed in Figure~\ref{fig:architecture}. 
 The magnitude guard comes third. 
 It corrects a figure when the gap between the generated number and the dashboard one is small enough to look like a precision or recalculation drift, and refuses when that gap is too large to be one; the threshold is deliberately generous, half of the canonical value in Listing~\ref{lst:sanitizer}, because with every number frozen upstream a cited figure is almost always the right value in a slightly wrong form, so the guard only has to tell a drifted copy from a genuinely different one. 
-Last comes the precision lock, that holds a value in its canonical shape, so a figure that should read one way does not appear in another.
+Last comes the precision lock, which holds a value in its canonical shape, so a figure that should read one way does not appear in another.
 The magnitude guard works on the value: it repairs a small mismatch, whether that came from a precision slip (F6) or from a leftover recalculation (F1), and refuses a sign inversion (F7). A fused label (F8) fails canonical resolution, so it stays visibly broken.  
 
 \begin{lstlisting}[language=Python, caption={Precision lock and magnitude guard.}, label={lst:sanitizer}]
@@ -965,13 +965,13 @@ The magnitude guard works on the value: it repairs a small mismatch, whether tha
 
 The contracts in the previous sections are not abstract ideas: the first two reach the model directly through the prompt while the last one stands after it on the finished text.
 The system prompt that drives the model is not designed to ask \enquote{in general terms} to be accurate.
-Chapter~\ref{chap:state_of_the_art} already explained that a prompt is a request not a command, and better instructions raise the odds of a correct answer without making any errors impossible \cite{wei2022cot}.
+Chapter~\ref{chap:state_of_the_art} already explained that a prompt is a request, not a command, and better instructions raise the odds of a correct answer without making any errors impossible \cite{wei2022cot}.
 So this design does not try to overturn that verdict, it builds with it.
 The prompt is scoped to what a request can actually do: deliver the two pre-generation contracts (tile-as-source and curated knowledge tree) and cut the avoidable failures at the source.
-Specifically each failure mode observed during the development is answered by a directive, nothing vaguer, so the \ac{LLM}'s efforts can be directed where needed.
+Specifically, each failure mode observed during the development is answered by a directive, nothing vaguer, so the \ac{LLM}'s efforts can be directed where needed.
 
 
-The prompt has a well-defined structure composed by the directive block that sits on top, then the tiles block with the frozen values, the scoped tree block, and the skeleton of the narrative that must be followed.
+The prompt has a well-defined structure composed of the directive block that sits on top, then the tiles block with the frozen values, the scoped tree block, and the skeleton of the narrative that must be followed.
 The skeleton also copies, for every action, the owner and the horizon the tree assigns it, so feasibility rides along with the action instead of being asked for.
 Listing~\ref{lst:directives} shows an excerpt of the directive block, with each directive tagged with the mode it answers.
 To be precise, in the production prompt, these base rules grow into more specific versions based on the domain they are referring to, but every variant traces back to one of the eight modes.
@@ -1009,7 +1009,7 @@ The three contracts run inside an application that the manager opens during the 
 It is the tool that answers the first weakness of Chapter~\ref{chap:case_study}: a lack of reactivity caused by pulling data manually, tile by tile, while the weekly report was still days away. 
 
 The application works by rebuilding the old spreadsheet weekly report with all its categories and subcategories, in a modern way by implementing charts and visual aids that guide the reader.
-One of the key parts, as anticipated, is the possibility to have an intra-week view: the tool shows, on any day of the running period, whether the station sits above or below its plan, so the picture no longer has to wait for the week to close.
+One of the key parts, as anticipated, is the possibility of having an intra-week view: the tool shows, on any day of the running period, whether the station sits above or below its plan, so the picture no longer has to wait for the week to close.
 When a flagged week closes, one click automatically pulls back the full view of it, all the data plus some extra context to help the manager understand and control the metrics of their workplace.
 Having context is a necessary condition because a manager reading the narrative must be capable of checking in real time what is being said without the need to search for the information by hand across different dashboards, the requirement Chapter~\ref{chap:introduction} tied to trust.
 The bridge itself is produced by the engine of the previous sections, and because this generation step is fixed and identical for every station, the depth of the output no longer depends on who runs it, and that settles the writing side of the third weakness of Chapter~\ref{chap:case_study}; the judgment itself does not disappear, it moves upstream into the curation of the tree.
@@ -1118,7 +1118,7 @@ Each of the thirty station-weeks is run through the four levels of the ladder, w
 The first front counts the failures across all four levels; the comparison with the expert uses only the thirty final narratives produced by the shipped configuration.
  
 All the sampled stations belong to the same country network, span two building types, and cover gap magnitudes from small to large.
-The production model is a frontier language model, the same one the app runs, from L2 onwards the prompt is the full app prompt, and not a reduced version.
+The production model is a frontier language model, the same one the app runs; from L2 onwards the prompt is the full app prompt, and not a reduced version.
 Each generation is isolated and stateless: one conversation per station-week per level, three concurrent workers, and no contamination across stations.
 
 
@@ -1236,7 +1236,7 @@ The causal modes (F4, F5) shrink at L1 and disappear completely only when the tr
 At the previous two levels the model invents definitions for the different drivers, reading operational meaning into labels it was never given, and proposes out-of-mandate actions; both disappear at L2.
 
 
-For what regards the formal modes (F6, F7, F8), they cannot be read off the natural output: Chapter~\ref{chap:proposed_solution} already explained why the upstream contracts leave nothing to catch for the sanitizer.
+As regards the formal modes (F6, F7, F8), they cannot be read off the natural output: Chapter~\ref{chap:proposed_solution} already explained why the upstream contracts leave nothing to catch for the sanitizer.
 On the natural runs it stayed silent, and not because it was inactive: it compared every recognizable value, and made zero corrections across the thirty shipped narratives.
 So the sanitizer is measured by injection: the four value faults are each planted on all sixty-six sites of the shipped narratives, two hundred and sixty-four injections, of which two of the four faults sit inside the half-value guard band.
 A separate sweep welds a metric label to its own value, removing the separator between them, on the same sixty-six sites, for three hundred and thirty injections in all.
@@ -1462,7 +1462,7 @@ Its effects show up only if someone performs it, so a non-match at this depth is
     \node[font=\small\bfseries]
       at ({(\yb+\W)/2},-2.70) {33 additional levers};
     \node[note] at (0,-3.40)
-      {67 proposed actions by the model};
+      {67 actions proposed by the model};
   \end{tikzpicture}
 
   \caption{Depth 3, the full action set. The upper bar measures reference recall over 66 expert actions; the lower bar describes the 67 actions proposed by the model.}
@@ -1498,7 +1498,7 @@ The four axes combine different parts of the bridge:
   \item \textbf{Actions} is the same harmonic mean, computed per station-week over the action levers of Depth 3, local ones included.
 \end{itemize}
 
-For what regards actions and causes the harmonic mean between precision and recall is a necessary choice: those two measures reward opposite shortcuts.
+As regards actions and causes the harmonic mean between precision and recall is a necessary choice: those two measures reward opposite shortcuts.
 Recall alone favors a bridge that keeps adding levers until every line of the expert is covered, while precision alone favors a bridge that writes one safe claim and stops.
 The harmonic mean falls sharply when either of the two is low, so a high score requires covering the expert list and staying concise at the same time.
 Figure~\ref{fig:depth_bsi} reports the resulting axis means and the composite.
@@ -1572,11 +1572,11 @@ This value records how rarely the proposed levers coincide with the actions chos
 \label{sec:evaluation_close}
 
 These two fronts are not equally solid. 
-The first consists in looking at the narrative's numbers and checking if they exist upstream, it is an objective measure. 
+The first consists in looking at the narrative's numbers and checking if they exist upstream; it is an objective measure. 
 The second checks the generated narrative against the hand-written one, so it depends on the quality of the manager's bridge.
 
-Everything in this chapter is measured on one single country, one single headline indicator (Metric\_R), and thirty station-weeks, all below target. 
-The failure modes are derived from a single pilot site used as starting point during development, so I make no transfer claim beyond that setting.
+Everything in this chapter is measured in one single country, one single headline indicator (Metric\_R), and thirty station-weeks, all below target. 
+The failure modes are derived from a single pilot site used as a starting point during development, so I make no transfer claim beyond that setting.
 The counts at L0 also reflect the specific frontier model used, so a different \ac{LLM} would change the measured size of the reduction even if the contracts do not depend on it.
 
 On the measurement side I kept the choices conservative.
@@ -1585,8 +1585,8 @@ The judgment step, the one that extracted causes and actions, was run only once 
 My check confirms numbers and cause set; the only disagreement was on the headline cause, where my manual count was twenty-seven against the twenty-five seen by the model, so I kept the lower one.
 I was the only rater for all the manual judgments in this chapter, and no independent double-check has been done to assess my perspective; the same caution applies to the manual screening of F4 and F5 in Section~\ref{sec:front_modes}.
 
-A further check removes the Completeness axis, that always sits at one hundred, from the \ac{BSI} calculation, and renormalizes the remaining weights to 0.50 for Numbers and 0.25 for Actions and Causes. The recalculated index drops to 81.6. 
-As explained before, the bridge is the result of personal judgment, that relies on claims that can be found in the data, and others that are founded on personal knowledge or events not recorded in the available data.
+A further check removes the Completeness axis, which always sits at one hundred, from the \ac{BSI} calculation, and renormalizes the remaining weights to 0.50 for Numbers and 0.25 for Actions and Causes. The recalculated index drops to 81.6. 
+As explained before, the bridge is the result of personal judgment, which relies on claims that can be found in the data, and others that are founded on personal knowledge or events not recorded in the available data.
 So, I decided to include also the ones the model cannot know by construction; without them the \ac{BSI} would increase by 0.4, to 85.7, so the headline value is the stricter of the two choices.
 The weights are also a design choice, so I tested how much the result depends on them: by moving up or down each weight by 0.10 and renormalizing the others, for all the eight combinations, the result always stays between 82.5 and 88.7, and the largest swing comes from the axis with the furthest score: the Actions.
 
@@ -1595,15 +1595,15 @@ In the end the source-based counts give the clearest result, the causal comparis
 \chapter{Conclusions}
 \label{chap:discussion}
 
-The previous chapter closed on the threats to validity, after measuring the framework on two fronts: the reduction of the failure modes, and the comparison with the bridges the managers wrote for the same sampled week.
-This chapter closes the thesis by going back to the three questions that opened it, with the evidences now collected, than it weighs what remains as contributions, and it ends where it started: on a morning at the station with the limits that still stand.
+The previous chapter closed on the threats to validity, after measuring the framework on two fronts: the reduction of the failure modes, and the comparison with the bridges the managers wrote for the same sampled weeks.
+This chapter closes the thesis by going back to the three questions that opened it, with the evidences now collected, then it weighs what remains as contributions, and it ends where it started: on a morning at the station with the limits that still stand.
 %----------------------------------------------------------------------------------------
 
 \section{The three questions answered}
 
 In Section~\ref{sec:Research_questions:} I discussed the three questions this thesis promises to answer: one empirical, and two about design.
 
-The first one asks which are the common grounding failures when a \ac{LLM} generates a narrative over a dense dashboard, full of KPIs.
+The first one asks what the common grounding failures are when an \ac{LLM} generates a narrative over a dense dashboard, full of KPIs.
 The answer that came from the field, after three months of observation, is the set of eight failure modes detailed in Section~\ref{sec:catalogue} and counted in Section~\ref{sec:front_modes}.
 Numeric modes corrupt the value.
 Causal modes give a domain term a meaning it does not have or propose an action no one at the site can take.
@@ -1630,7 +1630,7 @@ The catalog of the first one is what made possible the second answer, and the so
 
 The center of this thesis is the three-contract framework that results from the second question in the previous section, and around it sit three things I count as contributions.
 
-The first is the way of framing the grounding for operational \ac{BI}, that requires two things together: every quantitative token traceable character by character to a computed value, and every cause drawn from a set the domain admits.
+The first is the way of framing the grounding for operational \ac{BI}, which requires two things together: every quantitative token traceable character by character to a computed value, and every cause drawn from a set the domain admits.
 That definition is stricter than the grounding the hallucination literature usually measures, where a claim counts as grounded if some source broadly supports it \cite{ji2023survey,min2023factscore}, and no existing family carries both at once as guarantees, as shown in Table~\ref{tab:positioning}.
 Naming the two requirements, and showing that they do not reduce to each other, is what lets the rest of the work be precise about which guarantee is hard and which is soft.
 Nothing here depends on parcels or stations, so it travels to any setting where a model writes a narrative over pre-computed operational figures.
