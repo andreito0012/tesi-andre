@@ -952,7 +952,7 @@ The magnitude guard works on the value: it repairs a small mismatch, whether tha
   The reason for that comes directly from the operational setting: the worst result is a wrong sentence that reads as correct, worse than a visible error a reader could catch.
   An aggressive sanitizer that corrects any value close to the canonical one in a broken sentence would wash the break away, leaving a clean-looking lie.
   The conservative option I decided to go for preserves a big mismatch through the magnitude guard.
-  That visibility, however, is not uniform across the model: a fused label reads as broken, while a refused sign inversion still reads as plausible. 
+  That visibility, however, is not uniform across the modes: a fused label reads as broken, while a refused sign inversion still reads as plausible. 
   There the refusal only avoids a false repair, and the protection against it rests on the upstream contract, which left no inversion on the natural output of Chapter~\ref{chap:results}.
 
   The sanitizer is a corrector rather than a preventer. 
@@ -1114,7 +1114,7 @@ Each front is measured in its own way, and a language model participates in the 
 The narratives are generated along the ablation ladder of Figure~\ref{fig:ladder}.
 For the numeric modes (F1, F2, F3) the first front relies on a deterministic check: every figure in the narrative has to trace back to a value the model was given.
 The causal modes (F4, F5) are counted by hand, by a single rater, against predefined rules: the named causes and actions have to exist in the admitted domain.
-Finally, the formal modes (F6, F7, F8) are read off the natural output under one attribute rule: a formal slip is a slip of copying, and at L0 no copy rule exists, so a figure with a drifted precision or sign inversion cannot be told apart from a recomputed one and is attributed to the numeric class.
+Finally, the formal modes (F6, F7, F8) are read off the natural output under one attribution rule: a formal slip is a slip of copying, and at L0 no copy rule exists, so a figure with a drifted precision or sign inversion cannot be told apart from a recomputed one and is attributed to the numeric class.
 From L1 onwards, where the copy contract makes the class identifiable, the natural output counted on this sample is zero; that's why the sanitizer is tested by injection.
 
 Each of the thirty station-weeks is run through the four levels of the ladder, which gives one hundred and twenty narratives. 
@@ -1259,7 +1259,7 @@ The causal modes (F4, F5) shrink at L1 and disappear completely only when the tr
 At the previous two levels the model invents definitions for the different drivers, reading operational meaning into labels it was never given, and proposes out-of-mandate actions; both disappear at L2.
 
 
-As regards the formal modes (F6, F7, F8), they cannot be read off the natural output: at L0 the attibution rule of Section~\ref{sec:eval_design} folds them into numeric rows, and from L1 onwards Chapter~\ref{chap:proposed_solution} already explained why the upstream contracts leave nothing to catch for the sanitizer.
+As regards the formal modes (F6, F7, F8), they cannot be read off the natural output: at L0 the attribution rule of Section~\ref{sec:eval_design} folds them into numeric rows, and from L1 onwards Chapter~\ref{chap:proposed_solution} already explained why the upstream contracts leave nothing to catch for the sanitizer.
 On the natural runs it stayed silent, and not because it was inactive: it compared every recognizable value, and made zero corrections across the thirty shipped narratives.
 So the sanitizer is measured by injection: the four value faults are each planted on all sixty-six sites of the shipped narratives, two hundred and sixty-four injections, of which two of the four faults sit inside the half-value guard band.
 A separate sweep welds a metric label to its own value, removing the separator between them, on the same sixty-six sites, for three hundred and thirty injections in all.
@@ -1511,15 +1511,15 @@ The fourth depth combines the previous comparisons with numeric fidelity and mat
 
 where $D_s$ contains the axes defined for that station-week, and $A_{i,s}$ is the score of axis $i$ between zero and one.
 Sometimes it happens that in the manager's bridge no action is included; in that case the Actions axis is excluded and remaining weights are renormalized.
-The reported \ac{BSI} is the mean of the thirty per-station-week values; it differs slightly from the weighted sum of the axis means in Figure~\ref{fig:depth_bsi} (85.0) because weights, exclusions and renormalizations act inside each week, before averaging
+The reported \ac{BSI} is the mean of the thirty per-station-week values; it differs slightly from the weighted sum of the axis means in Figure~\ref{fig:depth_bsi} (85.0) because weights, exclusions and renormalizations act inside each week, before averaging.
 
 The four axes combine different parts of the bridge:
 
 \begin{itemize}
   \item \textbf{Numbers} combines source traceability with agreement on the numbers shared with the expert, using weights 0.75 and 0.25 respectively; when no shared number is recorded, source traceability alone defines the axis.
   \item \textbf{Completeness} checks whether the narrative cites the drivers that cumulatively explain 80\% of the sum of the absolute impact, capped at five drivers.
-  \item \textbf{Causes} gives equal weight to the headline match of Depth 1 and the harmonic mean of precision and recall over the cause set of Depth 2, where both direct matches and coherent additions count as precision hit, since a cause is checked against data.
-  \item \textbf{Actions} is the same harmonic mean, computed per station-week over the action levers of Depth 3, local ones included; here only the leels aligned with the expert count as precision hit, because an action cannot be checked against data.
+  \item \textbf{Causes} gives equal weight to the headline match of Depth 1 and the harmonic mean of precision and recall over the cause set of Depth 2, where both direct matches and coherent additions count as precision hits, since a cause is checked against data.
+  \item \textbf{Actions} is the same harmonic mean, computed per station-week over the action levers of Depth 3, local ones included; here only the levers aligned with the expert count as precision hits, because an action cannot be checked against data.
 \end{itemize}
 
 As regards actions and causes the harmonic mean between precision and recall is a necessary choice: those two measures reward opposite shortcuts.
@@ -1640,7 +1640,7 @@ Tile-as-source freezes the numbers upstream and carries most of the numeric load
 The tree bounds the causal half, while the sanitizer audits the forms after the fact.
 
 The last one asks what role a curated knowledge tree, a well-built map, can play in bounding what a model is allowed to say.
-On the bounding side the causal mode disappear once the three enters the prompt, and 98.7\% of the proposed causes do not contradict the expert's reading.
+On the bounding side the causal modes disappear once the tree enters the prompt, and 98.7\% of the proposed causes do not contradict the expert's reading.
 Coverage on the expert reading is a different matter since, among all the causes in the tested sample, eighty-one expert causes were covered out of the one hundred and four total, reaching 78\%.
 On the action side, only thirty-two expert actions were aligned out of the sixty-six total, reaching 48\%.
 This lower figure shows how difficult it is to predict actions compared to causes, since the choice of a lever rests on personal judgment.
