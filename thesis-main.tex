@@ -414,7 +414,7 @@ Prompt engineering & no & no & no & \\
 Tool use & partial & no & no & \\
 Constrained decoding & no & no & no & \\
 Semantic layers & yes & no & no & \\
-Knowledge graphs & no & partial & no & \\
+Knowledge graphs & no & yes (soft) & no & \\
 Text-to-SQL / NL2VIS & partial & no & no & \\
 \addlinespace
 Commercial BI assistants & partial & partial & yes & \rdelim\}{5}{4mm}[\textit{narrative}] \\
@@ -478,10 +478,10 @@ This work sits in the top-right corner, while every other family lands off to on
   \node[band,left=6pt] at (0,8.55) {full};
   
   % --- paradigm points (placed per Table tab:positioning) ---
-  \node[dot] (rag)  at (0.8,1.0) {};   \node[lbl,right=2pt] at (rag.east) {RAG};
+  \node[dot] (rag)  at (1.0,1.0) {};   \node[lbl,right=2pt] at (rag.east) {RAG};
   \node[dot] (con)  at (1.0,1.9) {};   \node[lbl,right=2pt,align=center] at (con.east) {Constrained\\decoding};
-  \node[dot] (pe)   at (1.2,3.2) {};   \node[lbl,right=2pt] at (pe.east) {Prompt eng.};
-  \node[dot] (kg)   at (3.0,5.8) {};   \node[lbl,above right=1pt and 3pt,align=center] at (kg.north east) {Knowledge\\graphs};
+  \node[dot] (pe)   at (1.0,3.2) {};   \node[lbl,right=2pt] at (pe.east) {Prompt eng.};
+  \node[dot] (kg)   at (2.0,7.1) {};   \node[lbl,above right=1pt and 3pt,align=center] at (kg.north east) {Knowledge\\graphs};
   \node[dot] (llm)  at (1.6,4.7) {};   \node[lbl,right=2pt] at (llm.east) {LLM-generated\\narratives};
   \node[dot] (tool) at (5.1,1.2) {};   \node[lbl,above=1pt] at (tool.north) {Tool use};
   \node[dot] (sql)  at (5.2,2.6) {};   \node[lbl,right=2pt,align=center] at (sql.east) {Text-to-SQL /\\NL2VIS};
@@ -781,7 +781,7 @@ For the causal side, instead, we cannot talk about hard guarantees because the t
     Metric conflation (F4)\newline
     Non-actionable recommendation (F5) &
     Precision drift (F6)\newline
-    Sign inversion (F7)\newline
+    Sign inversion (F7, refusal only)\newline
     Token concatenation (F8) \\
   \hline
   Guarantee &
@@ -958,7 +958,7 @@ The magnitude guard works on the value: it repairs a small mismatch, whether tha
   The sanitizer is a corrector rather than a preventer. 
   It acts like a smoke detector that will probably stay off, as demonstrated in Chapter~\ref{chap:results}, but it is needed anyway: it is what enforces the numeric bound on every figure it can tie to a metric.
   This last contract is not free of risks.
-  Label disambiguation can collide if two drivers share the same number: in that case the value could end up matched with the wrong label; or the cleanup of orphaned formatting around rate values can, if written too broadly, strip a figure that should have stayed.
+  Label disambiguation can collide if two drivers share the same number: in that case the value could end up matched with the wrong label; or the cleanup of orphaned formatting around rate values can, if written too broadly, strip a figure that should have stayed;
   The risk is real but small. It is the price of having a downstream check that runs without judgment.
 
   
