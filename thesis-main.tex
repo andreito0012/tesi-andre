@@ -57,7 +57,8 @@
 \acrodef{RoG}{Reasoning on Graphs}
 \acrodef{NL2VIS}{Natural Language to Visualization}
 \acrodef{VOOL}{Vocalizing OLAP}
-\acrodef{FActSCore}{FActual precision in Atomicity Score}
+\acrodef{FActScore}{FActual precision in Atomicity Score}
+\acrodef{RAGAS}{Retrieval-Augmented Generation Assessment}
 \acrodef{HaluEval}{Hallucination Evaluation}
 \acrodef{TruthfulQA}{Truthful Question Answering}
 \acrodef{BSI}{Bridge Similarity Index}
@@ -182,13 +183,13 @@ Explaining why we have that precise value, instead, is connected to the domain k
 The set of plausible-sounding causes for any gap is enormous, while the possible set of causes admitted by the domain is small and specific. 
 A narrative defined as \enquote{useful} has to stay inside this small set. 
 It should behave like an expert analyst that among the possible explanations of the gap, chooses only the feasible ones, and consequently the actions that a manager can adopt in order to improve the situation.
-Domain constraint without numerical fidelity buys very little, a right explanation based on a wrong input is meaningless.
+Domain constraint without numeric fidelity buys very little, a right explanation based on a wrong input is meaningless.
 
 Those two requirements matter even more because a wrong output does not stay only on the screen. 
 A manager uses it as the basis for decisions that influence the whole operation.
 The standard here is therefore demanding, above all on the numbers: a value must be right every time, because one confident mistake, acted upon, can undo a week of planning.
 The causal side is a different story: the most I can require is that the explanation stays inside what the domain admits.
-In particular, once the numeric side was frozen upstream, most of the failures I observed were causal: a wrong number is worse, but in the running system wrong causes were what remained.
+In particular, once the numeric side was frozen upstream, most of the failures I observed were causal: a wrong number is worse, but at that stage of development wrong causes were what remained.
 % It is also the section that existing approaches leave largely uncovered.
 
 
@@ -197,7 +198,7 @@ In particular, once the numeric side was frozen upstream, most of the failures I
 The two criticalities highlighted in the previous section shape the questions that guide the thesis.
 I framed the work around one main question and two subsequent ones, each at a different level.
 
-The first question is empirical and comes before thinking about any solution: what are the common patterns of grounding failure that occur when a language model generates a narrative over a high-density \ac{BI} dashboard?
+The first question is empirical and comes logically before thinking about any solution: what are the common patterns of grounding failure that occur when a language model generates a narrative over a high-density \ac{BI} dashboard?
 I wanted a clear picture of how the model fails derived from the field directly, rather than borrowed from the literature. 
 This decision was motivated by the intention to build a design tailored to the real failures.
 
@@ -358,11 +359,11 @@ In the field of multidimensional cubes, this last approach is the closest point 
 It stays accurate by building descriptions from statistics and templates, without interpreting the results. 
 The numbers are safe, but the reason behind them is left to the reader.
 Then the wall again. What happens when an \ac{LLM} is put inside the loop to carry out the analysis? It can hallucinate on numbers. One of the most recent attempts, a system for \ac{LLM}-assisted navigation, keeps the language model far from figures. 
-The model does only two things: it ranks the candidate views, and it explains why. A separate \ac{OLAP} engine then computes every value in order to preserve number fidelity \cite{liu2026llmolap}.
+The model does only two things: it ranks the candidate views, and it explains why. A separate \ac{OLAP} engine then computes every value in order to preserve numeric fidelity \cite{liu2026llmolap}.
 
 
 These are the nearest neighbors of the present work, and they differ from it in two aspects: their causes are generated freely or discovered statistically, not bound to any curated knowledge tree, and
-they implement numerical fidelity by keeping the numbers away from the model, not by a deterministic contract over the generated narrative.
+they implement numeric fidelity by keeping the numbers away from the model, not by a deterministic contract over the generated narrative.
 %Finally, none of them measures their output on a catalogue of grounding faliure modes.
 \section{Evaluating hallucination and faithfulness}
 The way faithfulness is measured decides what is counted as solved. A critical part, in fact, is choosing the right approach to the scoring, one that avoids marking something as \enquote{addressed} that is not.
@@ -429,7 +430,7 @@ LLM-assisted OLAP & yes & no & partial & \\
 
 %FINE TABELLA
 Figure~\ref{fig:positioning} represents the same idea on the two requirements alone.
-Numerical fidelity is located on the x-axis, causal grounding on the y-axis, and each of them has three possible states: none, partial, full.
+Numeric fidelity is located on the x-axis, causal grounding on the y-axis, and each of them has three possible states: none, partial, full.
 This work sits in the top-right corner, while every other family lands off a side.
 
 %INIZIO IMMAGINE
@@ -656,7 +657,7 @@ The numbers, by contrast, were never a problem at all: the manager pastes them d
 How each of these is addressed is discussed in Chapter~\ref{chap:proposed_solution}, where the three-contract framework is introduced.
 
 \section{Methodology}
-The study is organized around a single operation, developed following a longitudinal design: I worked on the system observing day after day the working routine.
+The study is organized around a single operation, developed following a longitudinal, single-case design: I worked on the system observing day after day the working routine.
 The system presented in Chapter~\ref{chap:proposed_solution} was developed through an iterative loop: code, observe what the output is, isolate one issue at a time, fix it, validate the solution, and repeat; this loop ran several dozen times, and each pass left a record of what had gone wrong and why.
 Those traces are the base material of the analysis: I organized them into families by the kind of error they represent, and labeled them as grounding failures in Chapter~\ref{chap:proposed_solution}. 
 The data behind the test sits on two layers.
@@ -916,7 +917,7 @@ This last point is the coverage weakness highlighted in Chapter~\ref{chap:case_s
 What the tree buys is the causal side of the narrative, the one that the other two contracts do not touch.
 With tile-as-source in place the model can still get the meaning of a metric wrong (F4), and the sanitizer does not guarantee that all actions produced are inside the feasible set (F5).
 The tree is what bounds both, closest in spirit to the methods that feed a small slice of a graph into the prompt \cite{baek2023knowledgeaugmented}.
-Being a hand-curated tree allows for compactness, but it is also a major downside: the quality of it runs entirely on how fresh that curation stays; Chapter~\ref{chap:discussion} returns to this point. 
+Being a hand-curated tree allows for compactness, but it is also a major downside: the quality of it runs entirely on how fresh that curation stays. 
 
 
 \section{Contract 3: the sanitizer}
@@ -967,7 +968,7 @@ The system prompt that drives the model is not designed to ask \enquote{in gener
 Chapter~\ref{chap:state_of_the_art} already explained that a prompt is a request not a command, and better instructions raise the odds of a correct answer without making any errors impossible \cite{wei2022cot}.
 So this design does not try to overturn that verdict, it builds with it.
 The prompt is scoped to what a request can actually do: deliver the two pre-generation contracts (tile-as-source and curated knowledge tree) and cut the avoidable failures at the source.
-Specifically there is a directive for each failure mode observed during the development, nothing vaguer, so the \ac{LLM}'s efforts can be directed where needed.
+Specifically each failure mode observed during the development is answered by a directive, nothing vaguer, so the \ac{LLM}'s efforts can be directed where needed.
 
 
 The prompt has a well-defined structure composed by the directive block that sits on top, then the tiles block with the frozen values, the scoped tree block, and the skeleton of the narrative that must be followed.
@@ -976,8 +977,8 @@ Listing~\ref{lst:directives} shows an excerpt of the directive block, with each 
 To be precise, in the production prompt, these base rules grow into more specific versions based on the domain they are referring to, but every variant traces back to one of the eight modes.
 
 
-\begin{lstlisting}[caption={Excerpt of the directive block: one rule per observed failure mode.}, label={lst:directives}]
-  RULES ( every failure mode answered):
+\begin{lstlisting}[caption={Excerpt of the directive block: every observed failure mode answered by a rule.}, label={lst:directives}]
+  RULES (every failure mode answered):
   - Copy every value from the TILES block verbatim; never
     compute, round, or derive a number yourself.       # F1, F6
   - Never state a rate or a share that is not given in
@@ -1151,7 +1152,7 @@ Each generation is isolated and stateless: one conversation per station-week per
   % L3: + sanitizer
   \node[con, anchor=south] (c1) at (11.1,0.75) {tile-as-source};
   \node[con, above=4pt of c1] (c2) {knowledge tree};
-  \node[new, above=4pt of c2] (c3) {\textbf{output sanitizer}\\ deterministic check on the output};
+  \node[new, above=4pt of c2] (c3) {\textbf{sanitizer}\\ deterministic check on the output};
   \node[lvl, above=4pt of c3] (l3) {\textbf{L3}};
   
   % tags
@@ -1278,7 +1279,7 @@ Figure~\ref{fig:injection} shows the outcome of that stress test: every fault en
   \draw[a] (g3a) -- (o3a);
   \node[n] at (8.15,-5.0) {66 of 66};
   \end{tikzpicture}
-  \caption{The sanitizer stress test: each fault planted on the 66 candidate sites of the shipped narratives. Dark chips are repairs to the canonical value, light chips are refusals that leave the fault visible, and the dashed chip is a fault with no canonical resolution, left broken. Every outcome is 66 of 66: zero false repairs.}
+  \caption{The sanitizer stress test: each fault planted on the 66 candidate sites of the shipped narratives. Dark chips are repairs to the canonical value, light chips are refusals that leave the fault in place, and the dashed chip is a fault with no canonical resolution, left broken. Every outcome is 66 of 66: zero false repairs.}
   \label{fig:injection}
   \end{figure}
 
@@ -1473,7 +1474,7 @@ Its effects show up only if someone performs it, so a non-match at this depth is
 \subsection{Depth 4: the Bridge Similarity Index}
 \label{sec:bsi}
 
-The fourth depth combines the previous comparisons with numerical fidelity and material-driver coverage. I define the BSI for each station-week $s$ as
+The fourth depth combines the previous comparisons with numeric fidelity and material-driver coverage. I define the BSI for each station-week $s$ as
 
 \begin{equation}
   \mathrm{BSI}_s = 100\,
@@ -1595,14 +1596,14 @@ In the end the source-based counts give the clearest result, the causal comparis
 \label{chap:discussion}
 
 The previous chapter closed on the threats to validity, after measuring the framework on two fronts: the reduction of the failure modes, and the comparison with the bridges the managers wrote for the same sampled week.
-This chaprter closes the thesis by going back to the three questions that opened it, with the evidences now collected, than it weighs what remains as contributions, and it ends where it started: on a morning at the station with the limits that still stand.
+This chapter closes the thesis by going back to the three questions that opened it, with the evidences now collected, than it weighs what remains as contributions, and it ends where it started: on a morning at the station with the limits that still stand.
 %----------------------------------------------------------------------------------------
 
 \section{The three questions answered}
 
 In Section~\ref{sec:Research_questions:} I discussed the three questions this thesis promises to answer: one empirical, and two about design.
 
-The first one asks which are the common grounding failures when a \ac{LLM} iterates over a dense dashboard, full of KPIs.
+The first one asks which are the common grounding failures when a \ac{LLM} generates a narrative over a dense dashboard, full of KPIs.
 The answer that came from the field, after three months of observation, is the set of eight failure modes detailed in Section~\ref{sec:catalogue} and counted in Section~\ref{sec:front_modes}.
 Numeric modes corrupt the value.
 Causal modes give a domain term a meaning it does not have or propose an action no one at the site can take.
@@ -1610,23 +1611,24 @@ Formal modes involve a slip in form or sign.
 
 The second one asks what architecture can constrain the model on both numeric and causal grounding.
 The solution is the three-contract framework of Chapter~\ref{chap:proposed_solution}.
-What matters is the composition, since each contract is built against one class and none of them can act where the others do, so they are needed all together.
+What matters is the composition, since each contract is built against one class and none of them covers the whole chain, so they are needed all together.
 Tile-as-source freezes the numbers upstream and carries most of the numeric load.
 The tree bounds the causal half, while the sanitizer audits the forms after the fact.
 
-The last one asks what role a curated tree, a well-built map, can play in bounding what a model is allowed to say.
-Among all the causes in the tested sample, eighty-one expert causes were covered out of the one hundred and four total, reaching 78\%.
+The last one asks what role a curated knowledge tree, a well-built map, can play in bounding what a model is allowed to say.
+On the bounding side the causal mode disappear once the three enters the prompt, and 98.7\% of the proposed causes fall inside the admitted domain.
+Coverage on the expert reading is a different matter since, among all the causes in the tested sample, eighty-one expert causes were covered out of the one hundred and four total, reaching 78\%.
 On the action side, only thirty-two expert actions were aligned out of the sixty-six total, reaching 48\%.
 This lower figure shows how difficult it is to predict actions compared to causes, since the choice of a lever rests on personal judgment.
 
 The three answers depend on each other.
-The catalogue of the first one is what made possible the second answer, and the solid architecture of that answer is what allowed me to explore the third, creating a chain where each response justifies the next.
+The catalog of the first one is what made possible the second answer, and the solid architecture of that answer is what allowed me to explore the third, creating a chain where each response justifies the next.
 
 
 \section{Contributions and how far they travel}
 \label{sec:contributions}
 
-The center of this thesis is the contract framework that results from the second question in the previous section, and around it sit three things I count as contributions.
+The center of this thesis is the three-contract framework that results from the second question in the previous section, and around it sit three things I count as contributions.
 
 The first is the way of framing the grounding for operational \ac{BI}, that requires two things together: every quantitative token traceable character by character to a computed value, and every cause drawn from a set the domain admits.
 That definition is stricter than the grounding the hallucination literature usually measures, where a claim counts as grounded if some source broadly supports it \cite{ji2023survey,min2023factscore}, and no existing family carries both at once as guarantees, as shown in Table~\ref{tab:positioning}.
@@ -1635,7 +1637,7 @@ Nothing here depends on parcels or stations, so it travels to any setting where 
 
 The second is the failure catalogue itself: eight modes in three classes, collected during the internship while working on real data, not on a synthetic proxy.
 At the naive level the model already had the full decomposition with the correct values, and a prompt that asked for drivers, causes and actions; it still recomputed forty-four numbers, invented twenty-one rates and stated twenty-two values as the gap over thirty narratives.
-This same catalogue can be used, on similar systems, to understand what tends to break, and where in the pipeline each break can be caught.
+This same catalogue can be used, on similar systems, as starting hypothesis of what tends to break, and where in the pipeline each break can be caught.
 
 The third is the evaluation protocol.
 It is made of four instruments: an ablation ladder that works by adding one contract per rung, a composite similarity index over four axes (the \ac{BSI}), a separate model as claim extractor and aligner, and a fault-injection rig for the one contract that stays silent on natural output.
@@ -1647,13 +1649,13 @@ The second front cannot, since it needs someone who already writes the reference
 \label{sec:closing}
 
 The claims of this thesis stop where its evidence stops.
-The evaluation of Chapter~\ref{chap:results} graded a single-site prototype, and adoption was not measured: the numbers describe what the system writes and cover nothing of what managers do with it.
+The evaluation of Chapter~\ref{chap:results} graded a prototype built at a single pilot site, measured  on thirty station-weeks of one country, and adoption was not measured: the numbers describe what the system writes and cover nothing of what managers do with it.
 Since then the application has passed that stage: at the time of writing it is under active development for a wider rollout across Europe.
 This step is the strongest external signal the work has received, but a signal is not a measurement, and both limits stand until the rollout produces its own numbers.
 
 This thesis opened with a morning at the station: the dashboard flagged a real gap, and a confident paragraph on top of it blamed a metric that had little to do with the cause, proposing actions no one on site could take.
-Under the shipped configuration that paragraph can no longer be written.
-Every value has to trace back to a tile, the cause has to come from the admitted domain, the actions from the mandate of the site, and a corrupted value is repaired if the drift is minimal.
+Under the shipped configuration that paragraph can no longer be written as it was.
+Every value the contract covers has to trace back to a tile, the cause has to come from the admitted domain, the actions from the mandate of the site, and a corrupted value is repaired if the drift is minimal.
 Chapter~\ref{chap:results} measured how far that goes: 98.8\% of the audited figures trace back to their tile, and the similarity to the expert's hand-written bridge stops at 85.3 out of 100.
 Most of the missing distance sits in causes and actions, where the guarantee is soft.
 
