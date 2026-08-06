@@ -1114,8 +1114,9 @@ Each front is measured in its own way, and a language model participates in the 
 The narratives are generated along the ablation ladder of Figure~\ref{fig:ladder}.
 For the numeric modes (F1, F2, F3) the first front relies on a deterministic check: every figure in the narrative has to trace back to a value the model was given.
 The causal modes (F4, F5) are counted by hand, by a single rater, against predefined rules: the named causes and actions have to exist in the admitted domain.
-Finally, the formal modes (F6, F7, F8) are read off the natural output under one attribution rule: a formal slip is a slip of copying, and at L0 no copy rule exists, so a figure with a drifted precision or sign inversion cannot be told apart from a recomputed one and is attributed to the numeric class.
-From L1 onwards, where the copy contract makes the class identifiable, the natural output counted on this sample is zero; that's why the sanitizer is tested by injection.
+Finally, the formal modes (F6, F7, F8) are read off the natural output under one attribution rule: a formal slip is a slip of copying, and at L0 no copy rule exists, so a figure with a drifted precision or sign inversion cannot be told apart from a recomputed one and is attributed to the numeric class; the tracing check is exact on the written form, so such figure fails it and is counted once, in the numeric rows.
+F8 is a fault on the label rather than of the value, so it needs no attribution and is counted on its own at avery level.
+From L1 onwards, where the copy contract makes F6 and F7 identifiable, the natural output counted on this sample is zero; that's why the sanitizer is tested by injection.
 
 Each of the thirty station-weeks is run through the four levels of the ladder, which gives one hundred and twenty narratives. 
 The first front counts the failures across all four levels; the comparison with the expert uses only the thirty final narratives produced by the shipped configuration.
@@ -1228,7 +1229,7 @@ Figure~\ref{fig:descent} collects the counts.
   \node[rowlab] at (-0.95,\rF) {F6 precision drift};
   \node[rowlab] at (-0.95,\rG) {F7 sign inversion};
   \node[rowlab] at (-0.95,\rH) {F8 token concatenation};
-  \node[nid] at (\cA,\rF) {in F1--F3};
+  \node[nid] at (\cA,\rF) {in F1--F3 (5)};
   \node[cell, fill=black!0] at (\cB,\rF) {0};
   \node[cell, fill=black!0] at (\cC,\rF) {0};
   \node[cell, fill=black!0] at (\cD,\rF) {0$^{\dagger}$};
@@ -1236,7 +1237,7 @@ Figure~\ref{fig:descent} collects the counts.
   \node[cell, fill=black!0] at (\cB,\rG) {0};
   \node[cell, fill=black!0] at (\cC,\rG) {0};
   \node[cell, fill=black!0] at (\cD,\rG) {0$^{\dagger}$};
-  \node[nid] at (\cA,\rH) {in F1--F3};
+  \node[cell, fill=black!0] at (\cA,\rH) {0};
   \node[cell, fill=black!0] at (\cB,\rH) {0};
   \node[cell, fill=black!0] at (\cC,\rH) {0};
   \node[cell, fill=black!0] at (\cD,\rH) {0$^{\dagger}$};
@@ -1259,7 +1260,8 @@ The causal modes (F4, F5) shrink at L1 and disappear completely only when the tr
 At the previous two levels the model invents definitions for the different drivers, reading operational meaning into labels it was never given, and proposes out-of-mandate actions; both disappear at L2.
 
 
-As regards the formal modes (F6, F7, F8), they cannot be read off the natural output: at L0 the attribution rule of Section~\ref{sec:eval_design} folds them into numeric rows, and from L1 onwards Chapter~\ref{chap:proposed_solution} already explained why the upstream contracts leave nothing to catch for the sanitizer.
+As regards the formal modes (F6, F7, F8), at L0, the attribution rule of Section~\ref{sec:eval_design} folds them into numeric rows: five of the eighty-seven numeric counts there match a given value up  to its written precision, the surface signature of a drifted copy, but whether they were rounded copies or recomputations is exactly what no copy rule can settle.
+F8 never happens since there were no fused label at any level and from L1 onwards Chapter~\ref{chap:proposed_solution} already explained why the upstream contracts leave nothing to catch for the sanitizer.
 On the natural runs it stayed silent, and not because it was inactive: it compared every recognizable value, and made zero corrections across the thirty shipped narratives.
 So the sanitizer is measured by injection: the four value faults are each planted on all sixty-six sites of the shipped narratives, two hundred and sixty-four injections, of which two of the four faults sit inside the half-value guard band.
 A separate sweep welds a metric label to its own value, removing the separator between them, on the same sixty-six sites, for three hundred and thirty injections in all.
@@ -1608,6 +1610,8 @@ All the ambiguous tokens were excluded automatically rather than counted in the 
 The judgment step, the one that extracted causes and actions, was run only once per narrative, but I manually checked them as a control.
 My check confirms numbers and cause set; the only disagreement was on the headline cause, where my manual count was twenty-seven against the twenty-five seen by the model, so I kept the lower one.
 I was the only rater for all the manual judgments in this chapter, and no independent double-check has been done to assess my perspective; the same caution applies to the manual screening of F4 and F5 in Section~\ref{sec:front_modes}.
+Formal modes have a low number presence by construction: beyond the five drift-signature counts at L0, their evidence rests on the three months of observations , where no systematic tally was kept.
+A wrong comparative that cites no numeric token would also escape the numeric tracer at L0, a blind spot the counting inherits.
 
 A further check removes the Completeness axis, which always sits at one hundred, from the \ac{BSI} calculation, and renormalizes the remaining weights to 0.50 for Numbers and 0.25 for Actions and Causes. The recalculated index drops to 81.6. 
 As explained before, the bridge is the result of personal judgment, which relies on claims that can be found in the data, and others that are founded on personal knowledge or events not recorded in the available data.
@@ -1628,7 +1632,7 @@ This chapter closes the thesis by going back to the three questions that opened 
 In Section~\ref{sec:Research_questions:} I discussed the three questions this thesis promises to answer: one empirical, and two about design.
 
 The first one asks what the common grounding failures are when an \ac{LLM} generates a narrative over a dense dashboard, full of KPIs.
-The answer that came from the field, after three months of observation, is the set of eight failure modes detailed in Section~\ref{sec:catalogue} and counted in Section~\ref{sec:front_modes}.
+The answer that came from the field, after three months of observation, is the set of eight failure modes detailed in Section~\ref{sec:catalogue} and counted, where the attribution rule makes them indentifiable, in Section~\ref{sec:front_modes}.
 Numeric modes corrupt the value.
 Causal modes give a domain term a meaning it does not have or propose an action no one at the site can take.
 Formal modes involve a slip in form or sign.
