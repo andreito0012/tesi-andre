@@ -1114,8 +1114,8 @@ Each front is measured in its own way, and a language model participates in the 
 The narratives are generated along the ablation ladder of Figure~\ref{fig:ladder}.
 For the numeric modes (F1, F2, F3) the first front relies on a deterministic check: every figure in the narrative has to trace back to a value the model was given.
 The causal modes (F4, F5) are counted by hand, by a single rater, against predefined rules: the named causes and actions have to exist in the admitted domain.
-Finally, the formal modes (F6, F7, F8) are read off the natural output under one attribution rule: a formal slip is a slip of copying, and at L0 no copy rule exists, so a figure with a drifted precision or sign inversion cannot be told apart from a recomputed one and is attributed to the numeric class.
-From L1 onwards, where the copy contract makes the class identifiable, the natural output counted on this sample is zero; that's why the sanitizer is tested by injection.
+Finally, the formal modes (F6, F7, F8) are read off the natural output by the same kind of deterministic check on form and sign: a value repeated with less precision, a copied value with the wrong sign, or a token that don't appear anywhere in the input text.
+The check runs at each level of the ladder, and each candidate is first confirmed by hand before it is counted. 
 
 Each of the thirty station-weeks is run through the four levels of the ladder, which gives one hundred and twenty narratives. 
 The first front counts the failures across all four levels; the comparison with the expert uses only the thirty final narratives produced by the shipped configuration.
@@ -1189,7 +1189,6 @@ Figure~\ref{fig:descent} collects the counts.
     rowlab/.style={anchor=east, font=\footnotesize, inner sep=3pt},
     colhead/.style={anchor=south, font=\footnotesize\bfseries},
     colsub/.style={anchor=north, font=\scriptsize\itshape, text=black!55},
-    nid/.style={cell, draw=black!35, dashed, fill=black!4, font=\scriptsize\itshape, text=black!55},
   ]
   \def\cA{0}\def\cB{1.6}\def\cC{3.2}\def\cD{4.8}
   \def\rA{0}\def\rB{-0.86}\def\rC{-1.72}\def\rD{-2.58}\def\rE{-3.44}
@@ -1223,20 +1222,19 @@ Figure~\ref{fig:descent} collects the counts.
   \node[cell, fill=black!38]             at (\cB,\rE) {26};
   \node[cell, fill=black!0]              at (\cC,\rE) {0};
   \node[cell, fill=black!0]              at (\cD,\rE) {0};
-  % ---- formal modes: identifiable only where a copy rule exists ----
   \draw[black!30, dashed] (-4.9,-3.94) -- (5.6,-3.94);
   \node[rowlab] at (-0.95,\rF) {F6 precision drift};
   \node[rowlab] at (-0.95,\rG) {F7 sign inversion};
   \node[rowlab] at (-0.95,\rH) {F8 token concatenation};
-  \node[nid] at (\cA,\rF) {in F1--F3};
+  \node[cell, fill=black!7] at (\cA,\rF) {5};
   \node[cell, fill=black!0] at (\cB,\rF) {0};
   \node[cell, fill=black!0] at (\cC,\rF) {0};
   \node[cell, fill=black!0] at (\cD,\rF) {0$^{\dagger}$};
-  \node[nid] at (\cA,\rG) {in F1--F3};
+  \node[cell, fill=black!7] at (\cA,\rG) {0};
   \node[cell, fill=black!0] at (\cB,\rG) {0};
   \node[cell, fill=black!0] at (\cC,\rG) {0};
   \node[cell, fill=black!0] at (\cD,\rG) {0$^{\dagger}$};
-  \node[nid] at (\cA,\rH) {in F1--F3};
+  \node[cell, fill=black!0] at (\cA,\rH) {0};
   \node[cell, fill=black!0] at (\cB,\rH) {0};
   \node[cell, fill=black!0] at (\cC,\rH) {0};
   \node[cell, fill=black!0] at (\cD,\rH) {0$^{\dagger}$};
