@@ -81,7 +81,7 @@
 \begin{abstract}    
 When a last-mile delivery station misses its plan, a manager needs to manually explain the causes of the gap and the actions that will be taken to improve the situation.
 The challenge during my internship was to put a \ac{LLM} on the top of the station data to automatically generate that explanation.
-Grounding is one of the core part of this thesis that in my case has a duality aspect: each figure must match the dashboard value character by character, and each cause and action must come from the set that the domain admits. 
+Grounding is one of the core parts of this thesis that in my case has a duality aspect: each figure must match the dashboard value character by character, and each cause and action must come from the set that the domain admits. 
 During the first months of work I collected  eight failure modes in three classes and built three contracts against them: tile-as-source freezes the numbers upstream, so the model copies and never computes; a curated knowledge tree scopes the admitted causes and actions inside the prompt; and a deterministic sanitizer that audits the output.
 On thirty under-target station-weeks, run through an ablation ladder of four levels and compared with the bridge the manager wrote for the same week, the naive model recomputed 44 numbers and invented 21 rates; with the shipped configuration 98.8\% of the 413 audited figures trace back to a tile, the causal modes drop to zero, and the match with the expert reaches 78\% of the causes and 48\% of the actions, for a similarity index of 85.3 out of 100. The number can be guaranteed. The cause can only be bounded, and the choice stays with the reader. 
 \end{abstract}
@@ -617,7 +617,7 @@ Those ingredients, together with the completeness of the drivers, are the four a
 
 
 That manual approach has three different weaknesses starting from limited reactivity: a manager had to wait for the weekly report to know how the previous week had closed exactly; any intra-week visibility, when needed, depended on pulling data manually, tile by tile.
-The second one is incomplete root-cause coverage: the choice of which causes needed to be added to the report was up to the manager, without a fixed format. 
+The second one is incomplete root-cause coverage: the choice of which causes needed to be added to the report was not fixed by the format. 
 The decomposition existed in the data, but nothing forced the written explanation to follow it: no guarantee that the listed causes summed back to the total gap, nor that they were ranked by impact.
 The last one is analyst dependence: the depth and granularity of the diagnosis, and the realism of the recommended actions, varied, as in any hand-written analysis, with the experience of whoever prepared the document.
 The three weaknesses are visible in Figure~\ref{fig:ch3_weaknesses} together with a description of how each one is answered.
@@ -1642,7 +1642,7 @@ This chapter closes the thesis by going back to the three questions that opened 
 In Section~\ref{sec:Research_questions:} I discussed the three questions this thesis promises to answer: one empirical, and two about design.
 
 The first one asks what the common grounding failures are when an \ac{LLM} generates a narrative over a dense dashboard, full of KPIs.
-The answer that came from the field, after three months of observation, is the set of eight failure modes detailed in Section~\ref{sec:catalogue} and counted, where the attribution rule makes them indentifiable, in Section~\ref{sec:front_modes}.
+The answer that came from the field, after three months of observation, is the set of eight failure modes detailed in Section~\ref{sec:catalogue} and counted, where the attribution rule makes them identifiable, in Section~\ref{sec:front_modes}.
 Numeric modes corrupt the value.
 Causal modes give a domain term a meaning it does not have or propose an action no one at the site can take.
 Formal modes involve a slip in form or sign.
