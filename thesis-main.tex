@@ -111,9 +111,8 @@ To my friends, for making this path so special and unique.
 
 \section{Context}
 During one of the audited weeks of my internship, the operational dashboard flagged a clear gap at the station. 
-The AI summary built on top of it, an early version of the system this thesis describes, explained that difference with full confidence, but the explanation produced was factually incorrect. 
-It pointed to a structural metric that had little to do with the real cause of the difference, proposed corrective actions and root analyses that no manager could realistically carry out.
-I noticed the error, that morning, because I was familiar with the station and the metric, but a manager reading the same paragraph on a busy day, or a less experienced one, could have easily taken that as true and acted on it. 
+The summary built on top of it, an early prototype I was building of the system this thesis describes, explained that difference fluently, but the explanation produced was wrong. 
+It pointed to a structural metric that had little to do with the real cause of the difference, proposed corrective actions and root analyses that fell outside what the site could actually do.
 
 That episode marked the beginning of my thesis and frames the general problem it addresses: what happens when a \ac{LLM} is placed on top of a \ac{BI} dashboard and asked to turn numbers into decisions? 
 That is a key question considering the setting of a \ac{DS}. 
@@ -1692,7 +1691,7 @@ The evaluation of Chapter~\ref{chap:results} graded a prototype built at a singl
 Since then the application has passed that stage: at the time of writing it is under active development for a wider rollout across Europe.
 This step is the strongest external signal the work has received, but a signal is not a measurement, and both limits stand until the rollout produces its own numbers.
 
-This thesis opened with a morning at the station: the dashboard flagged a real gap, and a confident paragraph on top of it blamed a metric that had little to do with the cause, proposing actions no one on site could take.
+This thesis opened with a morning at the station: the dashboard flagged a real gap, and a paragraph, from an early protype, on top of it blamed a metric that had little to do with the cause, proposing actions outside what a site could do.
 Under the shipped configuration that paragraph can no longer be written as it was.
 Every value the contract covers has to trace back to a tile, the cause has to come from the admitted domain, the actions from the mandate of the site, and a corrupted value is repaired if the drift is minimal.
 Chapter~\ref{chap:results} measured how far that goes: 98.8\% of the audited figures trace back to their tile, and the similarity to the expert's hand-written bridge stops at 85.3 out of 100.
