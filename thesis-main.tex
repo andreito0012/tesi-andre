@@ -677,7 +677,7 @@ In Chapter~\ref{chap:results} the framework is measured on two fronts: against t
 
 
 Every metric in this thesis is anonymized: the headline indicator is denominated as Metric\_R, its components Category\_1 to Category\_k. 
-The values are synthetic in the illustrative examples and real in the operational data behind Chapter~\ref{chap:results}.
+The values are synthetic in the illustrative examples and historical in the operational data behind Chapter~\ref{chap:results}.
 
 
 
@@ -1109,7 +1109,7 @@ What Chapter~\ref{chap:results} measures, therefore, is not its adoption rate bu
 %----------------------------------------------------------------------------------------
 
 Chapter~\ref{chap:proposed_solution} presented the three-contract framework and how it acts to ground the narrative.
-This chapter measures how that claim holds against thirty station-weeks of real data, each below target, each paired with the bridge a human manager wrote by hand for the same period.
+This chapter measures how that claim holds against thirty historical station-weeks, each below target, each paired with the bridge a human manager wrote by hand for the same period.
 It takes the catalog of Section~\ref{sec:catalogue}, collected over three months of observations, shows how the contracts affect those failures, reports how closely the final outputs match the expert bridges, and closes on the limits of the evaluation.
 
 
@@ -1183,7 +1183,7 @@ Each generation is isolated and stateless: one conversation per station-week per
   \end{figure}
 
 The bottom bar of Figure~\ref{fig:ladder} is the reason why the naive level is not a strawman: L0 already hands the model the full decomposition with the correct values, plan, actual, and variance included, and already asks the model to name drivers, quantify the contribution, and give causes and actions.
-This first level shows what a capable model does when nothing constrains it.
+This first level exist only as the bottom of the ladder: it shows what a capable model does when nothing constrains it.
 
 %------------------------------------------------------------------
 
@@ -1259,7 +1259,7 @@ Figure~\ref{fig:descent} collects the counts.
   \end{figure}
 
 
-Starting with the numeric modes, at L0 the model fabricates numbers freely: it recalculates forty-four numbers (F1), invents twenty-one rates (F2), and states twenty-two values-as-gap (F3).
+Starting with the numeric modes, with no contract in place, the model recalculates forty-four numbers (F1), invents twenty-one rates (F2), and states twenty-two values-as-gap (F3).
 One rung of the ladder is enough to remove nearly all of it.
 The one increase observed for F1 at levels L2 and L3 is not a regression of the tile contract: the tree makes the narrative richer, more drivers get discussed together, and the model finds more occasions to state their total.
 The single case at L1 and the residual five are all such self-summed totals, the boundary declared in Section~\ref{sec:tileasource}.
@@ -1674,7 +1674,7 @@ That definition is stricter than the grounding the hallucination literature usua
 Naming the two requirements, and showing that they do not reduce to each other, is what lets the rest of the work be precise about which guarantee is hard and which is soft.
 Nothing here depends on parcels or stations, so it travels to any setting where a model writes a narrative over pre-computed operational figures.
 
-The second is the failure catalogue itself: eight modes in three classes, collected during the internship while working on real data, not on a synthetic proxy.
+The second is the failure catalogue itself: eight modes in three classes, collected during the internship while working on historical station-weeks, not on a synthetic proxy.
 At the naive level the model already had the full decomposition with the correct values, and a prompt that asked for drivers, causes and actions; it still recomputed forty-four numbers, invented twenty-one rates and stated twenty-two values as the gap over thirty narratives.
 This same catalogue can be used, on similar systems, as starting hypothesis of what tends to break, and where in the pipeline each break can be caught.
 
