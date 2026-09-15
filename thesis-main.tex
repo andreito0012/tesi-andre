@@ -79,8 +79,8 @@
 \frontmatter\frontispiece
 
 \begin{abstract}    
-When a last-mile delivery station misses its plan, a manager needs to manually justify the causes of the gap and the actions that will be taken to improve the situation.
-The challenge during my internship was to put a \ac{LLM} on the top of the station data to automatically generate that justification.
+When a last-mile delivery station misses its plan, a manager needs to manually explain the causes of the gap and the actions that will be taken to improve the situation.
+The challenge during my internship was to put a \ac{LLM} on the top of the station data to automatically generate that explanation.
 Grounding is one of the core part of this thesis that in my case has a duality aspect: each figure must match the dashboard value character by character, and each cause and action must come from the set that the domain admits. 
 During the first months of work I collected  eight failure modes in three classes and built three contracts against them: tile-as-source freezes the numbers upstream, so the model copies and never computes; a curated knowledge tree scopes the admitted causes and actions inside the prompt; and a deterministic sanitizer that audits the output.
 On thirty under-target station-weeks, run through an ablation ladder of four levels and compared with the bridge the manager wrote for the same week, the naive model recomputed 44 numbers and invented 21 rates; with the shipped configuration 98.8\% of the 413 audited figures trace back to a tile, the causal modes drop to zero, and the match with the expert reaches 78\% of the causes and 48\% of the actions, for a similarity index of 85.3 out of 100. The number can be guaranteed. The cause can only be bounded, and the choice stays with the reader. 
